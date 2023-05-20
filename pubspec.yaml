@@ -1,0 +1,45 @@
+name: my_app_hospital
+version: 1.0.0+1
+publish_to: none
+description: A new Flutter project.
+environment: 
+  sdk: '>=2.19.6 <3.0.0'
+
+dependencies: 
+  cupertino_icons: ^1.0.2
+  get: 4.6.5
+  flutter: 
+    sdk: flutter
+  get_cli: ^1.8.1
+  convex_bottom_bar: ^3.2.0
+  flutter_screenutil: ^5.7.0
+  fluttertoast: ^8.2.1
+  overlay_dialog: ^0.2.1
+
+dev_dependencies: 
+  flutter_lints: 2.0.1
+  flutter_test: 
+    sdk: flutter
+
+flutter: 
+  uses-material-design: true
+
+  assets:
+    - assets/images/
+
+fonts:
+    - family: BaiJamjuree
+      fonts:
+        - asset: assets/fonts/bai_Jamjuree/BaiJamjuree-SemiBoldItalic.ttf
+        - asset: assets/fonts/bai_Jamjuree/BaiJamjuree-Bold.ttf
+        - asset: assets/fonts/bai_Jamjuree/BaiJamjuree-BoldItalic.ttf
+        - asset: assets/fonts/bai_Jamjuree/BaiJamjuree-ExtraLight.ttf
+        - asset: assets/fonts/bai_Jamjuree/BaiJamjuree-ExtraLightItalic.ttf
+        - asset: assets/fonts/bai_Jamjuree/BaiJamjuree-Italic.ttf
+        - asset: assets/fonts/bai_Jamjuree/BaiJamjuree-Light.ttf
+        - asset: assets/fonts/bai_Jamjuree/BaiJamjuree-LightItalic.ttf
+        - asset: assets/fonts/bai_Jamjuree/BaiJamjuree-Medium.ttf
+        - asset: assets/fonts/bai_Jamjuree/BaiJamjuree-MediumItalic.ttf
+        - asset: assets/fonts/bai_Jamjuree/BaiJamjuree-Regular.ttf
+        - asset: assets/fonts/bai_Jamjuree/BaiJamjuree-SemiBold.ttf
+
