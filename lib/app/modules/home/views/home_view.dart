@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:my_app_hospital/app/modules/widget/custom_text.dart';
 import 'package:my_app_hospital/app/routes/app_pages.dart';
+import 'package:my_app_hospital/configs/app_color.dart';
 
 import '../controllers/home_controller.dart';
 
@@ -46,7 +47,9 @@ class HomeView extends GetView<HomeController> {
             children: [
               buildMenu('assets/images/iconapp.png', 'Khám sức khỏe', () {}),
               buildMenu('assets/images/iconapp.png', 'Đánh giá CBNV', () {}),
-              buildMenu('assets/images/iconapp.png', 'Y lệnh chăm sóc', () {}),
+              buildMenu('assets/images/iconapp.png', 'Y lệnh chăm sóc', () {
+                Get.toNamed(Routes.COMMAND);
+              }),
             ],
           ),
           const SizedBox(
@@ -72,10 +75,10 @@ class HomeView extends GetView<HomeController> {
               width: MediaQuery.of(context).size.width,
               padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(
-                color: Colors.blue,
-                borderRadius: BorderRadius.circular(30),
+                color: AppColors.bgBottomAppBar,
+                borderRadius: BorderRadius.circular(15),
                 border: Border.all(width: 1.0, color: Colors.white30),
-                boxShadow: [const BoxShadow(blurRadius: 5, color: Colors.black38, offset: Offset(1, 1))],
+                boxShadow: const [BoxShadow(blurRadius: 5, color: Colors.black38, offset: Offset(1, 1))],
               ),
               child: Column(
                 children: [
@@ -113,11 +116,17 @@ class HomeView extends GetView<HomeController> {
         width: 100,
         padding: const EdgeInsets.all(8),
         decoration: BoxDecoration(
-          color: Colors.blue,
-          borderRadius: BorderRadius.circular(30),
+          color: AppColors.bgBottomAppBar,
+          borderRadius: BorderRadius.circular(15),
           border: Border.all(width: 1.0, color: Colors.white30),
           boxShadow: const [BoxShadow(blurRadius: 5, color: Colors.black38, offset: Offset(1, 1))],
         ),
+        // decoration: BoxDecoration(
+        //   color: Colors.blue,
+        //   borderRadius: BorderRadius.circular(30),
+        //   border: Border.all(width: 1.0, color: Colors.white30),
+        //   boxShadow: const [BoxShadow(blurRadius: 5, color: Colors.black38, offset: Offset(1, 1))],
+        // ),
         child: Column(
           children: [
             Image.asset(

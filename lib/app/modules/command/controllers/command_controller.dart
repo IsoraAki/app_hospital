@@ -1,15 +1,10 @@
 import 'package:get/get.dart';
 
-class MedicationScheduleController extends GetxController {
-  //TODO: Implement MedicationScheduleController
+class CommandController extends GetxController {
+  //TODO: Implement CommandController
 
   var dropDownValue = 'Tất cả'.obs;
   var lv = 'Tất cả'.obs;
-
-  var checkboxValue1 = true.obs;
-  var checkboxValue2 = false.obs;
-  var checkboxValue3 = false.obs;
-  var checkboxValue4 = false.obs;
   @override
   void onInit() {
     super.onInit();

@@ -10,6 +10,7 @@ abstract class Routes {
   static const NOTE = _Paths.NOTE;
   static const SUPPORT = _Paths.SUPPORT;
   static const MEDICATION_SCHEDULE = _Paths.MEDICATION_SCHEDULE;
+  static const COMMAND = _Paths.COMMAND;
 }
 
 abstract class _Paths {
@@ -21,4 +22,5 @@ abstract class _Paths {
   static const NOTE = '/note';
   static const SUPPORT = '/support';
   static const MEDICATION_SCHEDULE = '/medication-schedule';
+  static const COMMAND = '/command';
 }

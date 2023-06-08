@@ -42,7 +42,7 @@ final ThemeData themeHospital = ThemeData(
     style: ButtonStyle(
         padding: MaterialStateProperty.all(EdgeInsets.zero),
         fixedSize: MaterialStateProperty.all(const Size.fromHeight(54)),
-        backgroundColor: MaterialStateProperty.all(AppColors.green),
+        backgroundColor: MaterialStateProperty.all(AppColors.blue),
         elevation: MaterialStateProperty.all(0.0),
         textStyle: MaterialStateProperty.all(TextStyle(
           fontFamily: AppFonts.baiJamjuree,

@@ -2,6 +2,8 @@ import 'package:get/get.dart';
 
 import '../modules/bottom_bar/bindings/bottom_bar_binding.dart';
 import '../modules/bottom_bar/views/bottom_bar_view.dart';
+import '../modules/command/bindings/command_binding.dart';
+import '../modules/command/views/command_view.dart';
 import '../modules/home/bindings/home_binding.dart';
 import '../modules/home/views/home_view.dart';
 import '../modules/login/bindings/login_binding.dart';
@@ -57,6 +59,11 @@ class AppPages {
       name: _Paths.MEDICATION_SCHEDULE,
       page: () => MedicationScheduleView(),
       binding: MedicationScheduleBinding(),
+    ),
+    GetPage(
+      name: _Paths.COMMAND,
+      page: () => CommandView(),
+      binding: CommandBinding(),
     ),
   ];
 }
