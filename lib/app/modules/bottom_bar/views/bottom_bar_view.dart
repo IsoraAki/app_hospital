@@ -30,7 +30,7 @@ class BottomBarView extends GetView<BottomBarController> {
       drawer: const Drawer(
         child: DrawerView(),
       ),
-      body: Obx(() => Center(child: listWidget[controller.index.value])),
+      body: Obx(() => Container(child: listWidget[controller.index.value])),
       bottomNavigationBar: ConvexAppBar(
         backgroundColor: Colors.blue,
         style: TabStyle.react,

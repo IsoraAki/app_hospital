@@ -2,18 +2,21 @@ import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 import 'package:my_app_hospital/app/modules/widget/custom_text.dart';
+import 'package:my_app_hospital/app/modules/widget/dialog/process_dialog.dart';
 import 'package:my_app_hospital/app/routes/app_pages.dart';
+import 'package:my_app_hospital/app_state.dart';
 import 'package:my_app_hospital/configs/app_color.dart';
 import 'package:my_app_hospital/configs/theme/dimens.dart';
+import 'package:my_app_hospital/util/validator.dart';
 
 import '../controllers/login_controller.dart';
 
 class LoginView extends GetView<LoginController> {
   LoginView({Key? key}) : super(key: key);
-  final TextEditingController _pwdController = TextEditingController();
-  final TextEditingController _emailController = TextEditingController();
+
   //final snackBar = SnackBar(content: Text('email ou mot de passe incorrect'));
   final _formKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
@@ -61,7 +64,7 @@ class LoginView extends GetView<LoginController> {
             children: [
               TweenAnimationBuilder(
                 tween: Tween<double>(begin: 0, end: 1),
-                duration: Duration(milliseconds: 500),
+                duration: const Duration(milliseconds: 500),
                 builder: (BuildContext context, double size, Widget? child) {
                   var zoom = 1 - size;
                   return Opacity(
@@ -69,31 +72,31 @@ class LoginView extends GetView<LoginController> {
                       child: Padding(
                         padding: EdgeInsets.only(left: (zoom * 20) + 20, right: (zoom * 20) + 20),
                         child: CustomTextField(
-                          controller: TextEditingController(),
+                          controller: controller.emailController,
                           typeInput: TypeInput.text,
                           lableText: 'Tên đăng nhập',
                           hideText: 'Nhập tên đăng nhập',
-                          prefixIcon: Icon(Icons.account_box_sharp),
-                          //validator: (value) => Validator.validateEmail(value),
+                          prefixIcon: const Icon(Icons.account_box_sharp),
+                          validator: (value) => Validator.username(value),
                         ),
                       ));
                 },
               ),
               TweenAnimationBuilder(
                 tween: Tween<double>(begin: 0, end: 1),
-                duration: Duration(milliseconds: 500),
+                duration: const Duration(milliseconds: 500),
                 builder: (BuildContext context, double size, Widget? child) {
                   return Opacity(
                     opacity: size,
                     child: Padding(
                       padding: EdgeInsets.only(left: size * 20, right: size * 20),
                       child: CustomTextField(
-                        controller: TextEditingController(),
+                        controller: controller.pwdController,
                         typeInput: TypeInput.password,
                         lableText: 'Mật khẩu',
                         hideText: '*********',
-                        prefixIcon: Icon(Icons.key),
-                        //validator: (value) => Validator.checkPassword(value),
+                        prefixIcon: const Icon(Icons.key),
+                        validator: (value) => Validator.password(value),
                       ),
                     ),
                   );
@@ -103,30 +106,33 @@ class LoginView extends GetView<LoginController> {
                 padding: const EdgeInsets.only(right: 25.0, top: 10.0),
                 child: Align(
                     alignment: Alignment.topRight,
-                    child: Material(
-                      color: Colors.transparent,
-                      child: CheckboxListTile(
-                        controlAffinity: ListTileControlAffinity.leading,
-                        activeColor: Colors.blue[400],
-                        checkColor: Colors.white,
-                        title: const Text(
-                          'Ghi nhớ thông tin',
-                          style: TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.w400,
+                    child: Obx(() => Material(
+                          color: Colors.transparent,
+                          child: CheckboxListTile(
+                            controlAffinity: ListTileControlAffinity.leading,
+                            activeColor: Colors.blue[400],
+                            checkColor: Colors.white,
+                            title: const Text(
+                              'Ghi nhớ thông tin',
+                              style: TextStyle(
+                                fontSize: 15,
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                            value: controller.isSave.value,
+                            onChanged: (bool? value) {
+                              controller.isSave.value = value ?? false;
+                              AppState.instance.settingBox.write(SettingType.isSave.toString(), controller.isSave.value);
+                            },
                           ),
-                        ),
-                        value: true,
-                        onChanged: (bool? value) {},
-                      ),
-                    )),
+                        ))),
               ),
               SizedBox(
                 height: size_25_h,
               ),
               TweenAnimationBuilder(
                 tween: Tween<double>(begin: 0, end: 1),
-                duration: Duration(milliseconds: 500),
+                duration: const Duration(milliseconds: 500),
                 builder: (BuildContext context, double size, Widget? child) {
                   return Opacity(
                     opacity: size,
@@ -139,9 +145,11 @@ class LoginView extends GetView<LoginController> {
                         child: ElevatedButton(
                           onPressed: () async {
                             if (_formKey.currentState!.validate()) {
-                              print("I ove tunisia");
+                              ProgressDialog.show(context);
+                              await controller.login();
+                              ProgressDialog.hide(context);
                             }
-                            Get.toNamed(Routes.BOTTOM_BAR);
+                            //Get.toNamed(Routes.BOTTOM_BAR);
                           },
                           style: ElevatedButton.styleFrom(
                             primary: AppColors.background,

@@ -1,1 +1,0 @@
-export 'package:my_app_hospital/presentation/home/home.screen.dart';
