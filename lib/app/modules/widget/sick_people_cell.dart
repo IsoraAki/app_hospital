@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:my_app_hospital/configs/app_color.dart';
 import 'package:my_app_hospital/configs/theme/dimens.dart';
@@ -25,12 +26,12 @@ Widget sickPeopleCell(BuildContext context, Function() ontap, String img, String
             children: [
               Image.network(
                 img,
-                height: size_40_h,
-                width: size_30_w,
+                width: 60.sp,
+                fit: BoxFit.contain,
                 errorBuilder: (context, error, stackTrace) {
                   return Icon(
                     Icons.account_box_rounded,
-                    size: size_60_h,
+                    size: 60.sp,
                   );
                 },
               ),

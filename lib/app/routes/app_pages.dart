@@ -34,6 +34,14 @@ class AppPages {
       name: _Paths.LOGIN,
       page: () => LoginView(),
       binding: LoginBinding(),
+      bindings: [
+        BottomBarBinding(),
+        SearchBinding(),
+        NoteBinding(),
+        SupportBinding(),
+        MedicationScheduleBinding(),
+        CommandBinding(),
+      ],
     ),
     GetPage(
       name: _Paths.BOTTOM_BAR,

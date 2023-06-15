@@ -3,7 +3,12 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:my_app_hospital/app/modules/bottom_bar/bindings/bottom_bar_binding.dart';
+import 'package:my_app_hospital/app/modules/command/bindings/command_binding.dart';
+import 'package:my_app_hospital/app/modules/command/controllers/command_controller.dart';
+import 'package:my_app_hospital/app/modules/home/bindings/home_binding.dart';
 import 'package:my_app_hospital/app/modules/home/controllers/home_controller.dart';
+import 'package:my_app_hospital/app/modules/login/bindings/login_binding.dart';
 import 'package:my_app_hospital/app/modules/login/controllers/login_controller.dart';
 import 'package:my_app_hospital/app_state.dart';
 import 'package:my_app_hospital/configs/theme/theme.dart';
@@ -31,22 +36,12 @@ Future<void> main() async {
 }
 
 Future<void> init() async {
-  // await Get.putAsync(() async {
-  //   await GetStorage.init();
-  //   return GetStorage();
-  // });
-  Get.put(
-    LoginController(),
-    permanent: true,
-  );
-
-  Get.put(
-    BottomBarController(),
-    permanent: true,
-  );
-
-  Get.put(
-    HomeController(),
-    permanent: true,
-  );
+  LoginBinding().dependencies();
+  // Get.lazyPut(() => LoginController());
+  BottomBarBinding().dependencies();
+  //Get.lazyPut(() => BottomBarController());
+  HomeBinding().dependencies();
+  //Get.lazyPut(() => HomeController());
+  CommandBinding().dependencies();
+  //Get.lazyPut(() => CommandController());
 }

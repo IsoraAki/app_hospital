@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:get/get.dart';
+import 'package:my_app_hospital/app/modules/command/controllers/command_controller.dart';
 import 'package:my_app_hospital/app/modules/widget/custom_text.dart';
+import 'package:my_app_hospital/app/modules/widget/dialog/process_dialog.dart';
 import 'package:my_app_hospital/app/routes/app_pages.dart';
 import 'package:my_app_hospital/configs/app_color.dart';
 import 'package:my_app_hospital/configs/theme/app_fonts.dart';
@@ -11,7 +14,9 @@ import '../controllers/home_controller.dart';
 
 class HomeView extends GetView<HomeController> {
   HomeView({Key? key}) : super(key: key);
+  final commandController = Get.find<CommandController>();
   final TextEditingController _searchController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -36,10 +41,34 @@ class HomeView extends GetView<HomeController> {
                 const SizedBox(
                   width: 16,
                 ),
-                Image.asset(
-                  'assets/images/iconapp.png',
-                  width: 100,
-                )
+                Column(
+                  children: [
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(50),
+                      child: Image.network(
+                        'http://192.168.1.178:1015/Data/48015/Template/AnhNhanVien/${controller.inforUser.value.uSERID}.jpg',
+                        fit: BoxFit.cover,
+                        width: 100.sp,
+                        errorBuilder: (context, error, stackTrace) {
+                          return Icon(
+                            Icons.account_circle,
+                            size: 100.sp,
+                          );
+                        },
+                      ),
+                    ),
+                    Text(
+                      controller.inforUser.value.fULLNAME ?? '...',
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                        fontFamily: 'Segoe UI',
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ],
+                ),
               ],
             ),
             const SizedBox(
@@ -171,27 +200,42 @@ class HomeView extends GetView<HomeController> {
               border: Border.all(width: 0.7, color: AppColors.hintText),
               //boxShadow: const [BoxShadow(blurRadius: 5, color: Colors.black38, offset: Offset(1, 1))],
             ),
-            child: Obx(
-              () => DropdownButton(
-                hint: Text(controller.dropDownValue.value,
+            child: DropdownButton(
+              hint: Obx(
+                () => Text(controller.dropDownValue.value,
                     maxLines: 1, style: TextStyle(fontSize: text_14, fontWeight: FontWeight.bold, color: AppColors.white, fontFamily: AppFonts.baiJamjuree)),
-                isExpanded: true,
-                icon: const Icon(Icons.arrow_drop_down),
-                underline: Container(),
-                style: Theme.of(context).textTheme.titleSmall!.copyWith(color: AppColors.black),
-                items: controller.listOffice.map(
-                  (val) {
-                    return DropdownMenuItem<String>(
-                      value: val.tENPHONGBAN,
-                      child: Text(val.tENPHONGBAN),
-                    );
-                  },
-                ).toList(),
-                onChanged: (String? val) {
-                  controller.getOffice();
-                  controller.updateData(dropDownValue: val, lvValue: val);
-                },
               ),
+              isExpanded: true,
+              icon: const Icon(Icons.arrow_drop_down),
+              underline: Container(),
+              style: Theme.of(context).textTheme.titleSmall!.copyWith(color: AppColors.black),
+              items: controller.listOffice.map(
+                (val) {
+                  return DropdownMenuItem<String>(
+                    value: val.tENPHONGBAN,
+                    child: Text(val.tENPHONGBAN),
+                  );
+                },
+              ).toList(),
+              onChanged: (String? val) async {
+                if (val != null) {
+                  controller.getOffice();
+                  //
+                  //controller.updateData(val);
+                  controller.dropDownValue.value = val;
+                  for (var e in controller.listOffice) {
+                    if (e.tENPHONGBAN == val) {
+                      commandController.tenphongban.value = e.tENPHONGBAN;
+                      commandController.maphongban.value = e.rESOURCENAME;
+                      break;
+                    }
+                  }
+                }
+
+                ProgressDialog.show(context);
+                await commandController.getList('Tất cả', 0, 0);
+                ProgressDialog.hide(context);
+              },
             ),
           ),
         ],

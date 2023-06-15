@@ -28,7 +28,15 @@ class CommandView extends GetView<CommandController> {
         padding: const EdgeInsets.all(8.0),
         child: Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
           Text(
-            "Tổng BN: ${list.length}",
+            controller.tenphongban.value,
+            maxLines: 3,
+            style: textTheme.titleSmall,
+          ),
+          SizedBox(
+            height: size_8_h,
+          ),
+          Text(
+            "Tổng BN: ${controller.listPatientInfor.length}",
             maxLines: 3,
             style: textTheme.titleSmall,
           ),
@@ -60,21 +68,21 @@ class CommandView extends GetView<CommandController> {
             child: SingleChildScrollView(
               child: Column(
                 children: [
-                  ...list.map(
+                  ...controller.listPatientInfor.map(
                     (e) => sickPeopleCell(
                       context,
                       () {
                         Get.to(CommandDetails());
                       },
-                      '',
-                      '22.002.5',
-                      'bệnh nhân',
-                      '1986',
-                      '22.000.000',
-                      'Phường An khê, Thành phố Đà Nẵng',
-                      'thoe dõi thường xuyên',
-                      'Phạm Tú',
-                      '1',
+                      'http://192.168.1.178:1015/Data/48015/Media/${e.mAYTE}/${e.fILENAME}',
+                      e.sOBENHAN.toString(),
+                      e.tENBENHNHAN ?? '...',
+                      e.nAMSINH.toString(),
+                      '...',
+                      e.dIACHI,
+                      e.gHICHUBS ?? 'Không có ghi chú BS trong ngày',
+                      e.bSDIEUTRI ?? '...',
+                      e.pCCS.toString(),
                     ),
                   )
                 ],
@@ -91,8 +99,7 @@ class CommandView extends GetView<CommandController> {
       'Cấp 1',
       'Cấp 2',
       'Cấp 3',
-      'Cấp 4',
-      'Chưa đăng nhập',
+      'Chưa scnhập',
     ];
     return SizedBox(
       width: Get.width * 0.3,
@@ -126,6 +133,9 @@ class CommandView extends GetView<CommandController> {
                 ).toList(),
                 onChanged: (String? val) {
                   controller.updateData(dropDownValue: val, lvValue: val);
+                  if (val != null) {
+                    controller.getList(val.replaceAll('Cấp ', ''), 0, 0);
+                  }
                 },
               ),
             ),

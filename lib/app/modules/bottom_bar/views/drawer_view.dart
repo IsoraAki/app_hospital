@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:my_app_hospital/app/modules/home/views/infor_user_view.dart';
 import 'package:my_app_hospital/configs/app_color.dart';
 import 'package:my_app_hospital/configs/theme/theme.dart';
 
@@ -38,14 +40,13 @@ class DrawerView extends StatelessWidget {
             child: separatorBuilder,
           ),
           ListTile(
-            leading: Icon(
+            leading: const Icon(
               Icons.account_circle,
               color: AppColors.white,
             ),
             title: const Text('Thông tin cá nhân'),
             onTap: () {
-              // Update the state of the app.
-              // ...
+              Get.to(InforUserView());
             },
           ),
           ListTile(
