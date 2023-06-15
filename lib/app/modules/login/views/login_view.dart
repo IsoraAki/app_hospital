@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
+import 'package:my_app_hospital/app/modules/home/controllers/home_controller.dart';
 import 'package:my_app_hospital/app/modules/widget/custom_text.dart';
 import 'package:my_app_hospital/app/modules/widget/dialog/process_dialog.dart';
 import 'package:my_app_hospital/app/routes/app_pages.dart';
@@ -12,6 +13,7 @@ import 'package:my_app_hospital/util/validator.dart';
 import '../controllers/login_controller.dart';
 
 class LoginView extends GetView<LoginController> {
+  final homeController = Get.find<HomeController>();
   LoginView({Key? key}) : super(key: key);
 
   //final snackBar = SnackBar(content: Text('email ou mot de passe incorrect'));
@@ -147,6 +149,7 @@ class LoginView extends GetView<LoginController> {
                             if (_formKey.currentState!.validate()) {
                               ProgressDialog.show(context);
                               await controller.login();
+                              homeController.getOffice();
                               ProgressDialog.hide(context);
                             }
                             //Get.toNamed(Routes.BOTTOM_BAR);

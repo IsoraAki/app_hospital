@@ -34,9 +34,10 @@ class HomeController extends GetxController {
   Future<void> getOffice() async {
     listOffice = [];
     final valueMap = json.decode(AppState.instance.settingBox.read(SettingType.listOffice.toString()).toString().trim());
-
-    for (var element in valueMap) {
-      listOffice.add(OfficeModer.fromJson(element));
+    if (valueMap != null) {
+      for (var element in valueMap) {
+        listOffice.add(OfficeModer.fromJson(element));
+      }
     }
   }
 }
