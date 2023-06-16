@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:my_app_hospital/app/modules/bottom_bar/controllers/bottom_bar_controller.dart';
 import 'package:my_app_hospital/app/modules/home/views/infor_user_view.dart';
 import 'package:my_app_hospital/configs/app_color.dart';
 import 'package:my_app_hospital/configs/theme/theme.dart';
 
 class DrawerView extends StatelessWidget {
-  const DrawerView({super.key});
+  DrawerView({super.key});
+  final controller = Get.find<BottomBarController>();
 
   @override
   Widget build(BuildContext context) {
@@ -45,8 +47,11 @@ class DrawerView extends StatelessWidget {
               color: AppColors.white,
             ),
             title: const Text('Thông tin cá nhân'),
-            onTap: () {
-              Get.to(InforUserView());
+            onTap: () async {
+              await controller.getInForUser();
+              Get.to(InforUserView(
+                inforUserModer: controller.inforUser.value,
+              ));
             },
           ),
           ListTile(

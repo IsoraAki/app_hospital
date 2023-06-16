@@ -15,6 +15,8 @@ class CommandController extends GetxController {
   var tenphongban = ''.obs;
   var maphongban = ''.obs;
 
+  var isLoad = false.obs;
+
   @override
   void onInit() {
     getList(dropDownValue.value, 0, 0);
@@ -38,6 +40,7 @@ class CommandController extends GetxController {
 
   Future<void> getList(String PCCS, int isGhiChuBS, int isSHBatThuong) async {
     try {
+      isLoad.value = true;
       var resOffice = await SqlConn.readData("exec APPMBL_SelectedListPatient '${maphongban.value}',N'$PCCS', $isGhiChuBS,$isSHBatThuong");
       print(resOffice.toString());
       if (resOffice != null) {
@@ -49,7 +52,9 @@ class CommandController extends GetxController {
           }
         }
       }
+      isLoad.value = false;
     } catch (e) {
+      isLoad.value = false;
       Get.log('getList error: $e');
     }
   }

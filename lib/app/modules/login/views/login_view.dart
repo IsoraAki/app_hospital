@@ -23,7 +23,7 @@ class LoginView extends GetView<LoginController> {
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     const double r = (175 / 360); //  rapport for web test(304 / 540);
-    final coverHeight = screenWidth * r;
+    final coverHeight = MediaQuery.of(context).size.width * 0.3;
     bool _pinned = false;
     bool _snap = false;
     bool _floating = false;
@@ -56,9 +56,6 @@ class LoginView extends GetView<LoginController> {
             },
           ),
         ],
-      ),
-      SizedBox(
-        height: size_25_h,
       ),
       Form(
           key: _formKey,
@@ -129,9 +126,6 @@ class LoginView extends GetView<LoginController> {
                           ),
                         ))),
               ),
-              SizedBox(
-                height: size_25_h,
-              ),
               TweenAnimationBuilder(
                 tween: Tween<double>(begin: 0, end: 1),
                 duration: const Duration(milliseconds: 500),
@@ -149,8 +143,9 @@ class LoginView extends GetView<LoginController> {
                             if (_formKey.currentState!.validate()) {
                               ProgressDialog.show(context);
                               await controller.login();
-                              homeController.getOffice();
+                              await homeController.getOffice();
                               ProgressDialog.hide(context);
+                              Get.offNamed(Routes.BOTTOM_BAR);
                             }
                             //Get.toNamed(Routes.BOTTOM_BAR);
                           },
@@ -261,38 +256,6 @@ class LoginView extends GetView<LoginController> {
           }, childCount: widgetList.length))
         ],
       ),
-      // bottomNavigationBar: Stack(
-      //   children: [
-      //     new Container(
-      //       height: 50.0,
-      //       color: Colors.white,
-      //       child: Center(
-      //           child: Wrap(
-      //         children: [
-      //           Text(
-      //             "Vous n'avez pas un compte?  ",
-      //             style: TextStyle(color: Colors.grey[600], fontWeight: FontWeight.bold),
-      //           ),
-      //           Material(
-      //               child: InkWell(
-      //             onTap: () {
-      //               print("sign up tapped");
-      //               //Get.to(SignUpScreen());
-      //             },
-      //             child: Text(
-      //               "Sign Up",
-      //               style: TextStyle(
-      //                 color: Colors.blue[400],
-      //                 fontWeight: FontWeight.bold,
-      //                 fontSize: 15,
-      //               ),
-      //             ),
-      //           )),
-      //         ],
-      //       )),
-      //     ),
-      //   ],
-      // ),
     );
   }
 }

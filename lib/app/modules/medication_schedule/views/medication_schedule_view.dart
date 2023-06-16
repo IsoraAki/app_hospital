@@ -13,7 +13,6 @@ import '../controllers/medication_schedule_controller.dart';
 // ignore: must_be_immutable
 class MedicationScheduleView extends GetView<MedicationScheduleController> {
   MedicationScheduleView({Key? key}) : super(key: key);
-  final List<int> list = [1, 1, 1, 1, 1, 1, 1, 1];
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +26,15 @@ class MedicationScheduleView extends GetView<MedicationScheduleController> {
         padding: const EdgeInsets.all(8.0),
         child: Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
           Text(
-            "Tổng BN: ${list.length}",
+            controller.tenphongban.value,
+            maxLines: 3,
+            style: textTheme.titleSmall,
+          ),
+          SizedBox(
+            height: size_8_h,
+          ),
+          Text(
+            "Tổng BN: ${controller.listPatientInfor.length}",
             maxLines: 3,
             style: textTheme.titleSmall,
           ),
@@ -59,21 +66,22 @@ class MedicationScheduleView extends GetView<MedicationScheduleController> {
             child: SingleChildScrollView(
               child: Column(
                 children: [
-                  ...list.map(
+                  ...controller.listPatientInfor.map(
                     (e) => sickPeopleCell(
                       context,
                       () {
                         Get.to(StickDetails());
                       },
-                      '',
-                      '22.002.5',
-                      'bệnh nhân',
-                      '1986',
-                      '22.000.000',
-                      'Phường An khê, Thành phố Đà Nẵng',
-                      'thoe dõi thường xuyên',
-                      'Phạm Tú',
-                      '1',
+                      'http://192.168.1.178:1015/Data/48015/Media/${e.mAYTE}/${e.fILENAME}',
+                      e.sOBENHAN.toString(),
+                      e.tENBENHNHAN ?? '...',
+                      e.nAMSINH.toString(),
+                      '...',
+                      e.dIACHI,
+                      e.gHICHUBS ?? 'Không có ghi chú BS trong ngày',
+                      e.bSDIEUTRI ?? '...',
+                      e.pCCS.toString(),
+                      e.sEX,
                     ),
                   )
                 ],

@@ -58,7 +58,6 @@ class LoginController extends GetxController {
         final valueMap = json.decode(res.toString().trim());
 
         inforUser.value = InforUserModer.fromJson(valueMap[0]);
-        Get.offNamed(Routes.BOTTOM_BAR);
       }
 
       var resOffice = await SqlConn.readData("APPMBL_getPermissDEP 'ADMIN'"); //${inforUser.value.uSERID}

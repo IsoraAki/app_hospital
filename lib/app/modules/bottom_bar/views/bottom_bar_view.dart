@@ -27,7 +27,7 @@ class BottomBarView extends GetView<BottomBarController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text('Bệnh viện tâm thần')),
-      drawer: const Drawer(
+      drawer: Drawer(
         child: DrawerView(),
       ),
       body: Obx(() => Container(child: listWidget[controller.index.value])),

@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:my_app_hospital/app/data/infor_user_model.dart';
 import 'package:my_app_hospital/app/modules/home/controllers/home_controller.dart';
 import 'package:my_app_hospital/configs/app_color.dart';
 import 'package:my_app_hospital/configs/theme/dimens.dart';
 
 class InforUserView extends StatelessWidget {
-  InforUserView({super.key});
-
-  final homeController = Get.find<HomeController>();
+  final InforUserModer inforUserModer;
+  InforUserView({super.key, required this.inforUserModer});
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +26,7 @@ class InforUserView extends StatelessWidget {
               ClipRRect(
                 borderRadius: BorderRadius.circular(50),
                 child: Image.network(
-                  'http://192.168.1.178:1015/Data/48015/Template/AnhNhanVien/${homeController.inforUser.value.uSERID}.jpg',
+                  'http://192.168.1.178:1015/Data/48015/Template/AnhNhanVien/${inforUserModer.uSERID}.jpg',
                   fit: BoxFit.cover,
                   width: 100.sp,
                   errorBuilder: (context, error, stackTrace) {
@@ -38,7 +38,7 @@ class InforUserView extends StatelessWidget {
                 ),
               ),
               Text(
-                homeController.inforUser.value.fULLNAME ?? '...',
+                inforUserModer.fULLNAME ?? '...',
                 textAlign: TextAlign.center,
                 style: const TextStyle(
                   fontFamily: 'Segoe UI',
@@ -50,11 +50,25 @@ class InforUserView extends StatelessWidget {
               SizedBox(
                 height: size_24_h,
               ),
-              cellText(context, 'Phòng ban:', homeController.inforUser.value.dEPARTMENTNAMEEXT ?? '...'),
-              SizedBox(
-                height: size_16_h,
+              Container(
+                padding: const EdgeInsets.all(16.0),
+                margin: const EdgeInsets.all(8.0),
+                decoration: BoxDecoration(
+                  color: AppColors.bgBottomAppBar,
+                  borderRadius: BorderRadius.circular(15),
+                  border: Border.all(width: 1.0, color: Colors.white30),
+                  boxShadow: const [BoxShadow(blurRadius: 5, color: Colors.black38, offset: Offset(1, 1))],
+                ),
+                child: Column(
+                  children: [
+                    cellText(context, 'Phòng ban:', inforUserModer.dEPARTMENTNAMEEXT ?? '...'),
+                    SizedBox(
+                      height: size_16_h,
+                    ),
+                    cellText(context, 'Ngày tạo:', inforUserModer.cREATEDDATE ?? '...'),
+                  ],
+                ),
               ),
-              cellText(context, 'Ngày tạo:', homeController.inforUser.value.cREATEDDATE ?? '...'),
             ],
           ),
         ),

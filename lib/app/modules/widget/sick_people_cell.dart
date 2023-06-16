@@ -4,7 +4,8 @@ import 'package:get/get.dart';
 import 'package:my_app_hospital/configs/app_color.dart';
 import 'package:my_app_hospital/configs/theme/dimens.dart';
 
-Widget sickPeopleCell(BuildContext context, Function() ontap, String img, String id, String name, String brithday, String fee, String adr, String note, String bs, String lv) {
+Widget sickPeopleCell(
+    BuildContext context, Function() ontap, String img, String id, String name, String brithday, String fee, String adr, String note, String bs, String lv, int sex) {
   TextTheme textTheme = Theme.of(context).textTheme;
   return InkWell(
     onTap: ontap,
@@ -29,10 +30,17 @@ Widget sickPeopleCell(BuildContext context, Function() ontap, String img, String
                 width: 60.sp,
                 fit: BoxFit.contain,
                 errorBuilder: (context, error, stackTrace) {
-                  return Icon(
-                    Icons.account_box_rounded,
-                    size: 60.sp,
-                  );
+                  return sex == 1
+                      ? Image.asset(
+                          'assets/images/icon_account_man.png',
+                          width: 60.sp,
+                          fit: BoxFit.contain,
+                        )
+                      : Image.asset(
+                          'assets/images/icon_account_woman.jpg',
+                          width: 60.sp,
+                          fit: BoxFit.contain,
+                        );
                 },
               ),
               SizedBox(

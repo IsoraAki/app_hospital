@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:get/get.dart';
 import 'package:my_app_hospital/app/modules/command/controllers/command_controller.dart';
+import 'package:my_app_hospital/app/modules/medication_schedule/controllers/medication_schedule_controller.dart';
 import 'package:my_app_hospital/app/modules/widget/custom_text.dart';
 import 'package:my_app_hospital/app/modules/widget/dialog/process_dialog.dart';
 import 'package:my_app_hospital/app/routes/app_pages.dart';
@@ -12,9 +13,25 @@ import 'package:my_app_hospital/configs/theme/text.dart';
 
 import '../controllers/home_controller.dart';
 
-class HomeView extends GetView<HomeController> {
-  HomeView({Key? key}) : super(key: key);
+class HomeView extends StatefulWidget {
+  const HomeView({super.key});
+
+  @override
+  State<HomeView> createState() => _HomeViewState();
+}
+
+class _HomeViewState extends State<HomeView> {
+//   @override
+//   Widget build(BuildContext context) {
+//     return const Placeholder();
+//   }
+// }
+
+// class HomeView extends GetView<HomeController> {
+//   HomeView({Key? key}) : super(key: key);
+  final controller = Get.find<HomeController>();
   final commandController = Get.find<CommandController>();
+  final medicationScheduleController = Get.find<MedicationScheduleController>();
   final TextEditingController _searchController = TextEditingController();
 
   @override
@@ -26,6 +43,7 @@ class HomeView extends GetView<HomeController> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 // Expanded(
                 //   child: CustomTextField(
@@ -79,7 +97,13 @@ class HomeView extends GetView<HomeController> {
               children: [
                 buildMenu('assets/images/iconapp.png', 'Khám sức khỏe', () {}),
                 buildMenu('assets/images/iconapp.png', 'Đánh giá CBNV', () {}),
-                buildMenu('assets/images/iconapp.png', 'Y lệnh chăm sóc', () {
+                buildMenu('assets/images/iconapp.png', 'Y lệnh chăm sóc', () async {
+                  commandController.maphongban.value = controller.maphongban.value;
+                  commandController.tenphongban.value = controller.tenphongban.value;
+                  //commandController.listPatientInfor == controller.listPatientInfor;
+                  ProgressDialog.show(context);
+                  await commandController.getList('Tất cả', 0, 0);
+                  ProgressDialog.hide(context);
                   Get.toNamed(Routes.COMMAND);
                 }),
               ],
@@ -91,7 +115,13 @@ class HomeView extends GetView<HomeController> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 buildMenu('assets/images/iconapp.png', 'XN dùng thuốc', () {}),
-                buildMenu('assets/images/iconapp.png', 'Lịch dùng thuốc', () {
+                buildMenu('assets/images/iconapp.png', 'Lịch dùng thuốc', () async {
+                  medicationScheduleController.maphongban.value = controller.maphongban.value;
+                  medicationScheduleController.tenphongban.value = controller.tenphongban.value;
+                  //commandController.listPatientInfor == controller.listPatientInfor;
+                  ProgressDialog.show(context);
+                  await medicationScheduleController.getList('Tất cả', 0, 0);
+                  ProgressDialog.hide(context);
                   Get.toNamed(Routes.MEDICATION_SCHEDULE);
                 }),
                 buildMenu('assets/images/iconapp.png', 'Trò chuyện', () {}),
@@ -219,22 +249,20 @@ class HomeView extends GetView<HomeController> {
               ).toList(),
               onChanged: (String? val) async {
                 if (val != null) {
-                  controller.getOffice();
-                  //
-                  //controller.updateData(val);
+                  controller.updateData(val);
                   controller.dropDownValue.value = val;
                   for (var e in controller.listOffice) {
                     if (e.tENPHONGBAN == val) {
-                      commandController.tenphongban.value = e.tENPHONGBAN;
-                      commandController.maphongban.value = e.rESOURCENAME;
+                      controller.tenphongban.value = e.tENPHONGBAN;
+                      controller.maphongban.value = e.rESOURCENAME;
                       break;
                     }
                   }
                 }
-
-                ProgressDialog.show(context);
-                await commandController.getList('Tất cả', 0, 0);
-                ProgressDialog.hide(context);
+                setState(() {});
+                // ProgressDialog.show(context);
+                // await controller.getList('Tất cả', 0, 0);
+                // ProgressDialog.hide(context);
               },
             ),
           ),

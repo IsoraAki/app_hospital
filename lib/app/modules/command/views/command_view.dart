@@ -14,8 +14,6 @@ import '../controllers/command_controller.dart';
 class CommandView extends GetView<CommandController> {
   CommandView({Key? key}) : super(key: key);
 
-  final List<int> list = [1, 1, 1, 1, 1, 1, 1, 1];
-
   @override
   Widget build(BuildContext context) {
     TextTheme textTheme = Theme.of(context).textTheme;
@@ -66,27 +64,28 @@ class CommandView extends GetView<CommandController> {
           // ),
           Expanded(
             child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  ...controller.listPatientInfor.map(
-                    (e) => sickPeopleCell(
-                      context,
-                      () {
-                        Get.to(CommandDetails());
-                      },
-                      'http://192.168.1.178:1015/Data/48015/Media/${e.mAYTE}/${e.fILENAME}',
-                      e.sOBENHAN.toString(),
-                      e.tENBENHNHAN ?? '...',
-                      e.nAMSINH.toString(),
-                      '...',
-                      e.dIACHI,
-                      e.gHICHUBS ?? 'Không có ghi chú BS trong ngày',
-                      e.bSDIEUTRI ?? '...',
-                      e.pCCS.toString(),
-                    ),
-                  )
-                ],
-              ),
+              child: Obx(() => Column(
+                    children: [
+                      ...controller.listPatientInfor.map(
+                        (e) => sickPeopleCell(
+                          context,
+                          () {
+                            Get.to(CommandDetails());
+                          },
+                          'http://192.168.1.178:1015/Data/48015/Media/${e.mAYTE}/${e.fILENAME}',
+                          e.sOBENHAN.toString(),
+                          e.tENBENHNHAN ?? '...',
+                          e.nAMSINH.toString(),
+                          '...',
+                          e.dIACHI,
+                          e.gHICHUBS ?? 'Không có ghi chú BS trong ngày',
+                          e.bSDIEUTRI ?? '...',
+                          e.pCCS.toString(),
+                          e.sEX,
+                        ),
+                      )
+                    ],
+                  )),
             ),
           )
         ]),
@@ -96,10 +95,11 @@ class CommandView extends GetView<CommandController> {
 
   Widget _buildLV(BuildContext context) {
     List<String> _data = [
+      'Tất cả',
       'Cấp 1',
       'Cấp 2',
       'Cấp 3',
-      'Chưa scnhập',
+      'Chưa nhập',
     ];
     return SizedBox(
       width: Get.width * 0.3,
