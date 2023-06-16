@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:my_app_hospital/app/modules/medication_schedule/views/stick_details.dart';
+import 'package:my_app_hospital/app/modules/widget/custom_bottom_sheet.dart';
 import 'package:my_app_hospital/app/modules/widget/custom_text.dart';
 import 'package:my_app_hospital/app/modules/widget/sick_people_cell.dart';
 import 'package:my_app_hospital/configs/app_color.dart';
 import 'package:my_app_hospital/configs/theme/app_fonts.dart';
 import 'package:my_app_hospital/configs/theme/dimens.dart';
 import 'package:my_app_hospital/configs/theme/text.dart';
+import 'package:sticky_headers/sticky_headers.dart';
 
 import '../controllers/medication_schedule_controller.dart';
 
@@ -21,85 +23,161 @@ class MedicationScheduleView extends GetView<MedicationScheduleController> {
       appBar: AppBar(
         title: const Text('Lịch dùng thuốc'),
         centerTitle: true,
+        actions: [
+          IconButton(
+              onPressed: () {
+                CustomBottomSheet.showModalNotFullScreen(
+                    context,
+                    Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Column(
+                        children: [
+                          Text(
+                            "Bộ lọc",
+                            maxLines: 3,
+                            style: textTheme.titleSmall,
+                          ),
+                          Obx(() => Material(
+                                color: Colors.transparent,
+                                child: CheckboxListTile(
+                                  controlAffinity: ListTileControlAffinity.leading,
+                                  activeColor: Colors.blue[400],
+                                  checkColor: Colors.white,
+                                  title: const Text(
+                                    'Lọc sinh hiệu bất thường',
+                                    style: TextStyle(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.w400,
+                                    ),
+                                  ),
+                                  value: controller.isSHBatThuong.value == 1,
+                                  onChanged: (bool? value) {
+                                    controller.isSHBatThuong.value = value == true ? 1 : 0;
+                                    controller.getList(controller.dropDownValue.replaceAll('Cấp ', ''), controller.isGhiChuBS.value, controller.isSHBatThuong.value);
+                                    Get.back();
+                                  },
+                                ),
+                              )),
+                          Obx(() => Material(
+                                color: Colors.transparent,
+                                child: CheckboxListTile(
+                                  controlAffinity: ListTileControlAffinity.leading,
+                                  activeColor: Colors.blue[400],
+                                  checkColor: Colors.white,
+                                  title: const Text(
+                                    'Lọc ghi chú BS',
+                                    style: TextStyle(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.w400,
+                                    ),
+                                  ),
+                                  value: controller.isGhiChuBS.value == 1,
+                                  onChanged: (bool? value) {
+                                    controller.isGhiChuBS.value = value == true ? 1 : 0;
+                                    controller.getList(controller.dropDownValue.replaceAll('Cấp ', ''), controller.isGhiChuBS.value, controller.isSHBatThuong.value);
+                                    Get.back();
+                                  },
+                                ),
+                              )),
+                        ],
+                      ),
+                    ));
+              },
+              icon: Icon(Icons.filter_alt))
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
-          Text(
-            controller.tenphongban.value,
-            maxLines: 3,
-            style: textTheme.titleSmall,
-          ),
-          SizedBox(
-            height: size_8_h,
-          ),
-          Text(
-            "Tổng BN: ${controller.listPatientInfor.length}",
-            maxLines: 3,
-            style: textTheme.titleSmall,
-          ),
-          SizedBox(
-            height: size_8_h,
-          ),
-          Row(
-            children: [
-              Expanded(
-                child: CustomTextField(
-                  controller: TextEditingController(),
-                  typeInput: TypeInput.text,
-                  lableText: 'Tìm bệnh nhân',
-                  hideText: 'Nhập thông tin BN',
-                  prefixIcon: const Icon(Icons.search),
-                  //validator: (value) => Validator.validateEmail(value),
+        child: SingleChildScrollView(
+          child: Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
+            Text(
+              controller.tenphongban.value,
+              maxLines: 3,
+              style: textTheme.titleSmall,
+            ),
+            SizedBox(
+              height: size_8_h,
+            ),
+            Text(
+              "Tổng BN: ${controller.listPatientInfor.length}",
+              maxLines: 3,
+              style: textTheme.titleSmall,
+            ),
+            SizedBox(
+              height: size_8_h,
+            ),
+            StickyHeader(
+              header: Container(
+                color: AppColors.background,
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: CustomTextField(
+                        controller: TextEditingController(),
+                        typeInput: TypeInput.text,
+                        lableText: 'Tìm bệnh nhân',
+                        hideText: 'Nhập thông tin BN',
+                        prefixIcon: const Icon(Icons.search),
+                        //validator: (value) => Validator.validateEmail(value),
+                      ),
+                    ),
+                    const SizedBox(
+                      width: 16,
+                    ),
+                    _buildLV(context),
+                  ],
                 ),
               ),
-              const SizedBox(
-                width: 16,
-              ),
-              _buildLV(context),
-            ],
-          ),
-          // SizedBox(
-          //   height: size_16_h,
-          // ),
-          Expanded(
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  ...controller.listPatientInfor.map(
-                    (e) => sickPeopleCell(
-                      context,
-                      () {
-                        Get.to(StickDetails());
-                      },
-                      'http://192.168.1.178:1015/Data/48015/Media/${e.mAYTE}/${e.fILENAME}',
-                      e.sOBENHAN.toString(),
-                      e.tENBENHNHAN ?? '...',
-                      e.nAMSINH.toString(),
-                      '...',
-                      e.dIACHI,
-                      e.gHICHUBS ?? 'Không có ghi chú BS trong ngày',
-                      e.bSDIEUTRI ?? '...',
-                      e.pCCS.toString(),
-                      e.sEX,
-                    ),
-                  )
-                ],
-              ),
-            ),
-          )
-        ]),
+              content: Obx(() => controller.listPatientInfor.isNotEmpty
+                  ? Column(
+                      children: [
+                        ...controller.listPatientInfor.map(
+                          (e) => sickPeopleCell(
+                            context,
+                            () {
+                              Get.to(const StickDetails());
+                            },
+                            'http://192.168.1.178:1015/Data/48015/Media/${e.mAYTE}/${e.fILENAME}',
+                            e.sOBENHAN.toString(),
+                            e.tENBENHNHAN ?? '...',
+                            e.nAMSINH.toString(),
+                            '...',
+                            e.dIACHI,
+                            e.gHICHUBS ?? 'Không có ghi chú BS trong ngày',
+                            e.bSDIEUTRI ?? '...',
+                            e.pCCS.toString(),
+                            e.sEX,
+                          ),
+                        )
+                      ],
+                    )
+                  : SizedBox(
+                      height: Get.height / 2,
+                      child: Center(
+                        child: Text(
+                          "Không có dữ liệu",
+                          style: textTheme.bodyLarge!.copyWith(color: AppColors.hintText),
+                        ),
+                      ),
+                    )),
+            )
+
+            // SizedBox(
+            //   height: size_16_h,
+            // ),
+          ]),
+        ),
       ),
     );
   }
 
   Widget _buildLV(BuildContext context) {
     List<String> _data = [
+      'Tất cả',
       'Cấp 1',
       'Cấp 2',
       'Cấp 3',
-      'Cấp 4',
-      'Chưa đăng nhập',
+      'Chưa nhập',
     ];
     return SizedBox(
       width: Get.width * 0.3,
@@ -133,6 +211,9 @@ class MedicationScheduleView extends GetView<MedicationScheduleController> {
                 ).toList(),
                 onChanged: (String? val) {
                   controller.updateData(dropDownValue: val, lvValue: val);
+                  if (val != null) {
+                    controller.getList(controller.dropDownValue.replaceAll('Cấp ', ''), controller.isGhiChuBS.value, controller.isSHBatThuong.value);
+                  }
                 },
               ),
             ),

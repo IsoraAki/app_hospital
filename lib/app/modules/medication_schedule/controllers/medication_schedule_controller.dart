@@ -14,6 +14,9 @@ class MedicationScheduleController extends GetxController {
   var tenphongban = ''.obs;
   var maphongban = ''.obs;
 
+  var isGhiChuBS = 0.obs;
+  var isSHBatThuong = 0.obs;
+
   var checkboxValue1 = true.obs;
   var checkboxValue2 = false.obs;
   var checkboxValue3 = false.obs;

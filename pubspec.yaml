@@ -18,6 +18,8 @@ dependencies:
   sql_conn: ^0.0.3
   flutter_emoji: ^2.4.0
   get_storage: ^2.1.1
+  sticky_headers: ^0.3.0+2
+  flutter_device_type: ^0.4.0
 
 dev_dependencies: 
   flutter_lints: 2.0.1

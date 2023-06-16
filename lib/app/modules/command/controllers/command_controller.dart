@@ -16,6 +16,8 @@ class CommandController extends GetxController {
   var maphongban = ''.obs;
 
   var isLoad = false.obs;
+  var isGhiChuBS = 0.obs;
+  var isSHBatThuong = 0.obs;
 
   @override
   void onInit() {
@@ -57,5 +59,14 @@ class CommandController extends GetxController {
       isLoad.value = false;
       Get.log('getList error: $e');
     }
+  }
+
+  Future<void> search(String value) async {
+    // try {
+    //   var res = await SqlConn.readData("exec APPMBL_SelectedListPatient TENBENHNHAN N'%$value%'");
+    //   if (res != null) {}
+    // } catch (e) {
+    //   Get.log('search error: $e');
+    // }
   }
 }
