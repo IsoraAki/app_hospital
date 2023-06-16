@@ -1,16 +1,21 @@
 import 'dart:convert';
 
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:my_app_hospital/app/data/patient_information_model.dart';
 import 'package:my_app_hospital/app_state.dart';
+import 'package:my_app_hospital/configs/utils.dart';
 import 'package:sql_conn/sql_conn.dart';
 
 class CommandController extends GetxController {
   //TODO: Implement CommandController
 
+  TextEditingController searchController = TextEditingController();
+
   var dropDownValue = 'Tất cả'.obs;
   var lv = 'Tất cả'.obs;
   var listPatientInfor = [].obs;
+  var sarchlistPatientInfor = [].obs;
 
   var tenphongban = ''.obs;
   var maphongban = ''.obs;
@@ -21,6 +26,7 @@ class CommandController extends GetxController {
 
   @override
   void onInit() {
+    searchController.clear;
     getList(dropDownValue.value, 0, 0);
     super.onInit();
   }
@@ -32,12 +38,26 @@ class CommandController extends GetxController {
 
   @override
   void onClose() {
+    searchController.dispose();
     super.onClose();
   }
 
   void updateData({String? dropDownValue, String? lvValue}) {
     this.dropDownValue.value = dropDownValue ?? this.dropDownValue.value;
     lv.value = lvValue ?? lv.value;
+  }
+
+  void onSearchTextChanged(String text) async {
+    var newList = [];
+
+    for (var element in listPatientInfor) {
+      if (element.tENBENHNHAN.toString().toLowerCase().contains(text.toLowerCase()) ||
+          element.mAYTE.toString().toLowerCase().contains(text.toLowerCase()) ||
+          element.sOBENHAN.toString().toLowerCase().contains(text.toLowerCase())) {
+        newList.add(element);
+      }
+    }
+    sarchlistPatientInfor.value = newList.isNotEmpty ? newList : listPatientInfor;
   }
 
   Future<void> getList(String PCCS, int isGhiChuBS, int isSHBatThuong) async {
@@ -59,14 +79,5 @@ class CommandController extends GetxController {
       isLoad.value = false;
       Get.log('getList error: $e');
     }
-  }
-
-  Future<void> search(String value) async {
-    // try {
-    //   var res = await SqlConn.readData("exec APPMBL_SelectedListPatient TENBENHNHAN N'%$value%'");
-    //   if (res != null) {}
-    // } catch (e) {
-    //   Get.log('search error: $e');
-    // }
   }
 }

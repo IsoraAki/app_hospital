@@ -21,14 +21,6 @@ class HomeView extends StatefulWidget {
 }
 
 class _HomeViewState extends State<HomeView> {
-//   @override
-//   Widget build(BuildContext context) {
-//     return const Placeholder();
-//   }
-// }
-
-// class HomeView extends GetView<HomeController> {
-//   HomeView({Key? key}) : super(key: key);
   final controller = Get.find<HomeController>();
   final commandController = Get.find<CommandController>();
   final medicationScheduleController = Get.find<MedicationScheduleController>();

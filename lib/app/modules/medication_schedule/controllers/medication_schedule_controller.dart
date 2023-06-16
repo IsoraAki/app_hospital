@@ -1,11 +1,14 @@
 import 'dart:convert';
 
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:my_app_hospital/app/data/patient_information_model.dart';
 import 'package:sql_conn/sql_conn.dart';
 
 class MedicationScheduleController extends GetxController {
   //TODO: Implement MedicationScheduleController
+
+  TextEditingController searchController = TextEditingController();
 
   var dropDownValue = 'Tất cả'.obs;
   var lv = 'Tất cả'.obs;
@@ -17,6 +20,8 @@ class MedicationScheduleController extends GetxController {
   var isGhiChuBS = 0.obs;
   var isSHBatThuong = 0.obs;
 
+  var sarchlistPatientInfor = [].obs;
+
   var checkboxValue1 = true.obs;
   var checkboxValue2 = false.obs;
   var checkboxValue3 = false.obs;
@@ -24,6 +29,7 @@ class MedicationScheduleController extends GetxController {
 
   @override
   void onInit() {
+    searchController.clear;
     getList(dropDownValue.value, 0, 0);
     super.onInit();
   }
@@ -35,12 +41,26 @@ class MedicationScheduleController extends GetxController {
 
   @override
   void onClose() {
+    searchController.dispose();
     super.onClose();
   }
 
   void updateData({String? dropDownValue, String? lvValue}) {
     this.dropDownValue.value = dropDownValue ?? this.dropDownValue.value;
     lv.value = lvValue ?? lv.value;
+  }
+
+  void onSearchTextChanged(String text) async {
+    var newList = [];
+
+    for (var element in listPatientInfor) {
+      if (element.tENBENHNHAN.toString().toLowerCase().contains(text.toLowerCase()) ||
+          element.mAYTE.toString().toLowerCase().contains(text.toLowerCase()) ||
+          element.sOBENHAN.toString().toLowerCase().contains(text.toLowerCase())) {
+        newList.add(element);
+      }
+    }
+    sarchlistPatientInfor.value = newList.isNotEmpty ? newList : listPatientInfor;
   }
 
   Future<void> getList(String PCCS, int isGhiChuBS, int isSHBatThuong) async {

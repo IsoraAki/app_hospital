@@ -65,15 +65,6 @@ extension MapExtension on Map {
   }
 }
 
-extension StringExtension on String {
-  String removeHTML() {
-    String currentValue = this;
-    RegExp exp = RegExp(r"<[^>]*>", multiLine: true, caseSensitive: true);
-
-    return currentValue.replaceAll(exp, '');
-  }
-}
-
 class NumericTextFormatter extends TextInputFormatter {
   String moneyType;
 
@@ -148,5 +139,58 @@ class NumericTextFormatter extends TextInputFormatter {
     const MAX_LENGTH_CHARACTER = 15;
     if (text.replaceAll(',', '').length < MAX_LENGTH_CHARACTER) return true;
     return false;
+  }
+}
+
+extension StringExtension on String {
+  String capitalize() {
+    return "${this[0].toUpperCase()}${this.substring(1).toLowerCase()}";
+  }
+
+  String toCapitalized() => length > 0 ? '${this[0].toUpperCase()}${substring(1).toLowerCase()}' : '';
+
+  String toTitleCase() => replaceAll(RegExp(' +'), ' ').split(' ').map((str) => str.toCapitalized()).join(' ');
+
+  String formatTimeDuration() {
+    String time = '';
+    if (this == null || this == '') {
+      return this;
+    }
+    var listTime = this.split(':');
+    if (listTime.length == 3) {
+      time = listTime[1] + 'h' + listTime[2] + 'm';
+    }
+    if (listTime.length == 2) {
+      time = listTime[0] + 'h' + listTime[1] + 'm';
+    }
+    return time;
+  }
+
+  String replaceSpecialLetter() {
+    String result = this.toLowerCase();
+
+    const _vietnamese = 'aAeEoOuUiIdDyY';
+    final _vietnameseRegex = <RegExp>[
+      RegExp(r'à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ'),
+      RegExp(r'À|Á|Ạ|Ả|Ã|Â|Ầ|Ấ|Ậ|Ẩ|Ẫ|Ă|Ằ|Ắ|Ặ|Ẳ|Ẵ'),
+      RegExp(r'è|é|ẹ|ẻ|ẽ|ê|ề|ế|ệ|ể|ễ'),
+      RegExp(r'È|É|Ẹ|Ẻ|Ẽ|Ê|Ề|Ế|Ệ|Ể|Ễ'),
+      RegExp(r'ò|ó|ọ|ỏ|õ|ô|ồ|ố|ộ|ổ|ỗ|ơ|ờ|ớ|ợ|ở|ỡ'),
+      RegExp(r'Ò|Ó|Ọ|Ỏ|Õ|Ô|Ồ|Ố|Ộ|Ổ|Ỗ|Ơ|Ờ|Ớ|Ợ|Ở|Ỡ'),
+      RegExp(r'ù|ú|ụ|ủ|ũ|ư|ừ|ứ|ự|ử|ữ'),
+      RegExp(r'Ù|Ú|Ụ|Ủ|Ũ|Ư|Ừ|Ứ|Ự|Ử|Ữ'),
+      RegExp(r'ì|í|ị|ỉ|ĩ'),
+      RegExp(r'Ì|Í|Ị|Ỉ|Ĩ'),
+      RegExp(r'đ'),
+      RegExp(r'Đ'),
+      RegExp(r'ỳ|ý|ỵ|ỷ|ỹ'),
+      RegExp(r'Ỳ|Ý|Ỵ|Ỷ|Ỹ')
+    ];
+
+    for (var i = 0; i < _vietnamese.length; ++i) {
+      result = result.replaceAll(_vietnameseRegex[i], _vietnamese[i]);
+    }
+
+    return result.toLowerCase();
   }
 }

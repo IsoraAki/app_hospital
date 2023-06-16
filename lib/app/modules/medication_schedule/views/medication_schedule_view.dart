@@ -13,8 +13,16 @@ import 'package:sticky_headers/sticky_headers.dart';
 import '../controllers/medication_schedule_controller.dart';
 
 // ignore: must_be_immutable
-class MedicationScheduleView extends GetView<MedicationScheduleController> {
-  MedicationScheduleView({Key? key}) : super(key: key);
+
+class MedicationScheduleView extends StatefulWidget {
+  const MedicationScheduleView({super.key});
+
+  @override
+  State<MedicationScheduleView> createState() => _MedicationScheduleViewState();
+}
+
+class _MedicationScheduleViewState extends State<MedicationScheduleView> {
+  final controller = Get.find<MedicationScheduleController>();
 
   @override
   Widget build(BuildContext context) {
@@ -53,6 +61,7 @@ class MedicationScheduleView extends GetView<MedicationScheduleController> {
                                   value: controller.isSHBatThuong.value == 1,
                                   onChanged: (bool? value) {
                                     controller.isSHBatThuong.value = value == true ? 1 : 0;
+                                    controller.searchController.clear();
                                     controller.getList(controller.dropDownValue.replaceAll('Cấp ', ''), controller.isGhiChuBS.value, controller.isSHBatThuong.value);
                                     Get.back();
                                   },
@@ -74,6 +83,7 @@ class MedicationScheduleView extends GetView<MedicationScheduleController> {
                                   value: controller.isGhiChuBS.value == 1,
                                   onChanged: (bool? value) {
                                     controller.isGhiChuBS.value = value == true ? 1 : 0;
+                                    controller.searchController.clear();
                                     controller.getList(controller.dropDownValue.replaceAll('Cấp ', ''), controller.isGhiChuBS.value, controller.isSHBatThuong.value);
                                     Get.back();
                                   },
@@ -113,12 +123,16 @@ class MedicationScheduleView extends GetView<MedicationScheduleController> {
                   children: [
                     Expanded(
                       child: CustomTextField(
-                        controller: TextEditingController(),
+                        controller: controller.searchController,
                         typeInput: TypeInput.text,
                         lableText: 'Tìm bệnh nhân',
                         hideText: 'Nhập thông tin BN',
                         prefixIcon: const Icon(Icons.search),
                         //validator: (value) => Validator.validateEmail(value),
+                        onChanged: (value) {
+                          controller.onSearchTextChanged(value);
+                          setState(() {});
+                        },
                       ),
                     ),
                     const SizedBox(
@@ -128,38 +142,73 @@ class MedicationScheduleView extends GetView<MedicationScheduleController> {
                   ],
                 ),
               ),
-              content: Obx(() => controller.listPatientInfor.isNotEmpty
-                  ? Column(
-                      children: [
-                        ...controller.listPatientInfor.map(
-                          (e) => sickPeopleCell(
-                            context,
-                            () {
-                              Get.to(const StickDetails());
-                            },
-                            'http://192.168.1.178:1015/Data/48015/Media/${e.mAYTE}/${e.fILENAME}',
-                            e.sOBENHAN.toString(),
-                            e.tENBENHNHAN ?? '...',
-                            e.nAMSINH.toString(),
-                            '...',
-                            e.dIACHI,
-                            e.gHICHUBS ?? 'Không có ghi chú BS trong ngày',
-                            e.bSDIEUTRI ?? '...',
-                            e.pCCS.toString(),
-                            e.sEX,
+              content: Obx(
+                () => controller.searchController.text.isNotEmpty
+                    ? controller.sarchlistPatientInfor.isNotEmpty
+                        ? Column(
+                            children: [
+                              ...controller.sarchlistPatientInfor.map(
+                                (e) => sickPeopleCell(
+                                  context,
+                                  () {
+                                    Get.to(const StickDetails());
+                                  },
+                                  'http://192.168.1.178:1015/Data/48015/Media/${e.mAYTE}/${e.fILENAME}',
+                                  e.sOBENHAN.toString(),
+                                  e.tENBENHNHAN ?? '...',
+                                  e.nAMSINH.toString(),
+                                  '...',
+                                  e.dIACHI,
+                                  e.gHICHUBS ?? 'Không có ghi chú BS trong ngày',
+                                  e.bSDIEUTRI ?? '...',
+                                  e.pCCS.toString(),
+                                  e.sEX,
+                                ),
+                              )
+                            ],
+                          )
+                        : SizedBox(
+                            height: Get.height / 2,
+                            child: Center(
+                              child: Text(
+                                "Không có dữ liệu",
+                                style: textTheme.bodyLarge!.copyWith(color: AppColors.hintText),
+                              ),
+                            ),
+                          )
+                    : controller.listPatientInfor.isNotEmpty
+                        ? Column(
+                            children: [
+                              ...controller.listPatientInfor.map(
+                                (e) => sickPeopleCell(
+                                  context,
+                                  () {
+                                    Get.to(const StickDetails());
+                                  },
+                                  'http://192.168.1.178:1015/Data/48015/Media/${e.mAYTE}/${e.fILENAME}',
+                                  e.sOBENHAN.toString(),
+                                  e.tENBENHNHAN ?? '...',
+                                  e.nAMSINH.toString(),
+                                  '...',
+                                  e.dIACHI,
+                                  e.gHICHUBS ?? 'Không có ghi chú BS trong ngày',
+                                  e.bSDIEUTRI ?? '...',
+                                  e.pCCS.toString(),
+                                  e.sEX,
+                                ),
+                              )
+                            ],
+                          )
+                        : SizedBox(
+                            height: Get.height / 2,
+                            child: Center(
+                              child: Text(
+                                "Không có dữ liệu",
+                                style: textTheme.bodyLarge!.copyWith(color: AppColors.hintText),
+                              ),
+                            ),
                           ),
-                        )
-                      ],
-                    )
-                  : SizedBox(
-                      height: Get.height / 2,
-                      child: Center(
-                        child: Text(
-                          "Không có dữ liệu",
-                          style: textTheme.bodyLarge!.copyWith(color: AppColors.hintText),
-                        ),
-                      ),
-                    )),
+              ),
             )
 
             // SizedBox(
@@ -210,6 +259,7 @@ class MedicationScheduleView extends GetView<MedicationScheduleController> {
                   },
                 ).toList(),
                 onChanged: (String? val) {
+                  controller.searchController.clear();
                   controller.updateData(dropDownValue: val, lvValue: val);
                   if (val != null) {
                     controller.getList(controller.dropDownValue.replaceAll('Cấp ', ''), controller.isGhiChuBS.value, controller.isSHBatThuong.value);

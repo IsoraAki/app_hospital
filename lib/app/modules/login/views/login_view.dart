@@ -23,7 +23,7 @@ class LoginView extends GetView<LoginController> {
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     const double r = (175 / 360); //  rapport for web test(304 / 540);
-    final coverHeight = MediaQuery.of(context).size.width * 0.3;
+    final coverHeight = MediaQuery.of(context).size.width * 0.4;
     bool _pinned = false;
     bool _snap = false;
     bool _floating = false;
@@ -183,7 +183,7 @@ class LoginView extends GetView<LoginController> {
             ],
           )),
       SizedBox(
-        height: size_25_h,
+        height: size_32_h,
       ),
       Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
