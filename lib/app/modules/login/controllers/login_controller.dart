@@ -1,14 +1,18 @@
+import 'dart:async';
 import 'dart:convert';
 
+import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:my_app_hospital/app/data/infor_user_model.dart';
-import 'package:my_app_hospital/app/routes/app_pages.dart';
+import 'package:my_app_hospital/app/network/data/provider/my_reponse.dart';
+import 'package:my_app_hospital/app/network/repositories/app_repository.dart';
 import 'package:my_app_hospital/app_state.dart';
 import 'package:sql_conn/sql_conn.dart';
 
 class LoginController extends GetxController {
   //TODO: Implement LoginController
+  AppRepository _appRepository = AppRepository();
 
   final inforUser = InforUserModer().obs;
 
@@ -35,24 +39,24 @@ class LoginController extends GetxController {
     super.onClose();
   }
 
-  Future<void> login() async {
+  Future<void> connectSQL() async {
     try {
       await SqlConn.connect(
         ip: "192.168.1.178",
         port: "1433",
         databaseName: "STAGING_HIS",
-        username: emailController.text, //appmobi
-        password: pwdController.text, //123456a@
+        username: 'appmobi',
+        password: '123456a@',
       );
 
       var res = await SqlConn.readData("SELECT * FROM [PRODUCT_USR].[dbo].[TBL_USER] where EMPLOYEECODE='admin'");
       print(res.toString());
       if (res != null) {
         //var encodedString = jsonEncode(res.toString());
+        AppState.instance.settingBox.write(SettingType.inforUser.toString(), res.toString());
         if (isSave.value) {
           AppState.instance.settingBox.write(SettingType.user.toString(), emailController.text);
           AppState.instance.settingBox.write(SettingType.password.toString(), pwdController.text);
-          AppState.instance.settingBox.write(SettingType.inforUser.toString(), res.toString());
         }
 
         final valueMap = json.decode(res.toString().trim());
@@ -66,6 +70,34 @@ class LoginController extends GetxController {
         AppState.instance.settingBox.write(SettingType.listOffice.toString(), resOffice.toString());
       }
     } catch (e) {
+      Get.log(e.toString());
+    }
+  }
+
+  Future<void> logIn() async {
+    try {
+      AppState.instance.settingBox.remove(SettingType.inforUser.toString());
+      final MyResponse? myResponse = await _appRepository
+          .login(
+            username: emailController.text,
+            password: md5.convert(utf8.encode(pwdController.text)).toString(),
+          )
+          .timeout(const Duration(seconds: 60));
+      Get.log('username: ${emailController.text} || password: ${pwdController.text}');
+      if (myResponse != null) {
+        if (myResponse.success == true) {
+          await connectSQL();
+          // CacheHelper.saveData(key: 'user_name', value: username);
+          // CacheHelper.saveData(key: 'password', value: password);
+          // CacheHelper.saveData(key: 'token', value: myResponse.data!.first.token);
+        }
+      }
+    } on TimeoutException catch (e) {
+      //log(e.toString());
+      //emit(LoginErrorState());
+    } catch (e) {
+      //emit(LoginErrorState());
+      //ProgressDialog.showDialogwWarning(context, content: e.toString());
       Get.log(e.toString());
     }
   }

@@ -7,6 +7,8 @@ import 'package:my_app_hospital/app/modules/bottom_bar/bindings/bottom_bar_bindi
 import 'package:my_app_hospital/app/modules/command/bindings/command_binding.dart';
 import 'package:my_app_hospital/app/modules/home/bindings/home_binding.dart';
 import 'package:my_app_hospital/app/modules/login/bindings/login_binding.dart';
+import 'package:my_app_hospital/app/network/local/cache_helper.dart';
+import 'package:my_app_hospital/app/network/remote/dio.dart';
 import 'package:my_app_hospital/app_state.dart';
 import 'package:my_app_hospital/configs/theme/theme.dart';
 
@@ -14,6 +16,9 @@ import 'app/routes/app_pages.dart';
 
 Future<void> main() async {
   await GetStorage.init();
+  await CacheHelper.init();
+  await DioHelper.init();
+
   init();
   if (AppState.instance.settingBox.read(SettingType.isSave.toString()) == null) {
     AppState.instance.settingBox.write(SettingType.isSave.toString(), false);

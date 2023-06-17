@@ -8,6 +8,7 @@ import 'package:my_app_hospital/app/routes/app_pages.dart';
 import 'package:my_app_hospital/app_state.dart';
 import 'package:my_app_hospital/configs/app_color.dart';
 import 'package:my_app_hospital/configs/theme/dimens.dart';
+import 'package:my_app_hospital/configs/theme/theme.dart';
 import 'package:my_app_hospital/util/validator.dart';
 
 import '../controllers/login_controller.dart';
@@ -142,10 +143,14 @@ class LoginView extends GetView<LoginController> {
                           onPressed: () async {
                             if (_formKey.currentState!.validate()) {
                               ProgressDialog.show(context);
-                              await controller.login();
-                              await homeController.getOffice();
+                              await controller.logIn();
                               ProgressDialog.hide(context);
-                              Get.offNamed(Routes.BOTTOM_BAR);
+                              if (AppState.instance.settingBox.read(SettingType.inforUser.toString()) != null) {
+                                await homeController.getOffice();
+                                Get.offNamed(Routes.BOTTOM_BAR);
+                              } else {
+                                showToast('Login lỗi');
+                              }
                             }
                             //Get.toNamed(Routes.BOTTOM_BAR);
                           },
