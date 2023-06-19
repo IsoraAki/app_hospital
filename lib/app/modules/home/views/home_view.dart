@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:get/get.dart';
+import 'package:my_app_hospital/app/data/office_model.dart';
 import 'package:my_app_hospital/app/modules/command/controllers/command_controller.dart';
 import 'package:my_app_hospital/app/modules/medication_schedule/controllers/medication_schedule_controller.dart';
 import 'package:my_app_hospital/app/modules/widget/custom_text.dart';
@@ -9,6 +10,7 @@ import 'package:my_app_hospital/app/modules/widget/dialog/process_dialog.dart';
 import 'package:my_app_hospital/app/routes/app_pages.dart';
 import 'package:my_app_hospital/configs/app_color.dart';
 import 'package:my_app_hospital/configs/theme/app_fonts.dart';
+import 'package:my_app_hospital/configs/theme/dimens.dart';
 import 'package:my_app_hospital/configs/theme/text.dart';
 
 import '../controllers/home_controller.dart';
@@ -56,22 +58,31 @@ class _HomeViewState extends State<HomeView> {
                     ClipRRect(
                       borderRadius: BorderRadius.circular(50),
                       child: Image.network(
-                        'http://192.168.1.178:1015/Data/48015/Template/AnhNhanVien/${controller.inforUser.value.uSERID}.jpg',
+                        'http://192.168.1.178:1015/Data/48015/Template/AnhNhanVien/${controller.inforUser.value.manhanvien}.jpg',
                         fit: BoxFit.cover,
                         width: 100.sp,
                         errorBuilder: (context, error, stackTrace) {
-                          return Icon(
-                            Icons.account_circle,
-                            size: 100.sp,
-                          );
+                          return controller.inforUser.value.gioitinh == 1
+                              ? Image.asset(
+                                  'assets/images/icon_doctor_man.png',
+                                  width: 100.sp,
+                                  fit: BoxFit.contain,
+                                )
+                              : Image.asset(
+                                  'assets/images/icon_doctor_woman.jpg',
+                                  width: 100.sp,
+                                  fit: BoxFit.contain,
+                                );
                         },
                       ),
                     ),
+                    SizedBox(
+                      height: size_8_h,
+                    ),
                     Text(
-                      controller.inforUser.value.fULLNAME ?? '...',
+                      controller.inforUser.value.tennhanvien ?? '...',
                       textAlign: TextAlign.center,
                       style: const TextStyle(
-                        fontFamily: 'Segoe UI',
                         fontSize: 14,
                         fontWeight: FontWeight.bold,
                         color: Colors.white,
@@ -90,10 +101,11 @@ class _HomeViewState extends State<HomeView> {
                 buildMenu('assets/images/iconapp.png', 'Khám sức khỏe', () {}),
                 buildMenu('assets/images/iconapp.png', 'Đánh giá CBNV', () {}),
                 buildMenu('assets/images/iconapp.png', 'Y lệnh chăm sóc', () async {
-                  commandController.maphongban.value = controller.maphongban.value;
-                  commandController.tenphongban.value = controller.tenphongban.value;
+                  commandController.maphongban.value = controller.dropDownValue.value.rESOURCENAME ?? '';
+                  commandController.tenphongban.value = controller.dropDownValue.value.tENPHONGBAN ?? '';
                   //commandController.listPatientInfor == controller.listPatientInfor;
                   ProgressDialog.show(context);
+                  await commandController.getCDDD();
                   await commandController.getList('Tất cả', 0, 0);
                   ProgressDialog.hide(context);
                   Get.toNamed(Routes.COMMAND);
@@ -108,8 +120,8 @@ class _HomeViewState extends State<HomeView> {
               children: [
                 buildMenu('assets/images/iconapp.png', 'XN dùng thuốc', () {}),
                 buildMenu('assets/images/iconapp.png', 'Lịch dùng thuốc', () async {
-                  medicationScheduleController.maphongban.value = controller.maphongban.value;
-                  medicationScheduleController.tenphongban.value = controller.tenphongban.value;
+                  medicationScheduleController.maphongban.value = controller.dropDownValue.value.rESOURCENAME ?? '';
+                  medicationScheduleController.tenphongban.value = controller.dropDownValue.value.tENPHONGBAN ?? '';
                   //commandController.listPatientInfor == controller.listPatientInfor;
                   ProgressDialog.show(context);
                   await medicationScheduleController.getList('Tất cả', 0, 0);
@@ -224,7 +236,7 @@ class _HomeViewState extends State<HomeView> {
             ),
             child: DropdownButton(
               hint: Obx(
-                () => Text(controller.dropDownValue.value,
+                () => Text(controller.dropDownValue.value.tENPHONGBAN ?? '...',
                     maxLines: 1, style: TextStyle(fontSize: text_14, fontWeight: FontWeight.bold, color: AppColors.white, fontFamily: AppFonts.baiJamjuree)),
               ),
               isExpanded: true,
@@ -233,23 +245,23 @@ class _HomeViewState extends State<HomeView> {
               style: Theme.of(context).textTheme.titleSmall!.copyWith(color: AppColors.black),
               items: controller.listOffice.map(
                 (val) {
-                  return DropdownMenuItem<String>(
-                    value: val.tENPHONGBAN,
+                  return DropdownMenuItem<OfficeModer>(
+                    value: val,
                     child: Text(val.tENPHONGBAN),
                   );
                 },
               ).toList(),
-              onChanged: (String? val) async {
+              onChanged: (OfficeModer? val) async {
                 if (val != null) {
                   controller.updateData(val);
-                  controller.dropDownValue.value = val;
-                  for (var e in controller.listOffice) {
-                    if (e.tENPHONGBAN == val) {
-                      controller.tenphongban.value = e.tENPHONGBAN;
-                      controller.maphongban.value = e.rESOURCENAME;
-                      break;
-                    }
-                  }
+                  // controller.dropDownValue.value = val;
+                  // for (var e in controller.listOffice) {
+                  //   if (e.tENPHONGBAN == val) {
+                  //     controller.tenphongban.value = e.tENPHONGBAN;
+                  //     controller.maphongban.value = e.rESOURCENAME;
+                  //     break;
+                  //   }
+                  // }
                 }
                 setState(() {});
                 // ProgressDialog.show(context);

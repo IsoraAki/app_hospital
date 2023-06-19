@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_state_manager/src/simple/get_view.dart';
+import 'package:my_app_hospital/app/data/patient_information_model.dart';
 import 'package:my_app_hospital/configs/app_color.dart';
 import 'package:my_app_hospital/configs/theme/dimens.dart';
 import 'package:my_app_hospital/configs/theme/text.dart';
@@ -8,7 +8,9 @@ import 'package:my_app_hospital/configs/theme/text.dart';
 import '../controllers/medication_schedule_controller.dart';
 
 class StickDetails extends GetView<MedicationScheduleController> {
-  const StickDetails({super.key});
+  final PatientInformationModel patientInformationModel;
+
+  const StickDetails(this.patientInformationModel, {super.key});
 
   @override
   Widget build(BuildContext context) {

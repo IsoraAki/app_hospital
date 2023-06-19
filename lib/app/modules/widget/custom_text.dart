@@ -162,7 +162,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
               TextFormField(
                 autovalidateMode: AutovalidateMode.onUserInteraction,
                 onChanged: widget.onChanged,
-                maxLines: widget.maxLine,
+                maxLines: widget.typeInput == TypeInput.multiline ? null : widget.maxLine,
                 cursorColor: Colors.grey.shade700,
                 textAlignVertical: TextAlignVertical.center,
                 textAlign: widget.textAlign,

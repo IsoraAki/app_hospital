@@ -70,7 +70,7 @@ Widget sickPeopleCell(
                           width: size_16_w,
                         ),
                         Text(
-                          'Viện phí: $fee',
+                          fee,
                           maxLines: 3,
                           style: textTheme.bodyMedium,
                         ),

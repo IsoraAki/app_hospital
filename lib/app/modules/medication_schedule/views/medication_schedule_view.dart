@@ -151,7 +151,7 @@ class _MedicationScheduleViewState extends State<MedicationScheduleView> {
                                 (e) => sickPeopleCell(
                                   context,
                                   () {
-                                    Get.to(const StickDetails());
+                                    Get.to(StickDetails(e));
                                   },
                                   'http://192.168.1.178:1015/Data/48015/Media/${e.mAYTE}/${e.fILENAME}',
                                   e.sOBENHAN.toString(),
@@ -183,7 +183,7 @@ class _MedicationScheduleViewState extends State<MedicationScheduleView> {
                                 (e) => sickPeopleCell(
                                   context,
                                   () {
-                                    Get.to(const StickDetails());
+                                    Get.to(StickDetails(e));
                                   },
                                   'http://192.168.1.178:1015/Data/48015/Media/${e.mAYTE}/${e.fILENAME}',
                                   e.sOBENHAN.toString(),

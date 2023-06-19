@@ -5,8 +5,10 @@ import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:my_app_hospital/app/data/infor_user_model.dart';
+import 'package:my_app_hospital/app/modules/widget/dialog/process_dialog.dart';
 import 'package:my_app_hospital/app/network/data/provider/my_reponse.dart';
 import 'package:my_app_hospital/app/network/repositories/app_repository.dart';
+import 'package:my_app_hospital/app/routes/navigate_keys.dart';
 import 'package:my_app_hospital/app_state.dart';
 import 'package:sql_conn/sql_conn.dart';
 
@@ -49,7 +51,9 @@ class LoginController extends GetxController {
         password: '123456a@',
       );
 
-      var res = await SqlConn.readData("SELECT * FROM [PRODUCT_USR].[dbo].[TBL_USER] where EMPLOYEECODE='admin'");
+      // var res = await SqlConn.readData("SELECT * FROM [PRODUCT_USR].[dbo].[TBL_USER] where EMPLOYEECODE='admin'");
+      var res = await SqlConn.readData("APPMBL_getDepPermissFromUserCode '${emailController.text}'");
+
       print(res.toString());
       if (res != null) {
         //var encodedString = jsonEncode(res.toString());
@@ -59,17 +63,22 @@ class LoginController extends GetxController {
           AppState.instance.settingBox.write(SettingType.password.toString(), pwdController.text);
         }
 
-        final valueMap = json.decode(res.toString().trim());
+        // final valueMap = json.decode(res.toString().trim());
 
-        inforUser.value = InforUserModer.fromJson(valueMap[0]);
+        // inforUser.value = InforUserModer.fromJson(valueMap[0]);
+      } else {
+        ProgressDialog.showDialogNotification(NavigateKeys().navigationKey.currentContext!, content: 'Kết nối data không thành công');
       }
 
       var resOffice = await SqlConn.readData("APPMBL_getPermissDEP 'ADMIN'"); //${inforUser.value.uSERID}
       print(resOffice.toString());
       if (resOffice != null) {
         AppState.instance.settingBox.write(SettingType.listOffice.toString(), resOffice.toString());
+      } else {
+        ProgressDialog.showDialogNotification(NavigateKeys().navigationKey.currentContext!, content: 'Kết nối data không thành công');
       }
     } catch (e) {
+      ProgressDialog.showDialogNotification(NavigateKeys().navigationKey.currentContext!, content: 'Kết nối data không thành công');
       Get.log(e.toString());
     }
   }

@@ -150,7 +150,7 @@ class _CommandViewState extends State<CommandView> {
                                 (e) => sickPeopleCell(
                                   context,
                                   () {
-                                    Get.to(CommandDetails());
+                                    Get.to(CommandDetails(e));
                                   },
                                   'http://192.168.1.178:1015/Data/48015/Media/${e.mAYTE}/${e.fILENAME}',
                                   e.sOBENHAN.toString(),
@@ -181,14 +181,18 @@ class _CommandViewState extends State<CommandView> {
                               ...controller.listPatientInfor.map(
                                 (e) => sickPeopleCell(
                                   context,
-                                  () {
-                                    Get.to(CommandDetails());
+                                  () async {
+                                    ProgressDialog.show(context);
+                                    controller.resetData();
+                                    await controller.getTimeDate(e.bENHANID.toString());
+                                    ProgressDialog.hide(context);
+                                    Get.to(CommandDetails(e));
                                   },
                                   'http://192.168.1.178:1015/Data/48015/Media/${e.mAYTE}/${e.fILENAME}',
                                   e.sOBENHAN.toString(),
                                   e.tENBENHNHAN ?? '...',
                                   e.nAMSINH.toString(),
-                                  '...',
+                                  e.dOITUONG,
                                   e.dIACHI,
                                   e.gHICHUBS ?? 'Không có ghi chú BS trong ngày',
                                   e.bSDIEUTRI ?? '...',
