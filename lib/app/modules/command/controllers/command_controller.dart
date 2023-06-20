@@ -2,26 +2,26 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
 import 'package:my_app_hospital/app/data/diagnostic_model.dart';
 import 'package:my_app_hospital/app/data/infor_time_data_model.dart';
 import 'package:my_app_hospital/app/data/patient_information_model.dart';
 import 'package:my_app_hospital/app/data/thoi_gian_cham_soc_model.dart';
 import 'package:my_app_hospital/app/modules/widget/dialog/process_dialog.dart';
-import 'package:my_app_hospital/app/routes/navigate_keys.dart';
+import 'package:my_app_hospital/app/routes/app_pages.dart';
+import 'package:my_app_hospital/app_state.dart';
+import 'package:my_app_hospital/configs/app_color.dart';
 import 'package:my_app_hospital/configs/date_formatter.dart';
-import 'package:my_app_hospital/configs/theme/theme.dart';
 import 'package:sql_conn/sql_conn.dart';
 
 class CommandController extends GetxController {
   TextEditingController searchController = TextEditingController();
 
-  var mach = '...'.obs;
-  var nhietdo = '...'.obs;
-  var huyetap = '...'.obs;
-  var chieucao = '...'.obs;
-  var cannang = '...'.obs;
-  var nhiptho = '...'.obs;
+  var machController = TextEditingController().obs;
+  var nhietdoController = TextEditingController().obs;
+  var huyetapController = TextEditingController().obs;
+  var chieucaoController = TextEditingController().obs;
+  var cannangController = TextEditingController().obs;
+  var nhipthoController = TextEditingController().obs;
 
   var dienbienController = TextEditingController().obs;
   var ylenhchamsocController = TextEditingController().obs;
@@ -44,6 +44,7 @@ class CommandController extends GetxController {
   var maphongban = ''.obs;
 
   var isLoad = false.obs;
+  var isInsert = false.obs;
   var isGhiChuBS = 0.obs;
   var isSHBatThuong = 0.obs;
 
@@ -51,10 +52,14 @@ class CommandController extends GetxController {
   var listDiagnostic = [].obs;
   var diagnosticCurrent = DiagnosticModel().obs;
 
+  var colorMach = AppColors.textColor.obs;
+  var colorNhietDo = AppColors.textColor.obs;
+  var colorHuyetAp = AppColors.textColor.obs;
+
   @override
   void onInit() {
     searchController.clear;
-    getList(dropDownValue.value, 0, 0);
+    //getList(dropDownValue.value, 0, 0);
     super.onInit();
   }
 
@@ -73,6 +78,7 @@ class CommandController extends GetxController {
     chandoandieuduongController.value.clear();
     muctieudieuduongController.value.clear();
     canthiepController.value.clear();
+    isInsert.value = false;
     diagnosticCurrent = DiagnosticModel().obs;
   }
 
@@ -105,7 +111,7 @@ class CommandController extends GetxController {
   }
 
   void updateCDDD(DiagnosticModel value) {
-    this.diagnosticCurrent.value = value;
+    diagnosticCurrent.value = value;
     chandoandieuduongController.value.text = value.tEN ?? '';
     muctieudieuduongController.value.text = value.mUCTIEU ?? '';
     canthiepController.value.text = value.cANTHIEP ?? '';
@@ -124,13 +130,13 @@ class CommandController extends GetxController {
     sarchlistPatientInfor.value = newList.isNotEmpty ? newList : listPatientInfor;
   }
 
-  Future<void> getList(String PCCS, int isGhiChuBS, int isSHBatThuong) async {
+  Future<void> getList(BuildContext context, String PCCS, int isGhiChuBS, int isSHBatThuong, {bool? isGetTo}) async {
     try {
       isLoad.value = true;
+      listPatientInfor.value = [];
       var resOffice = await SqlConn.readData("exec APPMBL_SelectedListPatient '${maphongban.value}',N'$PCCS', $isGhiChuBS,$isSHBatThuong");
       print(resOffice.toString());
       if (resOffice != null) {
-        listPatientInfor.value = [];
         final valueMap = json.decode(resOffice.toString().trim());
         if (valueMap != null) {
           for (var element in valueMap) {
@@ -138,8 +144,12 @@ class CommandController extends GetxController {
           }
         }
       }
+      if (isGetTo == true) {
+        Get.toNamed(Routes.COMMAND);
+      }
       isLoad.value = false;
     } catch (e) {
+      ProgressDialog.showDialogNotification(context, content: 'Phát sinh lỗi: $e');
       isLoad.value = false;
       Get.log('getList error: $e');
     }
@@ -196,16 +206,17 @@ class CommandController extends GetxController {
         if (valueMap != null) {
           inforTimeDate.value = InforTimeDateModel.fromJson(valueMap[0]);
         }
-        mach.value = inforTimeDate.value.mach ?? '...';
-        nhietdo.value = inforTimeDate.value.nhietdo ?? '...';
-        huyetap.value = inforTimeDate.value.huyetap ?? '...';
-        chieucao.value = inforTimeDate.value.chieucao ?? '...';
-        cannang.value = inforTimeDate.value.cannang ?? '...';
-        nhiptho.value = inforTimeDate.value.nhiptho ?? '...';
+        machController.value.text = inforTimeDate.value.mach ?? '';
+        nhietdoController.value.text = inforTimeDate.value.nhietdo ?? '';
+        huyetapController.value.text = inforTimeDate.value.huyetap ?? '';
+        chieucaoController.value.text = inforTimeDate.value.chieucao ?? '';
+        cannangController.value.text = inforTimeDate.value.cannang ?? '';
+        nhipthoController.value.text = inforTimeDate.value.nhiptho ?? '';
 
         dienbienController.value.text = inforTimeDate.value.dienbien ?? '';
         ylenhchamsocController.value.text = inforTimeDate.value.ylenhchamsoc ?? '';
         chandoandieuduongController.value.text = inforTimeDate.value.chandoandieuduong ?? '';
+
         luonggiaController.value.text = inforTimeDate.value.luonggia ?? '';
         ghichuController.value.text = inforTimeDate.value.ghichu ?? '';
         chedodinhduongController.value.text = inforTimeDate.value.chandoandieuduong ?? '';
@@ -213,6 +224,60 @@ class CommandController extends GetxController {
       }
     } catch (e) {
       Get.log('getInforTimeDate error: $e');
+    }
+  }
+
+  void addYL() {
+    isInsert.value = true;
+    timeDate.value = ThoiGianChamSocModel(thoigianchamsoc: DateTime.now().dateMonyhDayTimeViFormatted());
+    machController.value.text;
+    nhietdoController.value.clear();
+    huyetapController.value.clear();
+    chieucaoController.value.clear();
+    cannangController.value.clear();
+    nhipthoController.value.clear();
+
+    dienbienController.value.clear();
+    ylenhchamsocController.value.clear();
+    chandoandieuduongController.value.clear();
+    canthiepController.value.clear();
+    luonggiaController.value.clear();
+    ghichuController.value.clear();
+    chedodinhduongController.value.clear();
+    muctieudieuduongController.value.clear();
+  }
+
+  Future<void> saveYL(BuildContext context) async {
+    try {
+      if (inforTimeDate.value.nguoithuchienCode == AppState.instance.settingBox.read(SettingType.usercode.toString())) {
+        if (isInsert.value) {
+          var res = await SqlConn.readData(
+              "Exec APPMBL_InsertNewPatientCare @${inforTimeDate.value.benhanId}, @${timeDate.value.thoigianchamsoc}, @${AppState.instance.settingBox.read(SettingType.usercode.toString())}, @${machController.value.text}, @${nhietdoController.value.text}, @${huyetapController.value.text}, @${cannangController.value.text}, @${nhipthoController.value.text}, @${chieucaoController.value.text}, @${dienbienController.value.text}, ,@${canthiepController.value.text}, @${chandoandieuduongController.value.text}, @${luonggiaController.value.text}, @${ghichuController.value.text}, @${inforTimeDate.value.phancapchamsoc}, @${ylenhchamsocController.value.text},@${inforTimeDate.value.chamsocId}, @${inforTimeDate.value.dieuduong}, @${muctieudieuduongController.value.text}");
+          isInsert.value = false;
+        } else {
+          var res = await SqlConn.readData(
+              "Exec APPMBL_UpdatePatientCareBy_ChamsocID @${timeDate.value.chamsocId.toString()}, @${timeDate.value.thoigianchamsoc}, @${AppState.instance.settingBox.read(SettingType.usercode.toString())}, @${machController.value.text}, @${nhietdoController.value.text}, @${huyetapController.value.text}, @${cannangController.value.text}, @${nhipthoController.value.text}, @${chieucaoController.value.text}, @${dienbienController.value.text}, ,@${canthiepController.value.text}, @${chandoandieuduongController.value.text}, @${luonggiaController.value.text}, @${ghichuController.value.text}, @${inforTimeDate.value.phancapchamsoc}, @${ylenhchamsocController.value.text},@${inforTimeDate.value.chamsocId}, @${inforTimeDate.value.dieuduong}, @${muctieudieuduongController.value.text}");
+        }
+      } else {
+        ProgressDialog.showDialogNotification(context, content: 'Chỉ có "${inforTimeDate.value.dieuduong}" mới có thể\nLƯU y lệnh chăm sóc này');
+      }
+    } catch (e) {
+      Get.log('saveYL error: $e');
+    }
+  }
+
+  Future<void> deletaYL(BuildContext context) async {
+    try {
+      if (inforTimeDate.value.nguoithuchienCode == AppState.instance.settingBox.read(SettingType.usercode.toString())) {
+        ProgressDialog.showDialogNotification(context, content: 'Xác nhận xóa Y lệnh', isCanel: true, onPressed: () {
+          SqlConn.readData("Exec APPMBL_deleteInfoPatientCareBy_ChamsocID @${timeDate.value.chamsocId.toString()}");
+        });
+      } else {
+        ProgressDialog.showDialogNotification(context, content: 'Chỉ có "${inforTimeDate.value.dieuduong}" mới có thể\nXÓA y lệnh chăm sóc này');
+      }
+    } catch (e) {
+      ProgressDialog.showDialogNotification(context, content: 'Xóa y lệnh thất bại\nLỗi: $e');
+      Get.log('deletaYL error: $e');
     }
   }
 }

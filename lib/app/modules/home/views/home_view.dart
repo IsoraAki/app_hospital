@@ -106,9 +106,8 @@ class _HomeViewState extends State<HomeView> {
                   //commandController.listPatientInfor == controller.listPatientInfor;
                   ProgressDialog.show(context);
                   await commandController.getCDDD();
-                  await commandController.getList('Tất cả', 0, 0);
+                  await commandController.getList(context, 'Tất cả', 0, 0, isGetTo: true);
                   ProgressDialog.hide(context);
-                  Get.toNamed(Routes.COMMAND);
                 }),
               ],
             ),
@@ -124,9 +123,8 @@ class _HomeViewState extends State<HomeView> {
                   medicationScheduleController.tenphongban.value = controller.dropDownValue.value.tENPHONGBAN ?? '';
                   //commandController.listPatientInfor == controller.listPatientInfor;
                   ProgressDialog.show(context);
-                  await medicationScheduleController.getList('Tất cả', 0, 0);
+                  await medicationScheduleController.getList(context, 'Tất cả', 0, 0, isGetTo: true);
                   ProgressDialog.hide(context);
-                  Get.toNamed(Routes.MEDICATION_SCHEDULE);
                 }),
                 buildMenu('assets/images/iconapp.png', 'Trò chuyện', () {}),
               ],

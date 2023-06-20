@@ -71,6 +71,10 @@ class InforUserView extends StatelessWidget {
                 ),
                 child: Column(
                   children: [
+                    cellText(context, 'Mã nhân viên:', inforUserModer.manhanvien ?? '...'),
+                    SizedBox(
+                      height: size_16_h,
+                    ),
                     cellText(context, 'Mã phòng ban:', inforUserModer.maphongban ?? '...'),
                     SizedBox(
                       height: size_16_h,

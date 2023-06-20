@@ -42,7 +42,7 @@ class CustomText extends StatelessWidget {
   }
 }
 
-enum TypeInput { name, phone, email, idCard, password, confirmPassword, number, text, multiline }
+enum TypeInput { name, phone, email, idCard, password, confirmPassword, number, text, multiline, datetime }
 
 const EMOJI_REGEXP = r'(\u00a9|\u00ae|[\u2000-\u3300]|\ud83c[\ud000-\udfff]|\ud83d[\ud000-\udfff]|\ud83e[\ud000-\udfff])';
 const MAX_LENGTH_CHARACTER = 50;
@@ -79,6 +79,7 @@ class CustomTextField extends StatefulWidget {
   final GestureTapCallback? onTapPaste;
   final TextStyle? style;
   final InputDecoration? decoration;
+  final int? maxNumber;
 
   const CustomTextField({
     super.key,
@@ -112,6 +113,7 @@ class CustomTextField extends StatefulWidget {
     this.isPaste = false,
     this.style,
     this.decoration,
+    this.maxNumber,
   });
 
   @override
@@ -137,6 +139,8 @@ class _CustomTextFieldState extends State<CustomTextField> {
         return TextInputType.visiblePassword;
       case TypeInput.multiline:
         return TextInputType.multiline;
+      case TypeInput.datetime:
+        return TextInputType.datetime;
       default:
         return TextInputType.text;
     }
@@ -172,7 +176,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
                   if (widget.vnd) ...{
                     NumericTextFormatter('VND'),
                   },
-                  widget.number ? LengthLimitingTextInputFormatter(15) : LengthLimitingTextInputFormatter(355),
+                  widget.number ? LengthLimitingTextInputFormatter(widget.maxNumber ?? 15) : LengthLimitingTextInputFormatter(widget.maxNumber ?? 355),
                   if (widget.number) ...{FilteringTextInputFormatter.digitsOnly}
                 ],
                 obscureText: widget.obscureText ?? widget.typeInput == TypeInput.password || widget.typeInput == TypeInput.confirmPassword ? !_passwordVisible : false,

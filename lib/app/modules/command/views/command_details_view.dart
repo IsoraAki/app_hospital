@@ -10,7 +10,6 @@ import 'package:my_app_hospital/app/modules/widget/custom_text.dart';
 import 'package:my_app_hospital/configs/app_color.dart';
 import 'package:my_app_hospital/configs/theme/dimens.dart';
 import 'package:my_app_hospital/configs/theme/text.dart';
-import 'package:my_app_hospital/configs/theme/theme.dart';
 import 'package:omni_datetime_picker/omni_datetime_picker.dart';
 
 class CommandDetails extends GetView<CommandController> {
@@ -43,10 +42,6 @@ class CommandDetails extends GetView<CommandController> {
                 patientInformationModel.pCCS ?? '...',
                 patientInformationModel.sEX ?? 1,
               ),
-              SizedBox(
-                height: size_8_h,
-              ),
-              Center(child: inforCell(context, 'Điều dưỡng', controller.inforTimeDate.value.dieuduong ?? '...')),
               SizedBox(
                 height: size_8_h,
               ),
@@ -115,7 +110,7 @@ class CommandDetails extends GetView<CommandController> {
               SizedBox(
                 height: size_8_h,
               ),
-              buildButton(),
+              buildButton(context),
               SizedBox(
                 height: size_24_h,
               ),
@@ -257,6 +252,10 @@ class CommandDetails extends GetView<CommandController> {
                       maxLines: 3,
                       style: textTheme.titleSmall,
                     ),
+                    SizedBox(
+                      height: size_8_h,
+                    ),
+                    inforCell(context, 'Điều dưỡng', controller.inforTimeDate.value.dieuduong ?? '...')
                   ],
                 ),
               )
@@ -270,49 +269,121 @@ class CommandDetails extends GetView<CommandController> {
   Widget buildDetails(BuildContext context) {
     TextTheme textTheme = Theme.of(context).textTheme;
     return Container(
-      width: Get.width,
-      padding: const EdgeInsets.all(16.0),
-      margin: const EdgeInsets.all(8.0),
-      decoration: BoxDecoration(
-        color: AppColors.bgBottomAppBar,
-        borderRadius: BorderRadius.circular(15),
-        border: Border.all(width: 1.0, color: Colors.white30),
-        boxShadow: const [BoxShadow(blurRadius: 5, color: Colors.black38, offset: Offset(1, 1))],
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+        width: Get.width,
+        padding: const EdgeInsets.all(16.0),
+        margin: const EdgeInsets.all(8.0),
+        decoration: BoxDecoration(
+          color: AppColors.bgBottomAppBar,
+          borderRadius: BorderRadius.circular(15),
+          border: Border.all(width: 1.0, color: Colors.white30),
+          boxShadow: const [BoxShadow(blurRadius: 5, color: Colors.black38, offset: Offset(1, 1))],
+        ),
+        child: Obx(
+          () => Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              cellInfor(Icons.monitor_heart_outlined, controller.mach.value, 'Lần/phút'),
-              cellInfor(Icons.thermostat, controller.nhietdo.value, '°C'),
-              cellInfor(Icons.bloodtype_rounded, controller.huyetap.value, 'mmHg'),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  cellInfor(Icons.monitor_heart_outlined, controller.machController.value, 'Lần/phút', type: 'mach'),
+                  cellInfor(Icons.thermostat, controller.nhietdoController.value, '°C', type: 'nhietdo'),
+                  cellInfor(Icons.bloodtype_rounded, controller.huyetapController.value, 'mmHg', typeInput: TypeInput.datetime, type: 'huyetap'),
+                ],
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  cellInfor(Icons.monitor_weight, controller.cannangController.value, 'Kg'),
+                  cellInfor(Icons.man_3_rounded, controller.chieucaoController.value, 'Cm'),
+                  cellInfor(Icons.air, controller.nhipthoController.value, 'Lần/phút'),
+                ],
+              )
             ],
           ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              cellInfor(Icons.monitor_weight, controller.cannang.value, 'Kg'),
-              cellInfor(Icons.man_3_rounded, controller.chieucao.value, 'Cm'),
-              cellInfor(Icons.air, controller.nhietdo.value, 'Lần/phút'),
-            ],
-          )
-        ],
-      ),
-    );
+        ));
   }
 
-  Widget cellInfor(IconData icon, String title, String describe) {
+  Widget cellInfor(IconData icon, TextEditingController textEditingController, String describe, {TypeInput? typeInput, String? type}) {
     return Row(
       children: [
         Icon(icon),
         SizedBox(
           width: size_8_w,
         ),
-        Text(
-          title,
-          style: TextStyle(color: AppColors.textColor, fontSize: 14.sp, fontWeight: FontWeight.w400),
+        SizedBox(
+          width: size_50_w,
+          child: CustomTextField(
+            controller: textEditingController,
+            isShowLable: false,
+            paddingVer: 0,
+            paddingHoz: 0,
+            maxNumber: 6,
+            style: TextStyle(
+                color: type == 'mach'
+                    ? controller.colorMach.value
+                    : type == 'nhietdo'
+                        ? controller.colorNhietDo.value
+                        : type == 'huyetap'
+                            ? controller.colorHuyetAp.value
+                            : AppColors.white,
+                fontSize: text_16,
+                fontWeight: FontWeight.w600),
+            textAlign: TextAlign.center,
+            typeInput: typeInput ?? TypeInput.number,
+            onChanged: (value) {
+              if (value.isNotEmpty) {
+                switch (type) {
+                  case 'mach':
+                    if (int.parse(value) < 55 || int.parse(value) > 100) {
+                      controller.colorMach.value = AppColors.error;
+                    } else {
+                      controller.colorMach.value = AppColors.white;
+                    }
+                    break;
+                  case 'nhietdo':
+                    if (int.parse(value) < 36 || int.parse(value) >= 38) {
+                      controller.colorNhietDo.value = AppColors.error;
+                    } else {
+                      controller.colorNhietDo.value = AppColors.white;
+                    }
+                    break;
+                  case 'huyetap':
+                    String cao = '0';
+
+                    String thap = '0';
+
+                    if (value.contains('/')) {
+                      cao = value.split('/').first.trim();
+                      thap = value.split('/').last.trim();
+                    } else if (value.contains(' ')) {
+                      cao = value.split(' ').first.trim();
+                      thap = value.split(' ').last.trim();
+                    } else {
+                      cao = value;
+                      thap = '0';
+                    }
+
+                    if (int.parse(cao) < 90 || int.parse(cao) > 140 || int.parse(thap) < 60 || int.parse(thap) > 90) {
+                      controller.colorHuyetAp.value = AppColors.error;
+                    } else {
+                      controller.colorHuyetAp.value = AppColors.white;
+                    }
+                    break;
+                  default:
+                }
+              }
+            },
+            decoration: InputDecoration(
+              fillColor: Colors.transparent,
+              border: InputBorder.none,
+              focusedBorder: InputBorder.none,
+              enabledBorder: InputBorder.none,
+              errorBorder: InputBorder.none,
+              disabledBorder: InputBorder.none,
+              contentPadding: EdgeInsets.only(left: 0, bottom: size_15_h, right: 0),
+              hintText: '...',
+            ),
+          ),
         ),
         SizedBox(
           width: size_8_w,
@@ -421,12 +492,15 @@ class CommandDetails extends GetView<CommandController> {
     );
   }
 
-  Widget buildButton() {
+  Widget buildButton(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
         ElevatedButton(
-            onPressed: () {},
+            onPressed: () {
+              controller.addYL();
+            },
+            style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.pink)),
             child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: Row(
@@ -440,7 +514,10 @@ class CommandDetails extends GetView<CommandController> {
               ),
             )),
         ElevatedButton(
-            onPressed: () {},
+            onPressed: () {
+              controller.saveYL(context);
+            },
+            style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.orange)),
             child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: Row(
@@ -453,20 +530,30 @@ class CommandDetails extends GetView<CommandController> {
                 ],
               ),
             )),
-        ElevatedButton(
-            onPressed: () {},
+        Obx(() => ElevatedButton(
+            onPressed: () {
+              if (controller.isInsert.value == false) {
+                controller.deletaYL(context);
+              }
+            },
+            style: controller.isInsert.value == true
+                ? ButtonStyle(backgroundColor: MaterialStateProperty.all(AppColors.backgroundBottombar))
+                : ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.red)),
             child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: Row(
                 children: [
-                  const Icon(Icons.delete),
+                  Icon(Icons.delete, color: controller.isInsert.value == true ? AppColors.hintText : AppColors.white),
                   SizedBox(
                     width: size_8_w,
                   ),
-                  const Text('Xóa YL'),
+                  Text(
+                    'Xóa YL',
+                    style: TextStyle(color: controller.isInsert.value == true ? AppColors.hintText : AppColors.white),
+                  ),
                 ],
               ),
-            )),
+            ))),
       ],
     );
   }

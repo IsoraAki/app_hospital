@@ -15,8 +15,8 @@ class AppRepository {
 
   Future<MyResponse?> login({String? username, String? password}) async {
     final params = {
-      "username": username,
-      "password": password,
+      "ACCOUNTNAME": username,
+      "PASSWORD": password,
     };
 
     //final queryParameters = {"agent": ApiDocs.agent};
@@ -26,6 +26,18 @@ class AppRepository {
       //object: Login(),
       params: params,
       //queryParameters: queryParameters,
+    );
+  }
+
+  Future<MyResponse?> passwordEncrypt({String? password}) async {
+    final params = {
+      "password": password,
+    };
+    return await callBack.get(
+      url: '192.168.1.178:1019',
+      endPoint: apiApp + ApiDocs.password,
+      //object: Login(),
+      params: params,
     );
   }
 }

@@ -41,7 +41,7 @@ class LoginController extends GetxController {
     super.onClose();
   }
 
-  Future<void> connectSQL() async {
+  Future<void> connectSQL(BuildContext context) async {
     try {
       await SqlConn.connect(
         ip: "192.168.1.178",
@@ -62,12 +62,8 @@ class LoginController extends GetxController {
           AppState.instance.settingBox.write(SettingType.user.toString(), emailController.text);
           AppState.instance.settingBox.write(SettingType.password.toString(), pwdController.text);
         }
-
-        // final valueMap = json.decode(res.toString().trim());
-
-        // inforUser.value = InforUserModer.fromJson(valueMap[0]);
       } else {
-        ProgressDialog.showDialogNotification(NavigateKeys().navigationKey.currentContext!, content: 'Kết nối data không thành công');
+        ProgressDialog.showDialogNotification(context, content: 'Kết nối data không thành công');
       }
 
       var resOffice = await SqlConn.readData("APPMBL_getPermissDEP 'ADMIN'"); //${inforUser.value.uSERID}
@@ -75,38 +71,59 @@ class LoginController extends GetxController {
       if (resOffice != null) {
         AppState.instance.settingBox.write(SettingType.listOffice.toString(), resOffice.toString());
       } else {
-        ProgressDialog.showDialogNotification(NavigateKeys().navigationKey.currentContext!, content: 'Kết nối data không thành công');
+        ProgressDialog.showDialogNotification(context, content: 'Kết nối data không thành công');
       }
     } catch (e) {
-      ProgressDialog.showDialogNotification(NavigateKeys().navigationKey.currentContext!, content: 'Kết nối data không thành công');
+      ProgressDialog.showDialogNotification(context, content: 'Kết nối data không thành công');
       Get.log(e.toString());
     }
   }
 
-  Future<void> logIn() async {
+  Future<void> passwordEncrypt(BuildContext context) async {
+    try {
+      final MyResponse? myResponse = await _appRepository
+          .passwordEncrypt(
+            password: pwdController.text,
+          )
+          .timeout(const Duration(seconds: 60));
+      Get.log('username: ${emailController.text} || password: ${pwdController.text}');
+      if (myResponse?.data != null) {
+        String password = myResponse!.data!.first.toString();
+        // ignore: use_build_context_synchronously
+        await logIn(context, password);
+      }
+    } on TimeoutException catch (e) {
+      ProgressDialog.showDialogNotification(context, content: 'Kết nối đươc với máy chủ');
+    } catch (e) {
+      ProgressDialog.showDialogNotification(context, content: 'Đăng nhập không thành công');
+      Get.log(e.toString());
+    }
+  }
+
+  Future<void> logIn(BuildContext context, String password) async {
     try {
       AppState.instance.settingBox.remove(SettingType.inforUser.toString());
       final MyResponse? myResponse = await _appRepository
           .login(
             username: emailController.text,
-            password: md5.convert(utf8.encode(pwdController.text)).toString(),
+            password: password,
           )
           .timeout(const Duration(seconds: 60));
       Get.log('username: ${emailController.text} || password: ${pwdController.text}');
       if (myResponse != null) {
         if (myResponse.success == true) {
-          await connectSQL();
-          // CacheHelper.saveData(key: 'user_name', value: username);
-          // CacheHelper.saveData(key: 'password', value: password);
-          // CacheHelper.saveData(key: 'token', value: myResponse.data!.first.token);
+          Get.log('${myResponse.result?.first['LOGINRESULTTYPE']}');
+          if (myResponse.result?.first['LOGINRESULTTYPE'] == 0) {
+            await connectSQL(context);
+          } else {
+            ProgressDialog.showDialogNotification(context, content: 'Sai tài khoản hoặc mật khẩu');
+          }
         }
       }
     } on TimeoutException catch (e) {
-      //log(e.toString());
-      //emit(LoginErrorState());
+      ProgressDialog.showDialogNotification(context, content: 'Kết nối đươc với máy chủ');
     } catch (e) {
-      //emit(LoginErrorState());
-      //ProgressDialog.showDialogwWarning(context, content: e.toString());
+      ProgressDialog.showDialogNotification(context, content: 'Đăng nhập không thành công');
       Get.log(e.toString());
     }
   }

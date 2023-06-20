@@ -39,7 +39,7 @@ class MyCallBack {
       if (DioErrorType.receiveTimeout == e.type || DioErrorType.connectionTimeout == e.type) {
       } else if (DioErrorType.unknown == e.type) {
         if (e.message!.contains('SocketException')) {
-          return MyResponse(false, 400, ErrorResolver.getCodeError(400), null, ErrorResolver.getCodeError(400), null);
+          return MyResponse(false, 400, ErrorResolver.getCodeError(400), null, ErrorResolver.getCodeError(400), null, null);
         }
       } else {
         return MyResponse(
@@ -48,6 +48,7 @@ class MyCallBack {
           e.response?.data['code'] ?? 'error',
           ((e.response?.data["message"] is List) ? e.response?.data['message'].cast<String>() : [e.response?.data['message']]),
           e.response?.data['error'] ?? 'error',
+          null,
           null,
         );
       }
@@ -71,7 +72,7 @@ class MyCallBack {
         print("object");
       } else if (DioErrorType.unknown == e.type) {
         if (e.message!.contains('SocketException')) {
-          return MyResponse(false, 400, ErrorResolver.getCodeError(400), null, ErrorResolver.getCodeError(400), null);
+          return MyResponse(false, 400, ErrorResolver.getCodeError(400), null, ErrorResolver.getCodeError(400), null, null);
         }
       } else {
         return MyResponse(
@@ -80,6 +81,7 @@ class MyCallBack {
           e.response?.data['code'] ?? 'error',
           ((e.response?.data["message"] is List) ? e.response?.data['message'].cast<String>() : [e.response?.data['message']]),
           e.response?.data['error'] ?? 'error',
+          null,
           null,
         );
       }
@@ -104,7 +106,7 @@ class MyCallBack {
         print("object");
       } else if (DioErrorType.unknown == e.type) {
         if (e.message!.contains('SocketException')) {
-          return MyResponse(false, 400, ErrorResolver.getCodeError(400), null, ErrorResolver.getCodeError(400), null);
+          return MyResponse(false, 400, ErrorResolver.getCodeError(400), null, ErrorResolver.getCodeError(400), null, null);
         }
       } else {
         return MyResponse(
@@ -113,6 +115,7 @@ class MyCallBack {
           e.response?.data['code'] ?? 'error',
           ((e.response?.data["message"] is List) ? e.response?.data['message'].cast<String>() : [e.response?.data['message']]),
           e.response?.data['error'] ?? 'error',
+          null,
           null,
         );
       }
@@ -133,10 +136,18 @@ class MyCallBack {
         print("object");
       } else if (DioErrorType.unknown == e.type) {
         if (e.message!.contains('SocketException')) {
-          return MyResponse(false, 400, ErrorResolver.getCodeError(400), null, ErrorResolver.getCodeError(400), null);
+          return MyResponse(false, 400, ErrorResolver.getCodeError(400), null, ErrorResolver.getCodeError(400), null, null);
         }
       } else {
-        return MyResponse(false, 500, ErrorResolver.getCodeError(500), null, ErrorResolver.getCodeError(500), null);
+        return MyResponse(
+          false,
+          500,
+          ErrorResolver.getCodeError(500),
+          null,
+          ErrorResolver.getCodeError(500),
+          null,
+          null,
+        );
       }
       _logger.log(Level.INFO, "Exception occured: " + e.toString());
     } catch (exc) {
@@ -148,7 +159,16 @@ class MyCallBack {
   Future<MyResponse?> base(final Response response, final lass) async {
     try {
       if (response.statusCode == 201 || response.statusCode == 200) {
-        MyResponse data = new MyResponse.fromJson(response.data, lass);
+        MyResponse data;
+        if (response.data is String) {
+          Map<String, dynamic> responsedata = {
+            "data": [response.data]
+          };
+          data = new MyResponse.fromJson(responsedata, lass);
+        } else {
+          data = new MyResponse.fromJson(response.data, lass);
+        }
+
         return data;
       }
     } catch (exc) {

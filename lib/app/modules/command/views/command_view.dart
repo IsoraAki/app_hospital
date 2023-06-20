@@ -61,7 +61,7 @@ class _CommandViewState extends State<CommandView> {
                                   onChanged: (bool? value) {
                                     controller.isSHBatThuong.value = value == true ? 1 : 0;
                                     controller.searchController.clear();
-                                    controller.getList(controller.dropDownValue.replaceAll('Cấp ', ''), controller.isGhiChuBS.value, controller.isSHBatThuong.value);
+                                    controller.getList(context, controller.dropDownValue.replaceAll('Cấp ', ''), controller.isGhiChuBS.value, controller.isSHBatThuong.value);
                                     Get.back();
                                   },
                                 ),
@@ -83,7 +83,7 @@ class _CommandViewState extends State<CommandView> {
                                   onChanged: (bool? value) {
                                     controller.isGhiChuBS.value = value == true ? 1 : 0;
                                     controller.searchController.clear();
-                                    controller.getList(controller.dropDownValue.replaceAll('Cấp ', ''), controller.isGhiChuBS.value, controller.isSHBatThuong.value);
+                                    controller.getList(context, controller.dropDownValue.replaceAll('Cấp ', ''), controller.isGhiChuBS.value, controller.isSHBatThuong.value);
                                     Get.back();
                                   },
                                 ),
@@ -265,7 +265,7 @@ class _CommandViewState extends State<CommandView> {
                   controller.searchController.clear();
                   controller.updateData(dropDownValue: val, lvValue: val);
                   if (val != null) {
-                    controller.getList(controller.dropDownValue.replaceAll('Cấp ', ''), controller.isGhiChuBS.value, controller.isSHBatThuong.value);
+                    controller.getList(context, controller.dropDownValue.replaceAll('Cấp ', ''), controller.isGhiChuBS.value, controller.isSHBatThuong.value);
                   }
                 },
               ),

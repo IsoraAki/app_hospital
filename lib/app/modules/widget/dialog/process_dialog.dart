@@ -114,7 +114,7 @@ class ProgressDialog {
   }
 
   static void showDialogNotification(BuildContext context,
-      {required String content, String? title, Function()? onPressed, bool canDismissible = false, String? okTitle, String? canTitle}) {
+      {required String content, String? title, Function()? onPressed, bool isCanel = false, bool canDismissible = false, String? okTitle, String? canTitle}) {
     Alert(
         context: context,
         barrierDismissible: canDismissible,
@@ -129,32 +129,36 @@ class ProgressDialog {
               child: Text(
                 content,
                 textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.bodySmall!.copyWith(fontSize: text_14),
+                style: Theme.of(context).textTheme.bodySmall!.copyWith(fontSize: text_14, height: 1.5),
               ),
             ),
             const SizedBox(height: 46),
           ],
         ),
         buttons: [
-          DialogButton(
-            margin: const EdgeInsets.only(left: 16, right: 16),
-            padding: const EdgeInsets.all(0.0),
-            color: Theme.of(context).disabledColor,
-            radius: BorderRadius.circular(10.0),
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-            child: Text(
-              canTitle ?? "Hủy",
-              style: Theme.of(context).textTheme.titleLarge,
+          if (isCanel)
+            DialogButton(
+              margin: const EdgeInsets.only(left: 16, right: 16),
+              padding: const EdgeInsets.all(0.0),
+              color: Theme.of(context).disabledColor,
+              radius: BorderRadius.circular(10.0),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text(
+                canTitle ?? "Hủy",
+                style: Theme.of(context).textTheme.titleLarge,
+              ),
             ),
-          ),
           DialogButton(
             margin: const EdgeInsets.only(left: 16, right: 16),
             padding: const EdgeInsets.all(0.0),
             color: AppColors.blue,
             radius: BorderRadius.circular(10.0),
-            onPressed: onPressed,
+            onPressed: onPressed ??
+                () {
+                  Navigator.of(context).pop();
+                },
             child: Text(
               okTitle ?? "Ok",
               style: Theme.of(context).textTheme.displaySmall,

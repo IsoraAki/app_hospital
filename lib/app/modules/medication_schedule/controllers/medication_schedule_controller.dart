@@ -3,6 +3,8 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:my_app_hospital/app/data/patient_information_model.dart';
+import 'package:my_app_hospital/app/modules/widget/dialog/process_dialog.dart';
+import 'package:my_app_hospital/app/routes/app_pages.dart';
 import 'package:sql_conn/sql_conn.dart';
 
 class MedicationScheduleController extends GetxController {
@@ -30,7 +32,6 @@ class MedicationScheduleController extends GetxController {
   @override
   void onInit() {
     searchController.clear;
-    getList(dropDownValue.value, 0, 0);
     super.onInit();
   }
 
@@ -63,12 +64,12 @@ class MedicationScheduleController extends GetxController {
     sarchlistPatientInfor.value = newList.isNotEmpty ? newList : listPatientInfor;
   }
 
-  Future<void> getList(String PCCS, int isGhiChuBS, int isSHBatThuong) async {
+  Future<void> getList(BuildContext context, String PCCS, int isGhiChuBS, int isSHBatThuong, {bool? isGetTo}) async {
     try {
+      listPatientInfor.value = [];
       var resOffice = await SqlConn.readData("exec APPMBL_SelectedListPatient '${maphongban.value}',N'$PCCS', $isGhiChuBS,$isSHBatThuong");
       print(resOffice.toString());
       if (resOffice != null) {
-        listPatientInfor.value = [];
         final valueMap = json.decode(resOffice.toString().trim());
         if (valueMap != null) {
           for (var element in valueMap) {
@@ -76,7 +77,11 @@ class MedicationScheduleController extends GetxController {
           }
         }
       }
+      if (isGetTo == true) {
+        Get.toNamed(Routes.MEDICATION_SCHEDULE);
+      }
     } catch (e) {
+      ProgressDialog.showDialogNotification(context, content: 'Phát sinh lỗi: $e');
       Get.log('getList error: $e');
     }
   }

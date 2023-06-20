@@ -42,6 +42,26 @@ class CdddView extends StatelessWidget {
                   children: [
                     Flexible(
                         child: Text(
+                      commandController.listDiagnostic[index].mA ?? '...',
+                      textAlign: TextAlign.left,
+                      style: TextStyle(
+                        fontSize: text_16,
+                        color: commandController.diagnosticCurrent.value == commandController.listDiagnostic[index] ? Colors.white : AppColors.hintText,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    )),
+                    Flexible(
+                        child: Text(
+                      commandController.listDiagnostic[index].nHOM ?? '...',
+                      textAlign: TextAlign.left,
+                      style: TextStyle(
+                        fontSize: text_16,
+                        color: commandController.diagnosticCurrent.value == commandController.listDiagnostic[index] ? Colors.white : AppColors.hintText,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    )),
+                    Flexible(
+                        child: Text(
                       commandController.listDiagnostic[index].tEN ?? '...',
                       textAlign: TextAlign.left,
                       style: TextStyle(
@@ -50,6 +70,7 @@ class CdddView extends StatelessWidget {
                         fontWeight: FontWeight.w500,
                       ),
                     )),
+
                     // if (filterCurrent == index)
                     //   SvgPicture.asset(AppAssets.ic_right),
                   ],

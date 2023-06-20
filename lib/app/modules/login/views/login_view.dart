@@ -143,7 +143,8 @@ class LoginView extends GetView<LoginController> {
                           onPressed: () async {
                             if (_formKey.currentState!.validate()) {
                               ProgressDialog.show(context);
-                              await controller.logIn();
+                              //await controller.logIn(context);
+                              await controller.passwordEncrypt(context);
                               ProgressDialog.hide(context);
                               if (AppState.instance.settingBox.read(SettingType.inforUser.toString()) != null) {
                                 await homeController.getOffice();
