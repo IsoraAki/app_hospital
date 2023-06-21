@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 import 'package:get/get.dart';
 import 'package:my_app_hospital/app/data/office_model.dart';
@@ -69,7 +70,7 @@ class _HomeViewState extends State<HomeView> {
                                   fit: BoxFit.contain,
                                 )
                               : Image.asset(
-                                  'assets/images/icon_doctor_woman.jpg',
+                                  'assets/images/icon_doctor_woman.png',
                                   width: 100.sp,
                                   fit: BoxFit.contain,
                                 );
@@ -98,9 +99,9 @@ class _HomeViewState extends State<HomeView> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                buildMenu('assets/images/iconapp.png', 'Khám sức khỏe', () {}),
-                buildMenu('assets/images/iconapp.png', 'Đánh giá CBNV', () {}),
-                buildMenu('assets/images/iconapp.png', 'Y lệnh chăm sóc', () async {
+                buildMenu('assets/svg/Icon-03.svg', 'Khám sức khỏe', () {}),
+                buildMenu('assets/svg/Icon-14.svg', 'Đánh giá CBNV', () {}),
+                buildMenu('assets/svg/Icon-24.svg', 'Y lệnh chăm sóc', () async {
                   commandController.maphongban.value = controller.dropDownValue.value.rESOURCENAME ?? '';
                   commandController.tenphongban.value = controller.dropDownValue.value.tENPHONGBAN ?? '';
                   //commandController.listPatientInfor == controller.listPatientInfor;
@@ -117,8 +118,8 @@ class _HomeViewState extends State<HomeView> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                buildMenu('assets/images/iconapp.png', 'XN dùng thuốc', () {}),
-                buildMenu('assets/images/iconapp.png', 'Lịch dùng thuốc', () async {
+                buildMenu('assets/svg/Icon-26.svg', 'XN dùng thuốc', () {}),
+                buildMenu('assets/svg/Icon-13.svg', 'Lịch dùng thuốc', () async {
                   medicationScheduleController.maphongban.value = controller.dropDownValue.value.rESOURCENAME ?? '';
                   medicationScheduleController.tenphongban.value = controller.dropDownValue.value.tENPHONGBAN ?? '';
                   //commandController.listPatientInfor == controller.listPatientInfor;
@@ -126,7 +127,7 @@ class _HomeViewState extends State<HomeView> {
                   await medicationScheduleController.getList(context, 'Tất cả', 0, 0, isGetTo: true);
                   ProgressDialog.hide(context);
                 }),
-                buildMenu('assets/images/iconapp.png', 'Trò chuyện', () {}),
+                buildMenu('assets/svg/Icon-07.svg', 'Trò chuyện', () {}),
               ],
             ),
             const SizedBox(
@@ -139,15 +140,15 @@ class _HomeViewState extends State<HomeView> {
                 width: MediaQuery.of(context).size.width,
                 padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
-                  color: AppColors.bgBottomAppBar,
+                  color: AppColors.bgBottomAppBarLight.withOpacity(0.35),
                   borderRadius: BorderRadius.circular(15),
                   border: Border.all(width: 1.0, color: Colors.white30),
                   boxShadow: const [BoxShadow(blurRadius: 5, color: Colors.black38, offset: Offset(1, 1))],
                 ),
                 child: Column(
                   children: [
-                    Image.asset(
-                      'assets/images/iconapp.png',
+                    SvgPicture.asset(
+                      'assets/svg/Icon-22.svg',
                       width: 40,
                     ),
                     const SizedBox(
@@ -160,7 +161,7 @@ class _HomeViewState extends State<HomeView> {
                         fontFamily: 'Segoe UI',
                         fontSize: 14,
                         fontWeight: FontWeight.bold,
-                        color: Colors.white,
+                        color: Colors.black,
                       ),
                     ),
                   ],
@@ -181,7 +182,7 @@ class _HomeViewState extends State<HomeView> {
         width: 100,
         padding: const EdgeInsets.all(8),
         decoration: BoxDecoration(
-          color: AppColors.bgBottomAppBar,
+          color: AppColors.bgBottomAppBarLight.withOpacity(0.35),
           borderRadius: BorderRadius.circular(15),
           border: Border.all(width: 1.0, color: Colors.white30),
           boxShadow: const [BoxShadow(blurRadius: 5, color: Colors.black38, offset: Offset(1, 1))],
@@ -194,9 +195,11 @@ class _HomeViewState extends State<HomeView> {
         // ),
         child: Column(
           children: [
-            Image.asset(
+            SvgPicture.asset(
               img,
-              width: 40,
+              height: 40.0.sp,
+              width: 40.0.sp,
+              allowDrawingOutsideViewBox: true,
             ),
             const SizedBox(
               height: 8,
@@ -208,7 +211,7 @@ class _HomeViewState extends State<HomeView> {
                 fontFamily: 'Segoe UI',
                 fontSize: 14,
                 fontWeight: FontWeight.bold,
-                color: Colors.white,
+                color: Colors.black,
               ),
             ),
           ],
@@ -227,7 +230,7 @@ class _HomeViewState extends State<HomeView> {
           Container(
             padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 0.5, bottom: 0.5),
             decoration: BoxDecoration(
-              color: AppColors.background,
+              color: AppColors.bgBottomAppBarLight.withOpacity(0.35),
               borderRadius: BorderRadius.circular(10),
               border: Border.all(width: 0.7, color: AppColors.hintText),
               //boxShadow: const [BoxShadow(blurRadius: 5, color: Colors.black38, offset: Offset(1, 1))],
@@ -235,10 +238,10 @@ class _HomeViewState extends State<HomeView> {
             child: DropdownButton(
               hint: Obx(
                 () => Text(controller.dropDownValue.value.tENPHONGBAN ?? '...',
-                    maxLines: 1, style: TextStyle(fontSize: text_14, fontWeight: FontWeight.bold, color: AppColors.white, fontFamily: AppFonts.baiJamjuree)),
+                    maxLines: 1, style: TextStyle(fontSize: text_14, fontWeight: FontWeight.bold, color: AppColors.black, fontFamily: AppFonts.baiJamjuree)),
               ),
               isExpanded: true,
-              icon: const Icon(Icons.arrow_drop_down),
+              icon: const Icon(Icons.arrow_drop_down, color: AppColors.black),
               underline: Container(),
               style: Theme.of(context).textTheme.titleSmall!.copyWith(color: AppColors.black),
               items: controller.listOffice.map(

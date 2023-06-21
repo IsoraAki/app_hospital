@@ -45,7 +45,7 @@ class BottomBarView extends GetView<BottomBarController> {
         initialActiveIndex: 2,
         onTap: (int i) {
           if (i == 4) {
-            ProgressDialog.showDialogNotification(context, content: 'Thoát ứng dụng', onPressed: () {
+            ProgressDialog.showDialogNotification(context, content: 'Thoát ứng dụng', isCanel: true, onPressed: () {
               SqlConn.disconnect();
               SystemNavigator.pop();
             });

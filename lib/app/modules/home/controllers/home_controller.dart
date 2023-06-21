@@ -18,7 +18,7 @@ class HomeController extends GetxController {
 
   @override
   void onInit() {
-    //getOffice();
+    getOffice();
     super.onInit();
   }
 
