@@ -7,6 +7,7 @@ import 'package:my_app_hospital/app/modules/command/controllers/command_controll
 import 'package:my_app_hospital/app/modules/command/views/cddd_view.dart';
 import 'package:my_app_hospital/app/modules/widget/custom_bottom_sheet.dart';
 import 'package:my_app_hospital/app/modules/widget/custom_text.dart';
+import 'package:my_app_hospital/app/modules/widget/dialog/process_dialog.dart';
 import 'package:my_app_hospital/configs/app_color.dart';
 import 'package:my_app_hospital/configs/theme/dimens.dart';
 import 'package:my_app_hospital/configs/theme/text.dart';

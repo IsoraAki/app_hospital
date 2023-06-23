@@ -250,14 +250,22 @@ class CommandController extends GetxController {
   Future<void> saveYL(BuildContext context) async {
     try {
       if (inforTimeDate.value.nguoithuchienCode == AppState.instance.settingBox.read(SettingType.usercode.toString())) {
-        if (isInsert.value) {
-          var res = await SqlConn.readData(
-              "Exec APPMBL_InsertNewPatientCare @${inforTimeDate.value.benhanId}, @${timeDate.value.thoigianchamsoc}, @${AppState.instance.settingBox.read(SettingType.usercode.toString())}, @${machController.value.text}, @${nhietdoController.value.text}, @${huyetapController.value.text}, @${cannangController.value.text}, @${nhipthoController.value.text}, @${chieucaoController.value.text}, @${dienbienController.value.text}, ,@${canthiepController.value.text}, @${chandoandieuduongController.value.text}, @${luonggiaController.value.text}, @${ghichuController.value.text}, @${inforTimeDate.value.phancapchamsoc}, @${ylenhchamsocController.value.text},@${inforTimeDate.value.chamsocId}, @${inforTimeDate.value.dieuduong}, @${muctieudieuduongController.value.text}");
-          isInsert.value = false;
-        } else {
-          var res = await SqlConn.readData(
-              "Exec APPMBL_UpdatePatientCareBy_ChamsocID @${timeDate.value.chamsocId.toString()}, @${timeDate.value.thoigianchamsoc}, @${AppState.instance.settingBox.read(SettingType.usercode.toString())}, @${machController.value.text}, @${nhietdoController.value.text}, @${huyetapController.value.text}, @${cannangController.value.text}, @${nhipthoController.value.text}, @${chieucaoController.value.text}, @${dienbienController.value.text}, ,@${canthiepController.value.text}, @${chandoandieuduongController.value.text}, @${luonggiaController.value.text}, @${ghichuController.value.text}, @${inforTimeDate.value.phancapchamsoc}, @${ylenhchamsocController.value.text},@${inforTimeDate.value.chamsocId}, @${inforTimeDate.value.dieuduong}, @${muctieudieuduongController.value.text}");
-        }
+        ProgressDialog.showDialogNotification(context, content: 'Xác nhận lưu y lệnh', isCanel: true, onPressed: () async {
+          if (isInsert.value) {
+            ProgressDialog.show(context);
+            var res = await SqlConn.readData(
+                "Exec APPMBL_InsertNewPatientCare @${inforTimeDate.value.benhanId}, @${timeDate.value.thoigianchamsoc}, @${AppState.instance.settingBox.read(SettingType.usercode.toString())}, @${machController.value.text}, @${nhietdoController.value.text}, @${huyetapController.value.text}, @${cannangController.value.text}, @${nhipthoController.value.text}, @${chieucaoController.value.text}, @${dienbienController.value.text}, ,@${canthiepController.value.text}, @${chandoandieuduongController.value.text}, @${luonggiaController.value.text}, @${ghichuController.value.text}, @${inforTimeDate.value.phancapchamsoc}, @${ylenhchamsocController.value.text},@${inforTimeDate.value.chamsocId}, @${inforTimeDate.value.dieuduong}, @${muctieudieuduongController.value.text}");
+            isInsert.value = false;
+            ProgressDialog.hide(context);
+            Navigator.of(context).pop();
+          } else {
+            ProgressDialog.show(context);
+            var res = await SqlConn.readData(
+                "Exec APPMBL_UpdatePatientCareBy_ChamsocID @${timeDate.value.chamsocId.toString()}, @${timeDate.value.thoigianchamsoc}, @${AppState.instance.settingBox.read(SettingType.usercode.toString())}, @${machController.value.text}, @${nhietdoController.value.text}, @${huyetapController.value.text}, @${cannangController.value.text}, @${nhipthoController.value.text}, @${chieucaoController.value.text}, @${dienbienController.value.text}, ,@${canthiepController.value.text}, @${chandoandieuduongController.value.text}, @${luonggiaController.value.text}, @${ghichuController.value.text}, @${inforTimeDate.value.phancapchamsoc}, @${ylenhchamsocController.value.text},@${inforTimeDate.value.chamsocId}, @${inforTimeDate.value.dieuduong}, @${muctieudieuduongController.value.text}");
+            ProgressDialog.hide(context);
+            Navigator.of(context).pop();
+          }
+        });
       } else {
         ProgressDialog.showDialogNotification(context, content: 'Chỉ có "${inforTimeDate.value.dieuduong}" mới có thể\nLƯU y lệnh chăm sóc này');
       }
@@ -269,8 +277,11 @@ class CommandController extends GetxController {
   Future<void> deletaYL(BuildContext context) async {
     try {
       if (inforTimeDate.value.nguoithuchienCode == AppState.instance.settingBox.read(SettingType.usercode.toString())) {
-        ProgressDialog.showDialogNotification(context, content: 'Xác nhận xóa Y lệnh', isCanel: true, onPressed: () {
-          SqlConn.readData("Exec APPMBL_deleteInfoPatientCareBy_ChamsocID @${timeDate.value.chamsocId.toString()}");
+        ProgressDialog.showDialogNotification(context, content: 'Xác nhận xóa Y lệnh', isCanel: true, onPressed: () async {
+          ProgressDialog.show(context);
+          await SqlConn.readData("Exec APPMBL_deleteInfoPatientCareBy_ChamsocID @${timeDate.value.chamsocId.toString()}");
+          ProgressDialog.hide(context);
+          Navigator.of(context).pop();
         });
       } else {
         ProgressDialog.showDialogNotification(context, content: 'Chỉ có "${inforTimeDate.value.dieuduong}" mới có thể\nXÓA y lệnh chăm sóc này');
@@ -279,5 +290,6 @@ class CommandController extends GetxController {
       ProgressDialog.showDialogNotification(context, content: 'Xóa y lệnh thất bại\nLỗi: $e');
       Get.log('deletaYL error: $e');
     }
+    ProgressDialog.hide(context);
   }
 }

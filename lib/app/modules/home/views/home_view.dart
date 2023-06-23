@@ -6,9 +6,7 @@ import 'package:get/get.dart';
 import 'package:my_app_hospital/app/data/office_model.dart';
 import 'package:my_app_hospital/app/modules/command/controllers/command_controller.dart';
 import 'package:my_app_hospital/app/modules/medication_schedule/controllers/medication_schedule_controller.dart';
-import 'package:my_app_hospital/app/modules/widget/custom_text.dart';
 import 'package:my_app_hospital/app/modules/widget/dialog/process_dialog.dart';
-import 'package:my_app_hospital/app/routes/app_pages.dart';
 import 'package:my_app_hospital/configs/app_color.dart';
 import 'package:my_app_hospital/configs/theme/app_fonts.dart';
 import 'package:my_app_hospital/configs/theme/dimens.dart';
@@ -140,7 +138,7 @@ class _HomeViewState extends State<HomeView> {
                 width: MediaQuery.of(context).size.width,
                 padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
-                  color: AppColors.bgBottomAppBarLight.withOpacity(0.35),
+                  color: AppColors.blue.withOpacity(0.35),
                   borderRadius: BorderRadius.circular(15),
                   border: Border.all(width: 1.0, color: Colors.white30),
                   boxShadow: const [BoxShadow(blurRadius: 5, color: Colors.black38, offset: Offset(1, 1))],
@@ -161,7 +159,7 @@ class _HomeViewState extends State<HomeView> {
                         fontFamily: 'Segoe UI',
                         fontSize: 14,
                         fontWeight: FontWeight.bold,
-                        color: Colors.black,
+                        color: Colors.white,
                       ),
                     ),
                   ],
@@ -182,7 +180,7 @@ class _HomeViewState extends State<HomeView> {
         width: 100,
         padding: const EdgeInsets.all(8),
         decoration: BoxDecoration(
-          color: AppColors.bgBottomAppBarLight.withOpacity(0.35),
+          color: AppColors.blue.withOpacity(0.35),
           borderRadius: BorderRadius.circular(15),
           border: Border.all(width: 1.0, color: Colors.white30),
           boxShadow: const [BoxShadow(blurRadius: 5, color: Colors.black38, offset: Offset(1, 1))],
@@ -211,7 +209,7 @@ class _HomeViewState extends State<HomeView> {
                 fontFamily: 'Segoe UI',
                 fontSize: 14,
                 fontWeight: FontWeight.bold,
-                color: Colors.black,
+                color: Colors.white,
               ),
             ),
           ],
@@ -230,7 +228,7 @@ class _HomeViewState extends State<HomeView> {
           Container(
             padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 0.5, bottom: 0.5),
             decoration: BoxDecoration(
-              color: AppColors.bgBottomAppBarLight.withOpacity(0.35),
+              color: Colors.transparent,
               borderRadius: BorderRadius.circular(10),
               border: Border.all(width: 0.7, color: AppColors.hintText),
               //boxShadow: const [BoxShadow(blurRadius: 5, color: Colors.black38, offset: Offset(1, 1))],
@@ -238,10 +236,10 @@ class _HomeViewState extends State<HomeView> {
             child: DropdownButton(
               hint: Obx(
                 () => Text(controller.dropDownValue.value.tENPHONGBAN ?? '...',
-                    maxLines: 1, style: TextStyle(fontSize: text_14, fontWeight: FontWeight.bold, color: AppColors.black, fontFamily: AppFonts.baiJamjuree)),
+                    maxLines: 1, style: TextStyle(fontSize: text_14, fontWeight: FontWeight.bold, color: AppColors.white, fontFamily: AppFonts.baiJamjuree)),
               ),
               isExpanded: true,
-              icon: const Icon(Icons.arrow_drop_down, color: AppColors.black),
+              icon: const Icon(Icons.arrow_drop_down, color: AppColors.white),
               underline: Container(),
               style: Theme.of(context).textTheme.titleSmall!.copyWith(color: AppColors.black),
               items: controller.listOffice.map(

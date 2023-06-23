@@ -107,11 +107,11 @@ class _CommandViewState extends State<CommandView> {
             SizedBox(
               height: size_8_h,
             ),
-            Text(
-              "Tổng BN: ${controller.listPatientInfor.length}",
-              maxLines: 3,
-              style: textTheme.titleSmall,
-            ),
+            Obx(() => Text(
+                  "Tổng BN: ${controller.listPatientInfor.length}",
+                  maxLines: 3,
+                  style: textTheme.titleSmall,
+                )),
             SizedBox(
               height: size_8_h,
             ),

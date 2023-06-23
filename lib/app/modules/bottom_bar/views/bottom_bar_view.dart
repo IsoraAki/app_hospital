@@ -33,7 +33,7 @@ class BottomBarView extends GetView<BottomBarController> {
       ),
       body: Obx(() => Container(child: listWidget[controller.index.value])),
       bottomNavigationBar: ConvexAppBar(
-        backgroundColor: Colors.blue,
+        backgroundColor: AppColors.blue.withOpacity(0.35),
         style: TabStyle.react,
         items: const [
           TabItem(icon: Icons.support_agent, title: 'Hỗ trợ'),

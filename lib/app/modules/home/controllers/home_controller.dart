@@ -58,6 +58,7 @@ class HomeController extends GetxController {
   Future<void> getOffice() async {
     final valueMapUser = json.decode(AppState.instance.settingBox.read(SettingType.inforUser.toString()).toString().trim());
     if (valueMapUser != null) {
+      inforUser.value = StaffInforModel();
       inforUser.value = StaffInforModel.fromJson(valueMapUser[0]);
       AppState.instance.settingBox.write(SettingType.usercode.toString(), inforUser.value.manhanvien);
       dropDownValue.value = OfficeModer(rESOURCENAME: inforUser.value.maphongban, tENPHONGBAN: inforUser.value.tenphongban);
