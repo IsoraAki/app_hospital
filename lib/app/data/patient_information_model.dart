@@ -39,24 +39,24 @@ class PatientInformationModel {
       this.yLSHBat});
 
   PatientInformationModel.fromJson(Map<String, dynamic> json) {
-    kHOALAMSANG = json['KHOALAMSANG'];
+    kHOALAMSANG = json['KHOALAMSANG'] == null ? '' : json['KHOALAMSANG'].toString();
     bENHANID = json['BENHAN_ID'];
     mAYTE = json['MAYTE'];
     sOBENHAN = json['SOBENHAN'];
     tENBENHNHAN = json['TENBENHNHAN'];
     nAMSINH = json['NAMSINH'];
-    dOITUONG = json['DOITUONG'];
+    dOITUONG = json['DOITUONG'] == null ? '' : json['DOITUONG'].toString();
     dIACHI = json['DIACHI'];
-    pHONGGIUONG = json['PHONGGIUONG'];
-    pCCS = json['PCCS'];
-    cHANDOANICD = json['CHANDOANICD'];
+    pHONGGIUONG = json['PHONGGIUONG'] == null ? '' : json['PHONGGIUONG'].toString();
+    pCCS = json['PCCS'] == null ? '' : json['PCCS'].toString();
+    cHANDOANICD = json['CHANDOANICD'] == null ? '' : json['CHANDOANICD'].toString();
     bSDIEUTRI = json['BSDIEUTRI'];
-    lOAIBA = json['LOAIBA'];
+    lOAIBA = json['LOAIBA'] == null ? '' : json['LOAIBA'].toString();
     sEX = json['SEX'];
-    fILENAME = json['FILENAME'];
+    fILENAME = json['FILENAME'] == null ? '' : json['FILENAME'].toString();
     isGhiChuBS = json['isGhiChuBS'];
     gHICHUBS = json['GHICHUBS'];
-    yLSHBat = json['YLSHBat'];
+    yLSHBat = json['YLSHBat'] == null ? '' : json['YLSHBat'].toString();
   }
 
   Map<String, dynamic> toJson() {

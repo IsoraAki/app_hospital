@@ -7,7 +7,6 @@ import 'package:my_app_hospital/app/modules/command/controllers/command_controll
 import 'package:my_app_hospital/app/modules/command/views/cddd_view.dart';
 import 'package:my_app_hospital/app/modules/widget/custom_bottom_sheet.dart';
 import 'package:my_app_hospital/app/modules/widget/custom_text.dart';
-import 'package:my_app_hospital/app/modules/widget/dialog/process_dialog.dart';
 import 'package:my_app_hospital/configs/app_color.dart';
 import 'package:my_app_hospital/configs/theme/dimens.dart';
 import 'package:my_app_hospital/configs/theme/text.dart';
@@ -165,7 +164,7 @@ class CommandDetails extends GetView<CommandController> {
               ).toList(),
               onChanged: (ThoiGianChamSocModel? val) async {
                 if (val != null) {
-                  controller.updateTimeDate(val);
+                  controller.updateTimeDate(context, val);
                 }
                 // setState(() {});
                 // ProgressDialog.show(context);
@@ -248,10 +247,42 @@ class CommandDetails extends GetView<CommandController> {
                     SizedBox(
                       height: size_8_h,
                     ),
-                    Text(
-                      "PCCS: $pccs",
-                      maxLines: 3,
-                      style: textTheme.titleSmall,
+                    // Text(
+                    //   "PCCS: $pccs",
+                    //   maxLines: 3,
+                    //   style: textTheme.titleSmall,
+                    // ),
+                    Row(
+                      children: [
+                        Text(
+                          "PCCS:",
+                          style: textTheme.titleSmall,
+                        ),
+                        SizedBox(
+                          width: size_50_w,
+                          child: CustomTextField(
+                            controller: controller.pccsController.value,
+                            isShowLable: false,
+                            paddingVer: 0,
+                            paddingHoz: 0,
+                            maxNumber: 6,
+                            style: TextStyle(color: AppColors.hintText, fontSize: text_16, fontWeight: FontWeight.w600),
+                            textAlign: TextAlign.center,
+                            typeInput: TypeInput.text,
+                            decoration: const InputDecoration(
+                              fillColor: Colors.transparent,
+                              isDense: true,
+                              border: InputBorder.none,
+                              focusedBorder: InputBorder.none,
+                              enabledBorder: InputBorder.none,
+                              errorBorder: InputBorder.none,
+                              disabledBorder: InputBorder.none,
+                              contentPadding: EdgeInsets.only(left: 0, bottom: 0, top: 0, right: 0),
+                              hintText: '...',
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                     SizedBox(
                       height: size_8_h,

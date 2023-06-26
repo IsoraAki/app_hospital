@@ -80,6 +80,8 @@ class CustomTextField extends StatefulWidget {
   final TextStyle? style;
   final InputDecoration? decoration;
   final int? maxNumber;
+  final double? horizontal;
+  final double? vertical;
 
   const CustomTextField({
     super.key,
@@ -114,6 +116,8 @@ class CustomTextField extends StatefulWidget {
     this.style,
     this.decoration,
     this.maxNumber,
+    this.horizontal,
+    this.vertical,
   });
 
   @override
@@ -191,7 +195,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
                       prefixIcon: widget.prefixIcon,
                       prefixIconColor: AppColors.textColor,
                       isDense: widget.isDense,
-                      contentPadding: EdgeInsets.symmetric(vertical: 10.w, horizontal: 10.w),
+                      contentPadding: EdgeInsets.symmetric(vertical: widget.vertical ?? 10.w, horizontal: widget.horizontal ?? 10.w),
                       errorStyle: TextStyle(color: AppColors.error, fontSize: 12.sp),
                       suffixIcon: widget.suffixIcon ??
                           (widget.typeInput == TypeInput.password || widget.typeInput == TypeInput.confirmPassword

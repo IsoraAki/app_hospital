@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:my_app_hospital/app/modules/bottom_bar/controllers/bottom_bar_controller.dart';
 import 'package:my_app_hospital/app/modules/home/views/infor_user_view.dart';
+import 'package:my_app_hospital/app/modules/widget/dialog/process_dialog.dart';
+import 'package:my_app_hospital/app/routes/app_pages.dart';
 import 'package:my_app_hospital/configs/app_color.dart';
 import 'package:my_app_hospital/configs/theme/theme.dart';
+import 'package:sql_conn/sql_conn.dart';
 
 class DrawerView extends StatelessWidget {
   DrawerView({super.key});
@@ -72,8 +76,10 @@ class DrawerView extends StatelessWidget {
             ),
             title: const Text('Đăng xuất'),
             onTap: () {
-              // Update the state of the app.
-              // ...
+              ProgressDialog.showDialogNotification(context, content: 'Xác nhận đăng xuất', isCanel: true, onPressed: () {
+                SqlConn.disconnect();
+                Get.offNamed(Routes.LOGIN);
+              });
             },
           ),
           const Padding(

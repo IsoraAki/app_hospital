@@ -62,7 +62,6 @@ class _CommandViewState extends State<CommandView> {
                                     controller.isSHBatThuong.value = value == true ? 1 : 0;
                                     controller.searchController.clear();
                                     controller.getList(context, controller.dropDownValue.replaceAll('Cấp ', ''), controller.isGhiChuBS.value, controller.isSHBatThuong.value);
-                                    Get.back();
                                   },
                                 ),
                               )),
@@ -84,7 +83,6 @@ class _CommandViewState extends State<CommandView> {
                                     controller.isGhiChuBS.value = value == true ? 1 : 0;
                                     controller.searchController.clear();
                                     controller.getList(context, controller.dropDownValue.replaceAll('Cấp ', ''), controller.isGhiChuBS.value, controller.isSHBatThuong.value);
-                                    Get.back();
                                   },
                                 ),
                               )),
@@ -149,8 +147,14 @@ class _CommandViewState extends State<CommandView> {
                               ...controller.sarchlistPatientInfor.map(
                                 (e) => sickPeopleCell(
                                   context,
-                                  () {
-                                    Get.to(CommandDetails(e));
+                                  () async {
+                                    ProgressDialog.show(context);
+                                    controller.resetData();
+                                    await controller.getTimeDate(context, e.bENHANID.toString());
+                                    ProgressDialog.hide(context);
+                                    if (controller.isError == false) {
+                                      Get.to(CommandDetails(e));
+                                    }
                                   },
                                   'http://192.168.1.178:1015/Data/48015/Media/${e.mAYTE}/${e.fILENAME}',
                                   e.sOBENHAN.toString(),
@@ -184,9 +188,11 @@ class _CommandViewState extends State<CommandView> {
                                   () async {
                                     ProgressDialog.show(context);
                                     controller.resetData();
-                                    await controller.getTimeDate(e.bENHANID.toString());
+                                    await controller.getTimeDate(context, e.bENHANID.toString());
                                     ProgressDialog.hide(context);
-                                    Get.to(CommandDetails(e));
+                                    if (controller.isError == false) {
+                                      Get.to(CommandDetails(e));
+                                    }
                                   },
                                   'http://192.168.1.178:1015/Data/48015/Media/${e.mAYTE}/${e.fILENAME}',
                                   e.sOBENHAN.toString(),

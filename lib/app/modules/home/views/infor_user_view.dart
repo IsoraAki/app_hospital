@@ -79,7 +79,7 @@ class InforUserView extends StatelessWidget {
                     SizedBox(
                       height: size_16_h,
                     ),
-                    cellText(context, 'Phòng ban:', inforUserModer.tenphongban ?? '...'),
+                    cellText(context, 'Phòng ban:', inforUserModer.loginDep ?? '...'),
                     SizedBox(
                       height: size_16_h,
                     ),
