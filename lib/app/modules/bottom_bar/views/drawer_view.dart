@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:my_app_hospital/app/modules/bottom_bar/controllers/bottom_bar_controller.dart';
 import 'package:my_app_hospital/app/modules/home/views/infor_user_view.dart';
@@ -22,7 +21,7 @@ class DrawerView extends StatelessWidget {
         padding: EdgeInsets.zero,
         children: [
           DrawerHeader(
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               color: Colors.blue,
             ),
             child: Image.asset(
@@ -32,7 +31,7 @@ class DrawerView extends StatelessWidget {
           ),
           ListTile(
             title: const Text('Trang chủ'),
-            leading: Icon(
+            leading: const Icon(
               Icons.home,
               color: AppColors.white,
             ),
@@ -59,7 +58,7 @@ class DrawerView extends StatelessWidget {
             },
           ),
           ListTile(
-            leading: Icon(
+            leading: const Icon(
               Icons.settings,
               color: AppColors.white,
             ),
@@ -70,7 +69,7 @@ class DrawerView extends StatelessWidget {
             },
           ),
           ListTile(
-            leading: Icon(
+            leading: const Icon(
               Icons.logout,
               color: AppColors.white,
             ),

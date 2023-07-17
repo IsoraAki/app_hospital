@@ -54,6 +54,7 @@ class MyCallBack {
       }
       _logger.log(Level.INFO, "Exception occured: " + e.toString());
     }
+    return null;
   }
 
   Future<MyResponse?> post({
@@ -90,6 +91,7 @@ class MyCallBack {
       // ErrorResolver.toast(exc.toString());
       _logger.log(Level.INFO, "Exception occured: " + exc.toString());
     }
+    return null;
   }
 
   Future<MyResponse?> put({
@@ -124,6 +126,7 @@ class MyCallBack {
       // ErrorResolver.toast(exc.toString());
       _logger.log(Level.INFO, "Exception occured: " + exc.toString());
     }
+    return null;
   }
 
   Future<MyResponse?> delete({final String? endPoint, final object, final Map<String, dynamic>? params = null}) async {
@@ -154,6 +157,7 @@ class MyCallBack {
       // ErrorResolver.toast(exc.toString());
       _logger.log(Level.INFO, "Exception occured: " + exc.toString());
     }
+    return null;
   }
 
   Future<MyResponse?> base(final Response response, final lass) async {
@@ -175,6 +179,7 @@ class MyCallBack {
       debugPrint('catch ${exc.toString()}');
       _logger.log(Level.INFO, "Exception occured: " + exc.toString());
     }
+    return null;
   }
 
   void setupInterceptors() {

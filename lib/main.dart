@@ -4,7 +4,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:my_app_hospital/app/modules/bottom_bar/bindings/bottom_bar_binding.dart';
-import 'package:my_app_hospital/app/modules/command/bindings/command_binding.dart';
 import 'package:my_app_hospital/app/modules/home/bindings/home_binding.dart';
 import 'package:my_app_hospital/app/modules/login/bindings/login_binding.dart';
 import 'package:my_app_hospital/app/network/local/cache_helper.dart';

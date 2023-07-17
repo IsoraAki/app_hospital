@@ -127,7 +127,6 @@ class StickDetails extends GetView<MedicationScheduleController> {
   }
 
   Widget buildDetails(BuildContext context) {
-    TextTheme textTheme = Theme.of(context).textTheme;
     return Container(
       width: Get.width,
       padding: const EdgeInsets.all(16.0),

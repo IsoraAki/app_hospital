@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:get/get.dart';
-import 'package:my_app_hospital/app/data/infor_user_model.dart';
 import 'package:my_app_hospital/app/data/office_model.dart';
 import 'package:my_app_hospital/app/data/patient_information_model.dart';
 import 'package:my_app_hospital/app/data/staff_infor_model.dart';
@@ -9,7 +8,6 @@ import 'package:my_app_hospital/app_state.dart';
 import 'package:sql_conn/sql_conn.dart';
 
 class HomeController extends GetxController {
-  //TODO: Implement HomeController\
   var dropDownValue = OfficeModer().obs;
   //var lv = 'Chọn phòng ban'.obs;
   var listOffice = [].obs;

@@ -14,6 +14,7 @@ import 'package:sql_conn/sql_conn.dart';
 import '../controllers/bottom_bar_controller.dart';
 import 'drawer_view.dart';
 
+// ignore: must_be_immutable
 class BottomBarView extends GetView<BottomBarController> {
   BottomBarView({Key? key}) : super(key: key);
 

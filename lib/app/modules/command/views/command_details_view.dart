@@ -18,7 +18,6 @@ class CommandDetails extends GetView<CommandController> {
 
   @override
   Widget build(BuildContext context) {
-    TextTheme textTheme = Theme.of(context).textTheme;
     return Scaffold(
       appBar: AppBar(
         title: const Text('Y lệnh chăm sóc'),
@@ -299,7 +298,6 @@ class CommandDetails extends GetView<CommandController> {
   }
 
   Widget buildDetails(BuildContext context) {
-    TextTheme textTheme = Theme.of(context).textTheme;
     return Container(
         width: Get.width,
         padding: const EdgeInsets.all(16.0),
@@ -429,7 +427,6 @@ class CommandDetails extends GetView<CommandController> {
   }
 
   Widget buildInfo(BuildContext context) {
-    TextTheme textTheme = Theme.of(context).textTheme;
     return Container(
       width: Get.width,
       padding: const EdgeInsets.all(16.0),

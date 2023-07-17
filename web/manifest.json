@@ -1,6 +1,6 @@
 {
-    "name": "app_hospital",
-    "short_name": "app_hospital",
+    "name": "bvtt",
+    "short_name": "bvtt",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

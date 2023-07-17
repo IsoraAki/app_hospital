@@ -1,6 +1,5 @@
-import 'dart:convert';
 import 'dart:io';
-import 'dart:math';
+
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -153,6 +152,7 @@ extension StringExtension on String {
 
   String formatTimeDuration() {
     String time = '';
+    // ignore: unnecessary_null_comparison
     if (this == null || this == '') {
       return this;
     }

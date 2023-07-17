@@ -1,4 +1,3 @@
-import 'package:flutter_emoji/flutter_emoji.dart';
 import 'package:my_app_hospital/configs/utils.dart';
 import 'package:my_app_hospital/util/config_regexp.dart';
 
@@ -74,7 +73,6 @@ class Validator {
   static String? password(String? text) {
     final maxLength = 128;
     final minLength = 6;
-    final pattern = RegExp(r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$');
 
     // if (!pattern.hasMatch(text!)) {
     //   return "Phải chứa ít nhất 1 chữ hoa, 1 số,1 kí tự đặc biệt. ";
@@ -93,8 +91,8 @@ class Validator {
   }
 
   static String? username(String? text) {
-    final maxLength = 50;
-    final minLength = 6;
+    // final maxLength = 50;
+    // final minLength = 6;
 
     if (Utils.isNullOrEmpty(text)) {
       return "Tên không được để trống";
@@ -212,7 +210,7 @@ class Validator {
     final minLength = 4;
     final maxLength = 16;
     String _registerUrl = "";
-    String _getLanguage = "";
+    // String _getLanguage = "";
 
     // if (walletI18n.locale.languageCode.toLowerCase() == 'vi') {
     //   _getLanguage = 'vi';

@@ -1,14 +1,11 @@
 import 'dart:async';
-import 'dart:convert';
 
-import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:my_app_hospital/app/data/infor_user_model.dart';
 import 'package:my_app_hospital/app/modules/widget/dialog/process_dialog.dart';
 import 'package:my_app_hospital/app/network/data/provider/my_reponse.dart';
 import 'package:my_app_hospital/app/network/repositories/app_repository.dart';
-import 'package:my_app_hospital/app/routes/navigate_keys.dart';
 import 'package:my_app_hospital/app_state.dart';
 import 'package:sql_conn/sql_conn.dart';
 
@@ -92,9 +89,11 @@ class LoginController extends GetxController {
         // ignore: use_build_context_synchronously
         await logIn(context, password);
       }
-    } on TimeoutException catch (e) {
+    } on TimeoutException {
+      // ignore: use_build_context_synchronously
       ProgressDialog.showDialogNotification(context, content: 'Kết nối đươc với máy chủ');
     } catch (e) {
+      // ignore: use_build_context_synchronously
       ProgressDialog.showDialogNotification(context, content: 'Đăng nhập không thành công');
       Get.log(e.toString());
     }
@@ -114,15 +113,19 @@ class LoginController extends GetxController {
         if (myResponse.success == true) {
           Get.log('${myResponse.result?.first['LOGINRESULTTYPE']}');
           if (myResponse.result?.first['LOGINRESULTTYPE'] == 0) {
+            // ignore: use_build_context_synchronously
             await connectSQL(context);
           } else {
+            // ignore: use_build_context_synchronously
             ProgressDialog.showDialogNotification(context, content: 'Sai tài khoản hoặc mật khẩu');
           }
         }
       }
-    } on TimeoutException catch (e) {
+    } on TimeoutException {
+      // ignore: use_build_context_synchronously
       ProgressDialog.showDialogNotification(context, content: 'Kết nối đươc với máy chủ');
     } catch (e) {
+      // ignore: use_build_context_synchronously
       ProgressDialog.showDialogNotification(context, content: 'Đăng nhập không thành công');
       Get.log(e.toString());
     }

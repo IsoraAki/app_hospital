@@ -25,7 +25,6 @@ class _HomeViewState extends State<HomeView> {
   final controller = Get.find<HomeController>();
   final commandController = Get.find<CommandController>();
   final medicationScheduleController = Get.find<MedicationScheduleController>();
-  final TextEditingController _searchController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {

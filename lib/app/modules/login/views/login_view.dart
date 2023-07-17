@@ -23,7 +23,7 @@ class LoginView extends GetView<LoginController> {
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
-    const double r = (175 / 360); //  rapport for web test(304 / 540);
+//  rapport for web test(304 / 540);
     final coverHeight = MediaQuery.of(context).size.width * 0.4;
     bool _pinned = false;
     bool _snap = false;
