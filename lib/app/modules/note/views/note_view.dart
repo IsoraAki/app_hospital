@@ -9,7 +9,7 @@ class NoteView extends GetView<NoteController> {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Text('Note'),
+      child: Text('Chức năng đang phát triển'),
     );
   }
 }

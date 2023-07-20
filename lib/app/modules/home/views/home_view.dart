@@ -96,8 +96,12 @@ class _HomeViewState extends State<HomeView> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                buildMenu('assets/svg/Icon-03.svg', 'Khám sức khỏe', () {}),
-                buildMenu('assets/svg/Icon-14.svg', 'Đánh giá CBNV', () {}),
+                buildMenu('assets/svg/Icon-03.svg', 'Khám sức khỏe', () {
+                  ProgressDialog.showDialogNotification(context, content: 'Chức năng đang phát triển');
+                }),
+                buildMenu('assets/svg/Icon-14.svg', 'Đánh giá CBNV', () {
+                  ProgressDialog.showDialogNotification(context, content: 'Chức năng đang phát triển');
+                }),
                 buildMenu('assets/svg/Icon-24.svg', 'Y lệnh chăm sóc', () async {
                   commandController.maphongban.value = controller.dropDownValue.value.rESOURCENAME ?? '';
                   commandController.tenphongban.value = controller.dropDownValue.value.tENPHONGBAN ?? '';
@@ -115,7 +119,9 @@ class _HomeViewState extends State<HomeView> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                buildMenu('assets/svg/Icon-26.svg', 'XN dùng thuốc', () {}),
+                buildMenu('assets/svg/Icon-26.svg', 'XN dùng thuốc', () {
+                  ProgressDialog.showDialogNotification(context, content: 'Chức năng đang phát triển');
+                }),
                 buildMenu('assets/svg/Icon-13.svg', 'Lịch dùng thuốc', () async {
                   medicationScheduleController.maphongban.value = controller.dropDownValue.value.rESOURCENAME ?? '';
                   medicationScheduleController.tenphongban.value = controller.dropDownValue.value.tENPHONGBAN ?? '';
@@ -124,14 +130,18 @@ class _HomeViewState extends State<HomeView> {
                   await medicationScheduleController.getList(context, 'Tất cả', 0, 0, isGetTo: true);
                   ProgressDialog.hide(context);
                 }),
-                buildMenu('assets/svg/Icon-07.svg', 'Trò chuyện', () {}),
+                buildMenu('assets/svg/Icon-07.svg', 'Trò chuyện', () {
+                  ProgressDialog.showDialogNotification(context, content: 'Chức năng đang phát triển');
+                }),
               ],
             ),
             const SizedBox(
               height: 16,
             ),
             InkWell(
-              onTap: () {},
+              onTap: () {
+                ProgressDialog.showDialogNotification(context, content: 'Chức năng đang phát triển');
+              },
               child: Container(
                 height: 100,
                 width: MediaQuery.of(context).size.width,
@@ -235,7 +245,8 @@ class _HomeViewState extends State<HomeView> {
             child: DropdownButton(
               hint: Obx(
                 () => Text(controller.dropDownValue.value.tENPHONGBAN ?? '...',
-                    maxLines: 1, style: TextStyle(fontSize: text_14, fontWeight: FontWeight.bold, color: AppColors.white, fontFamily: AppFonts.baiJamjuree)),
+                    maxLines: 1,
+                    style: TextStyle(fontSize: text_14, fontWeight: FontWeight.bold, color: AppColors.white, fontFamily: AppFonts.baiJamjuree)),
               ),
               isExpanded: true,
               icon: const Icon(Icons.arrow_drop_down, color: AppColors.white),

@@ -7,7 +7,7 @@ class SearchView extends GetView<SearchController> {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Text('Search'),
+      child: Text('Chức năng đang phát triển'),
     );
   }
 }

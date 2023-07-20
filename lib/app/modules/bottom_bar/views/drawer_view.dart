@@ -36,8 +36,7 @@ class DrawerView extends StatelessWidget {
               color: AppColors.white,
             ),
             onTap: () {
-              // Update the state of the app.
-              // ...
+              Get.back();
             },
           ),
           const Padding(
@@ -57,17 +56,17 @@ class DrawerView extends StatelessWidget {
               ));
             },
           ),
-          ListTile(
-            leading: const Icon(
-              Icons.settings,
-              color: AppColors.white,
-            ),
-            title: const Text('Cài đặt'),
-            onTap: () {
-              // Update the state of the app.
-              // ...
-            },
-          ),
+          // ListTile(
+          //   leading: const Icon(
+          //     Icons.settings,
+          //     color: AppColors.white,
+          //   ),
+          //   title: const Text('Cài đặt'),
+          //   onTap: () {
+          //     // Update the state of the app.
+          //     // ...
+          //   },
+          // ),
           ListTile(
             leading: const Icon(
               Icons.logout,
@@ -81,43 +80,43 @@ class DrawerView extends StatelessWidget {
               });
             },
           ),
-          const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 16),
-            child: separatorBuilder,
-          ),
-          ListTile(
-            leading: Icon(
-              Icons.share,
-              color: AppColors.white,
-            ),
-            title: const Text('Chia sẻ'),
-            onTap: () {
-              // Update the state of the app.
-              // ...
-            },
-          ),
-          ListTile(
-            leading: Icon(
-              Icons.note_alt_outlined,
-              color: AppColors.white,
-            ),
-            title: const Text('Đánh giá'),
-            onTap: () {
-              // Update the state of the app.
-              // ...
-            },
-          ),
-          ListTile(
-            leading: Icon(
-              Icons.info_outline,
-              color: AppColors.white,
-            ),
-            title: const Text('Thông tin ứng dụng'),
-            onTap: () {
-              // Update the state of the app.
-              // ...
-            },
-          ),
+          // const Padding(
+          //   padding: EdgeInsets.symmetric(horizontal: 16),
+          //   child: separatorBuilder,
+          // ),
+          // ListTile(
+          //   leading: Icon(
+          //     Icons.share,
+          //     color: AppColors.white,
+          //   ),
+          //   title: const Text('Chia sẻ'),
+          //   onTap: () {
+          //     // Update the state of the app.
+          //     // ...
+          //   },
+          // ),
+          // ListTile(
+          //   leading: Icon(
+          //     Icons.note_alt_outlined,
+          //     color: AppColors.white,
+          //   ),
+          //   title: const Text('Đánh giá'),
+          //   onTap: () {
+          //     // Update the state of the app.
+          //     // ...
+          //   },
+          // ),
+          // ListTile(
+          //   leading: Icon(
+          //     Icons.info_outline,
+          //     color: AppColors.white,
+          //   ),
+          //   title: const Text('Thông tin ứng dụng'),
+          //   onTap: () {
+          //     // Update the state of the app.
+          //     // ...
+          //   },
+          // ),
         ],
       ),
     );

@@ -9,7 +9,7 @@ class SupportView extends GetView<SupportController> {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Text('SupportView'),
+      child: Text('Chức năng đang phát triển'),
     );
   }
 }

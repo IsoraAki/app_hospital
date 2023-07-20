@@ -35,7 +35,7 @@ class InforUserView extends StatelessWidget {
                             fit: BoxFit.contain,
                           )
                         : Image.asset(
-                            'assets/images/icon_doctor_woman.jpg',
+                            'assets/images/icon_doctor_woman.png',
                             width: 100.sp,
                             fit: BoxFit.contain,
                           );

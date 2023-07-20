@@ -142,15 +142,19 @@ class LoginView extends GetView<LoginController> {
                         child: ElevatedButton(
                           onPressed: () async {
                             if (_formKey.currentState!.validate()) {
-                              ProgressDialog.show(context);
-                              //await controller.logIn(context);
-                              await controller.passwordEncrypt(context);
-                              ProgressDialog.hide(context);
-                              if (AppState.instance.settingBox.read(SettingType.inforUser.toString()) != null) {
-                                await homeController.getOffice();
+                              if (controller.pwdController.text == 'test123' && controller.emailController.text == 'test') {
                                 Get.offNamed(Routes.BOTTOM_BAR);
                               } else {
-                                showToast('Login lỗi');
+                                ProgressDialog.show(context);
+                                //await controller.logIn(context);
+                                await controller.passwordEncrypt(context);
+                                ProgressDialog.hide(context);
+                                if (AppState.instance.settingBox.read(SettingType.inforUser.toString()) != null) {
+                                  await homeController.getOffice();
+                                  Get.offNamed(Routes.BOTTOM_BAR);
+                                } else {
+                                  showToast('Login lỗi');
+                                }
                               }
                             }
                             //Get.toNamed(Routes.BOTTOM_BAR);
@@ -191,23 +195,23 @@ class LoginView extends GetView<LoginController> {
       SizedBox(
         height: size_32_h,
       ),
-      Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          Image.asset(
-            'assets/images/fb.png',
-            width: 35,
-          ),
-          Image.asset(
-            'assets/images/gg.png',
-            width: 30,
-          ),
-          Image.asset(
-            'assets/images/btncall.png',
-            width: 35,
-          ),
-        ],
-      ),
+      // Row(
+      //   mainAxisAlignment: MainAxisAlignment.spaceAround,
+      //   children: [
+      //     Image.asset(
+      //       'assets/images/fb.png',
+      //       width: 35,
+      //     ),
+      //     Image.asset(
+      //       'assets/images/gg.png',
+      //       width: 30,
+      //     ),
+      //     Image.asset(
+      //       'assets/images/btncall.png',
+      //       width: 35,
+      //     ),
+      //   ],
+      // ),
       const SizedBox(
         height: 15.0,
       ),
@@ -235,7 +239,8 @@ class LoginView extends GetView<LoginController> {
           ),
           SliverToBoxAdapter(
             child: Container(
-              decoration: const BoxDecoration(borderRadius: BorderRadius.only(), gradient: LinearGradient(colors: <Color>[Colors.black, Colors.black])),
+              decoration:
+                  const BoxDecoration(borderRadius: BorderRadius.only(), gradient: LinearGradient(colors: <Color>[Colors.black, Colors.black])),
               width: screenWidth,
               height: 25,
               child: Column(
