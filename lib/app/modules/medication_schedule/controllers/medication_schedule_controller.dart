@@ -81,7 +81,8 @@ class MedicationScheduleController extends GetxController {
         Get.toNamed(Routes.MEDICATION_SCHEDULE);
       }
     } catch (e) {
-      ProgressDialog.showDialogNotification(context, content: 'Phát sinh lỗi: $e');
+      Get.toNamed(Routes.MEDICATION_SCHEDULE);
+      //ProgressDialog.showDialogNotification(context, content: 'Phát sinh lỗi: $e');
       Get.log('getList error: $e');
     }
   }

@@ -1,8 +1,6 @@
 import 'package:get/get.dart';
 
-class SearchController extends GetxController {
-  //TODO: Implement SearchController
-
+class SearchViewController extends GetxController {
   final count = 0.obs;
   @override
   void onInit() {

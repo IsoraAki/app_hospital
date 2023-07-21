@@ -151,7 +151,8 @@ class CommandController extends GetxController {
       }
       isLoad.value = false;
     } catch (e) {
-      ProgressDialog.showDialogNotification(context, content: 'Phát sinh lỗi: $e');
+      Get.toNamed(Routes.COMMAND);
+      //ProgressDialog.showDialogNotification(context, content: 'Phát sinh lỗi: $e');
       isLoad.value = false;
       Get.log('getList error: $e');
     }
