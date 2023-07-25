@@ -38,6 +38,15 @@ class LoginController extends GetxController {
     super.onClose();
   }
 
+  loginTest() {
+    AppState.instance.settingBox.remove(SettingType.inforUser.toString());
+    if (isSave.value) {
+      AppState.instance.settingBox.write(SettingType.user.toString(), emailController.text);
+      AppState.instance.settingBox.write(SettingType.password.toString(), pwdController.text);
+    }
+    AppState.instance.settingBox.remove(SettingType.listOffice.toString());
+  }
+
   Future<void> connectSQL(BuildContext context) async {
     try {
       await SqlConn.connect(

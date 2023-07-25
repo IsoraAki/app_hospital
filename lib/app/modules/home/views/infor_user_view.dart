@@ -5,8 +5,8 @@ import 'package:my_app_hospital/configs/app_color.dart';
 import 'package:my_app_hospital/configs/theme/dimens.dart';
 
 class InforUserView extends StatelessWidget {
-  final StaffInforModel inforUserModer;
-  InforUserView({super.key, required this.inforUserModer});
+  final StaffInforModel? inforUserModer;
+  const InforUserView({super.key, this.inforUserModer});
 
   @override
   Widget build(BuildContext context) {
@@ -24,11 +24,11 @@ class InforUserView extends StatelessWidget {
               ClipRRect(
                 borderRadius: BorderRadius.circular(50),
                 child: Image.network(
-                  'http://192.168.1.178:1015/Data/48015/Template/AnhNhanVien/${inforUserModer.manhanvien}.jpg',
+                  'http://192.168.1.178:1015/Data/48015/Template/AnhNhanVien/${inforUserModer?.manhanvien}.jpg',
                   fit: BoxFit.cover,
                   width: 100.sp,
                   errorBuilder: (context, error, stackTrace) {
-                    return inforUserModer.gioitinh == 1
+                    return inforUserModer?.gioitinh == 1
                         ? Image.asset(
                             'assets/images/icon_doctor_man.png',
                             width: 100.sp,
@@ -46,7 +46,7 @@ class InforUserView extends StatelessWidget {
                 height: size_16_h,
               ),
               Text(
-                inforUserModer.tennhanvien ?? '...',
+                inforUserModer?.tennhanvien ?? '...',
                 textAlign: TextAlign.center,
                 style: const TextStyle(
                   fontSize: 14,
@@ -68,19 +68,19 @@ class InforUserView extends StatelessWidget {
                 ),
                 child: Column(
                   children: [
-                    cellText(context, 'Mã nhân viên:', inforUserModer.manhanvien ?? '...'),
+                    cellText(context, 'Mã nhân viên:', inforUserModer?.manhanvien ?? '...'),
                     SizedBox(
                       height: size_16_h,
                     ),
-                    cellText(context, 'Mã phòng ban:', inforUserModer.maphongban ?? '...'),
+                    cellText(context, 'Mã phòng ban:', inforUserModer?.maphongban ?? '...'),
                     SizedBox(
                       height: size_16_h,
                     ),
-                    cellText(context, 'Phòng ban:', inforUserModer.loginDep ?? '...'),
+                    cellText(context, 'Phòng ban:', inforUserModer?.loginDep ?? '...'),
                     SizedBox(
                       height: size_16_h,
                     ),
-                    cellText(context, 'Giới tính:', inforUserModer.gioitinh == 1 ? 'Nam' : 'Nữ'),
+                    cellText(context, 'Giới tính:', inforUserModer?.gioitinh == 1 ? 'Nam' : 'Nữ'),
                   ],
                 ),
               ),

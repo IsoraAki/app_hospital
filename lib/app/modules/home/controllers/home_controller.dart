@@ -37,7 +37,8 @@ class HomeController extends GetxController {
 
   Future<void> getList(String PCCS, int isGhiChuBS, int isSHBatThuong) async {
     try {
-      var resOffice = await SqlConn.readData("exec APPMBL_SelectedListPatient '${dropDownValue.value.rESOURCENAME}',N'$PCCS', $isGhiChuBS,$isSHBatThuong");
+      var resOffice =
+          await SqlConn.readData("exec APPMBL_SelectedListPatient '${dropDownValue.value.rESOURCENAME}',N'$PCCS', $isGhiChuBS,$isSHBatThuong");
       print(resOffice.toString());
       if (resOffice != null) {
         listPatientInfor.value = [];
@@ -51,6 +52,13 @@ class HomeController extends GetxController {
     } catch (e) {
       Get.log('getList error: $e');
     }
+  }
+
+  getOfficeTest() {
+    inforUser.value = StaffInforModel();
+    AppState.instance.settingBox.remove(SettingType.usercode.toString());
+    dropDownValue.value = OfficeModer();
+    listOffice.value = [];
   }
 
   Future<void> getOffice() async {

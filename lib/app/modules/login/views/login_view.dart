@@ -10,7 +10,6 @@ import 'package:my_app_hospital/configs/app_color.dart';
 import 'package:my_app_hospital/configs/theme/dimens.dart';
 import 'package:my_app_hospital/configs/theme/theme.dart';
 import 'package:my_app_hospital/util/validator.dart';
-import 'package:sql_conn/sql_conn.dart';
 
 import '../controllers/login_controller.dart';
 
@@ -144,8 +143,9 @@ class LoginView extends GetView<LoginController> {
                           onPressed: () async {
                             if (_formKey.currentState!.validate()) {
                               AppState.instance.settingBox.remove(SettingType.inforUser.toString());
-                              SqlConn.disconnect();
                               if (controller.pwdController.text == 'test123' && controller.emailController.text == 'test') {
+                                controller.loginTest();
+                                homeController.getOfficeTest();
                                 Get.offNamed(Routes.BOTTOM_BAR);
                               } else {
                                 ProgressDialog.show(context);
