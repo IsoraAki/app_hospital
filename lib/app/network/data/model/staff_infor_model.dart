@@ -1,4 +1,6 @@
-class StaffInforModel {
+import 'package:my_app_hospital/app/network/data/provider/my_reponse.dart';
+
+class StaffInforModel extends BaseObject<StaffInforModel> {
   String? manhanvien;
   String? tennhanvien;
   String? tenphongban;
@@ -26,5 +28,10 @@ class StaffInforModel {
     data['loginDep'] = this.loginDep;
     data['maphongban'] = this.maphongban;
     return data;
+  }
+
+  @override
+  StaffInforModel fromJson(json) {
+    return StaffInforModel.fromJson(json);
   }
 }

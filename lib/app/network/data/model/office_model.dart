@@ -1,4 +1,6 @@
-class OfficeModer {
+import '../provider/my_reponse.dart';
+
+class OfficeModer extends BaseObject<OfficeModer> {
   String? tENPHONGBAN;
   String? rESOURCENAME;
 
@@ -14,5 +16,10 @@ class OfficeModer {
     data['TENPHONGBAN'] = this.tENPHONGBAN;
     data['RESOURCENAME'] = this.rESOURCENAME;
     return data;
+  }
+
+  @override
+  OfficeModer fromJson(json) {
+    return OfficeModer.fromJson(json);
   }
 }

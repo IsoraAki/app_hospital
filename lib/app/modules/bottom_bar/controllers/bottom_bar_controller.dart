@@ -1,9 +1,6 @@
-import 'dart:convert';
-
 import 'package:get/get.dart';
-import 'package:my_app_hospital/app/data/staff_infor_model.dart';
-import 'package:my_app_hospital/app_state.dart';
-import 'package:sql_conn/sql_conn.dart';
+import 'package:my_app_hospital/app/network/data/model/staff_infor_model.dart';
+import 'package:my_app_hospital/app/network/local/cache_helper.dart';
 
 class BottomBarController extends GetxController {
   final inforUser = StaffInforModel().obs;
@@ -22,19 +19,19 @@ class BottomBarController extends GetxController {
 
   @override
   void onClose() {
-    SqlConn.disconnect();
+    CacheHelper.removeData(key: 'token');
     super.onClose();
   }
 
-  Future<void> getInForUser() async {
-    var valueMapUser;
-    if (AppState.instance.settingBox.read(SettingType.inforUser.toString()) != null &&
-        AppState.instance.settingBox.read(SettingType.inforUser.toString()) != '') {
-      valueMapUser = json.decode(AppState.instance.settingBox.read(SettingType.inforUser.toString()).toString().trim());
-    }
+  // Future<void> getInForUser() async {
+  //   var valueMapUser;
+  //   if (AppState.instance.settingBox.read(SettingType.inforUser.toString()) != null &&
+  //       AppState.instance.settingBox.read(SettingType.inforUser.toString()) != '') {
+  //     valueMapUser = json.decode(AppState.instance.settingBox.read(SettingType.inforUser.toString()).toString().trim());
+  //   }
 
-    if (valueMapUser != null && valueMapUser != '') {
-      inforUser.value = StaffInforModel.fromJson(valueMapUser[0]);
-    }
-  }
+  //   if (valueMapUser != null && valueMapUser != '') {
+  //     inforUser.value = StaffInforModel.fromJson(valueMapUser[0]);
+  //   }
+  // }
 }

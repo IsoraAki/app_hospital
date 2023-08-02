@@ -3,9 +3,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import 'package:get/get.dart';
-import 'package:my_app_hospital/app/data/office_model.dart';
+import 'package:my_app_hospital/app/network/data/model/office_model.dart';
 import 'package:my_app_hospital/app/modules/command/controllers/command_controller.dart';
-import 'package:my_app_hospital/app/modules/medication_schedule/controllers/medication_schedule_controller.dart';
+
 import 'package:my_app_hospital/app/modules/widget/dialog/process_dialog.dart';
 import 'package:my_app_hospital/configs/app_color.dart';
 import 'package:my_app_hospital/configs/theme/app_fonts.dart';
@@ -24,7 +24,7 @@ class HomeView extends StatefulWidget {
 class _HomeViewState extends State<HomeView> {
   final controller = Get.find<HomeController>();
   final commandController = Get.find<CommandController>();
-  final medicationScheduleController = Get.find<MedicationScheduleController>();
+  //final medicationScheduleController = Get.find<MedicationScheduleController>();
 
   @override
   Widget build(BuildContext context) {
@@ -107,7 +107,7 @@ class _HomeViewState extends State<HomeView> {
                   commandController.tenphongban.value = controller.dropDownValue.value.tENPHONGBAN ?? '';
                   //commandController.listPatientInfor == controller.listPatientInfor;
                   ProgressDialog.show(context);
-                  await commandController.getCDDD();
+                  //await commandController.getCDDD();
                   await commandController.getList(context, 'Tất cả', 0, 0, isGetTo: true);
                   ProgressDialog.hide(context);
                 }),
@@ -123,12 +123,19 @@ class _HomeViewState extends State<HomeView> {
                   ProgressDialog.showDialogNotification(context, content: 'Chức năng đang phát triển');
                 }),
                 buildMenu('assets/svg/Icon-13.svg', 'Lịch dùng thuốc', () async {
-                  medicationScheduleController.maphongban.value = controller.dropDownValue.value.rESOURCENAME ?? '';
-                  medicationScheduleController.tenphongban.value = controller.dropDownValue.value.tENPHONGBAN ?? '';
+                  commandController.maphongban.value = controller.dropDownValue.value.rESOURCENAME ?? '';
+                  commandController.tenphongban.value = controller.dropDownValue.value.tENPHONGBAN ?? '';
                   //commandController.listPatientInfor == controller.listPatientInfor;
                   ProgressDialog.show(context);
-                  await medicationScheduleController.getList(context, 'Tất cả', 0, 0, isGetTo: true);
+                  //await commandController.getCDDD();
+                  await commandController.getList(context, 'Tất cả', 0, 0, isGetTo: true);
                   ProgressDialog.hide(context);
+                  // medicationScheduleController.maphongban.value = controller.dropDownValue.value.rESOURCENAME ?? '';
+                  // medicationScheduleController.tenphongban.value = controller.dropDownValue.value.tENPHONGBAN ?? '';
+                  // //commandController.listPatientInfor == controller.listPatientInfor;
+                  // ProgressDialog.show(context);
+                  // await medicationScheduleController.getList(context, 'Tất cả', 0, 0, isGetTo: true);
+                  // ProgressDialog.hide(context);
                 }),
                 buildMenu('assets/svg/Icon-07.svg', 'Trò chuyện', () {
                   ProgressDialog.showDialogNotification(context, content: 'Chức năng đang phát triển');

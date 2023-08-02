@@ -8,8 +8,6 @@ import '../modules/home/bindings/home_binding.dart';
 import '../modules/home/views/home_view.dart';
 import '../modules/login/bindings/login_binding.dart';
 import '../modules/login/views/login_view.dart';
-import '../modules/medication_schedule/bindings/medication_schedule_binding.dart';
-import '../modules/medication_schedule/views/medication_schedule_view.dart';
 import '../modules/note/bindings/note_binding.dart';
 import '../modules/note/views/note_view.dart';
 import '../modules/search/bindings/search_binding.dart';
@@ -39,7 +37,6 @@ class AppPages {
         SearchBinding(),
         NoteBinding(),
         SupportBinding(),
-        MedicationScheduleBinding(),
         CommandBinding(),
       ],
     ),
@@ -62,11 +59,6 @@ class AppPages {
       name: _Paths.SUPPORT,
       page: () => const SupportView(),
       binding: SupportBinding(),
-    ),
-    GetPage(
-      name: _Paths.MEDICATION_SCHEDULE,
-      page: () => MedicationScheduleView(),
-      binding: MedicationScheduleBinding(),
     ),
     GetPage(
       name: _Paths.COMMAND,

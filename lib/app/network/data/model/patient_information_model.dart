@@ -1,4 +1,6 @@
-class PatientInformationModel {
+import 'package:my_app_hospital/app/network/data/provider/my_reponse.dart';
+
+class PatientInformationModel extends BaseObject<PatientInformationModel> {
   String? kHOALAMSANG;
   int? bENHANID;
   int? mAYTE;
@@ -80,5 +82,10 @@ class PatientInformationModel {
     data['GHICHUBS'] = this.gHICHUBS;
     data['YLSHBat'] = this.yLSHBat;
     return data;
+  }
+
+  @override
+  PatientInformationModel fromJson(json) {
+    return PatientInformationModel.fromJson(json);
   }
 }

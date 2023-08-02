@@ -8,8 +8,8 @@ import 'package:my_app_hospital/app/modules/note/views/note_view.dart';
 import 'package:my_app_hospital/app/modules/search/views/search_view.dart';
 import 'package:my_app_hospital/app/modules/support/views/support_view.dart';
 import 'package:my_app_hospital/app/modules/widget/dialog/process_dialog.dart';
+import 'package:my_app_hospital/app/network/local/cache_helper.dart';
 import 'package:my_app_hospital/configs/app_color.dart';
-import 'package:sql_conn/sql_conn.dart';
 
 import '../controllers/bottom_bar_controller.dart';
 import 'drawer_view.dart';
@@ -47,7 +47,7 @@ class BottomBarView extends GetView<BottomBarController> {
         onTap: (int i) {
           if (i == 4) {
             ProgressDialog.showDialogNotification(context, content: 'Thoát ứng dụng', isCanel: true, onPressed: () {
-              SqlConn.disconnect();
+              CacheHelper.removeData(key: 'token');
               SystemNavigator.pop();
             });
           } else {

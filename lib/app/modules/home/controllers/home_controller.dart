@@ -1,13 +1,14 @@
-import 'dart:convert';
+import 'dart:async';
 
 import 'package:get/get.dart';
-import 'package:my_app_hospital/app/data/office_model.dart';
-import 'package:my_app_hospital/app/data/patient_information_model.dart';
-import 'package:my_app_hospital/app/data/staff_infor_model.dart';
-import 'package:my_app_hospital/app_state.dart';
-import 'package:sql_conn/sql_conn.dart';
+import 'package:my_app_hospital/app/network/data/model/office_model.dart';
+
+import 'package:my_app_hospital/app/network/data/model/staff_infor_model.dart';
+import 'package:my_app_hospital/app/network/data/provider/my_reponse.dart';
+import 'package:my_app_hospital/app/network/repositories/app_repository.dart';
 
 class HomeController extends GetxController {
+  AppRepository appRepository = AppRepository();
   var dropDownValue = OfficeModer().obs;
   //var lv = 'Chọn phòng ban'.obs;
   var listOffice = [].obs;
@@ -37,15 +38,15 @@ class HomeController extends GetxController {
 
   Future<void> getList(String PCCS, int isGhiChuBS, int isSHBatThuong) async {
     try {
-      var resOffice =
-          await SqlConn.readData("exec APPMBL_SelectedListPatient '${dropDownValue.value.rESOURCENAME}',N'$PCCS', $isGhiChuBS,$isSHBatThuong");
-      print(resOffice.toString());
-      if (resOffice != null) {
-        listPatientInfor.value = [];
-        final valueMap = json.decode(resOffice.toString().trim());
-        if (valueMap != null) {
-          for (var element in valueMap) {
-            listPatientInfor.add(PatientInformationModel.fromJson(element));
+      final MyResponse? myResponse = await appRepository
+          .listPatient(maphongban: dropDownValue.value.rESOURCENAME, PCCS: PCCS, isGhiChuBS: isGhiChuBS, isSHBatThuong: isSHBatThuong)
+          .timeout(const Duration(seconds: 60));
+
+      if (myResponse != null) {
+        if (myResponse.code == "SUCCESS") {
+          if (myResponse.data != null) {
+            listPatientInfor.value = [];
+            listPatientInfor.value = myResponse.data!;
           }
         }
       }
@@ -54,28 +55,23 @@ class HomeController extends GetxController {
     }
   }
 
-  getOfficeTest() {
-    inforUser.value = StaffInforModel();
-    AppState.instance.settingBox.remove(SettingType.usercode.toString());
-    dropDownValue.value = OfficeModer();
-    listOffice.value = [];
-  }
-
   Future<void> getOffice() async {
-    final valueMapUser = json.decode(AppState.instance.settingBox.read(SettingType.inforUser.toString()).toString().trim());
-    if (valueMapUser != null) {
-      inforUser.value = StaffInforModel();
-      inforUser.value = StaffInforModel.fromJson(valueMapUser[0]);
-      AppState.instance.settingBox.write(SettingType.usercode.toString(), inforUser.value.manhanvien);
-      dropDownValue.value = OfficeModer(rESOURCENAME: inforUser.value.maphongban, tENPHONGBAN: inforUser.value.loginDep);
-    }
+    try {
+      final MyResponse? myResponse = await appRepository.department().timeout(const Duration(seconds: 60));
 
-    listOffice.value = [];
-    final valueMap = json.decode(AppState.instance.settingBox.read(SettingType.listOffice.toString()).toString().trim());
-    if (valueMap != null) {
-      for (var element in valueMap) {
-        listOffice.add(OfficeModer.fromJson(element));
+      if (myResponse != null) {
+        if (myResponse.code == "SUCCESS") {
+          if (myResponse.data != null) {
+            listOffice.value = [];
+            listOffice.value = myResponse.data!;
+          }
+        }
       }
+    } on TimeoutException {
+      // ignore: use_build_context_synchronously
+    } catch (e) {
+      // ignore: use_build_context_synchronously
+      Get.log(e.toString());
     }
   }
 }

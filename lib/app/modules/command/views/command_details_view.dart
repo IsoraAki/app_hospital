@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:my_app_hospital/app/data/patient_information_model.dart';
+import 'package:my_app_hospital/app/network/data/model/patient_information_model.dart';
 import 'package:my_app_hospital/app/data/thoi_gian_cham_soc_model.dart';
 import 'package:my_app_hospital/app/modules/command/controllers/command_controller.dart';
 import 'package:my_app_hospital/app/modules/command/views/cddd_view.dart';
@@ -544,7 +544,7 @@ class CommandDetails extends GetView<CommandController> {
             )),
         ElevatedButton(
             onPressed: () {
-              controller.saveYL(context);
+              //controller.saveYL(context);
             },
             style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.orange)),
             child: Padding(
@@ -562,7 +562,7 @@ class CommandDetails extends GetView<CommandController> {
         Obx(() => ElevatedButton(
             onPressed: () {
               if (controller.isInsert.value == false) {
-                controller.deletaYL(context);
+                //controller.deletaYL(context);
               }
             },
             style: controller.isInsert.value == true

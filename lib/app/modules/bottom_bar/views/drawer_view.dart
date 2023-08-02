@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:my_app_hospital/app/modules/bottom_bar/controllers/bottom_bar_controller.dart';
+import 'package:my_app_hospital/app/modules/home/controllers/home_controller.dart';
 import 'package:my_app_hospital/app/modules/home/views/infor_user_view.dart';
 import 'package:my_app_hospital/app/modules/widget/dialog/process_dialog.dart';
 import 'package:my_app_hospital/app/routes/app_pages.dart';
 import 'package:my_app_hospital/configs/app_color.dart';
 import 'package:my_app_hospital/configs/theme/theme.dart';
-import 'package:sql_conn/sql_conn.dart';
 
 class DrawerView extends StatelessWidget {
   DrawerView({super.key});
   final controller = Get.find<BottomBarController>();
+  final homeController = Get.find<HomeController>();
 
   @override
   Widget build(BuildContext context) {
@@ -50,7 +51,10 @@ class DrawerView extends StatelessWidget {
             ),
             title: const Text('Thông tin cá nhân'),
             onTap: () async {
-              await controller.getInForUser();
+              //await controller.getInForUser();
+
+              controller.inforUser.value = homeController.inforUser.value;
+              Get.back();
               Get.to(InforUserView(
                 inforUserModer: controller.inforUser.value,
               ));
@@ -75,7 +79,6 @@ class DrawerView extends StatelessWidget {
             title: const Text('Đăng xuất'),
             onTap: () {
               ProgressDialog.showDialogNotification(context, content: 'Xác nhận đăng xuất', isCanel: true, onPressed: () {
-                SqlConn.disconnect();
                 Get.offNamed(Routes.LOGIN);
               });
             },

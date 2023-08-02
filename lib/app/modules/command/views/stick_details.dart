@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:my_app_hospital/app/data/patient_information_model.dart';
+import 'package:my_app_hospital/app/modules/command/controllers/command_controller.dart';
+import 'package:my_app_hospital/app/network/data/model/patient_information_model.dart';
+
 import 'package:my_app_hospital/configs/app_color.dart';
 import 'package:my_app_hospital/configs/theme/dimens.dart';
 import 'package:my_app_hospital/configs/theme/text.dart';
 
-import '../controllers/medication_schedule_controller.dart';
-
-class StickDetails extends GetView<MedicationScheduleController> {
+class StickDetails extends GetView<CommandController> {
   final PatientInformationModel patientInformationModel;
 
   const StickDetails(this.patientInformationModel, {super.key});

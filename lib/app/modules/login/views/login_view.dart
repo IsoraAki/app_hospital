@@ -4,11 +4,13 @@ import 'package:get/get.dart';
 import 'package:my_app_hospital/app/modules/home/controllers/home_controller.dart';
 import 'package:my_app_hospital/app/modules/widget/custom_text.dart';
 import 'package:my_app_hospital/app/modules/widget/dialog/process_dialog.dart';
+import 'package:my_app_hospital/app/network/data/model/office_model.dart';
 import 'package:my_app_hospital/app/routes/app_pages.dart';
+
 import 'package:my_app_hospital/app_state.dart';
 import 'package:my_app_hospital/configs/app_color.dart';
 import 'package:my_app_hospital/configs/theme/dimens.dart';
-import 'package:my_app_hospital/configs/theme/theme.dart';
+
 import 'package:my_app_hospital/util/validator.dart';
 
 import '../controllers/login_controller.dart';
@@ -142,23 +144,38 @@ class LoginView extends GetView<LoginController> {
                         child: ElevatedButton(
                           onPressed: () async {
                             if (_formKey.currentState!.validate()) {
-                              AppState.instance.settingBox.remove(SettingType.inforUser.toString());
-                              if (controller.pwdController.text == 'test123' && controller.emailController.text == 'test') {
-                                controller.loginTest();
-                                homeController.getOfficeTest();
-                                Get.offNamed(Routes.BOTTOM_BAR);
-                              } else {
-                                ProgressDialog.show(context);
-                                //await controller.logIn(context);
-                                await controller.passwordEncrypt(context);
+                              ProgressDialog.show(context);
+                              await controller.logIn(context);
+                              if (controller.inforBS.value.manhanvien != null) {
+                                homeController.inforUser.value = controller.inforBS.value;
+                                AppState.instance.settingBox.write(SettingType.usercode.toString(), homeController.inforUser.value.manhanvien);
+                                homeController.dropDownValue.value = OfficeModer(
+                                    rESOURCENAME: homeController.inforUser.value.maphongban, tENPHONGBAN: homeController.inforUser.value.loginDep);
+                                // ignore: use_build_context_synchronously
+                                await homeController.getOffice();
+                                // ignore: use_build_context_synchronously
                                 ProgressDialog.hide(context);
-                                if (AppState.instance.settingBox.read(SettingType.inforUser.toString()) != null) {
-                                  await homeController.getOffice();
-                                  Get.offNamed(Routes.BOTTOM_BAR);
-                                } else {
-                                  showToast('Login lỗi');
-                                }
+                                Get.offNamed(Routes.BOTTOM_BAR);
                               }
+                              // ignore: use_build_context_synchronously
+                              ProgressDialog.hide(context);
+                              // AppState.instance.settingBox.remove(SettingType.inforUser.toString());
+                              // if (controller.pwdController.text == 'test123' && controller.emailController.text == 'test') {
+                              //   controller.loginTest();
+                              //   homeController.getOfficeTest();
+                              //   Get.offNamed(Routes.BOTTOM_BAR);
+                              // } else {
+                              //   ProgressDialog.show(context);
+                              //   //await controller.logIn(context);
+                              //   await controller.passwordEncrypt(context);
+                              //   ProgressDialog.hide(context);
+                              //   if (AppState.instance.settingBox.read(SettingType.inforUser.toString()) != null) {
+                              //     await homeController.getOffice();
+                              //     Get.offNamed(Routes.BOTTOM_BAR);
+                              //   } else {
+                              //     showToast('Login lỗi');
+                              //   }
+                              // }
                             }
                             //Get.toNamed(Routes.BOTTOM_BAR);
                           },

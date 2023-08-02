@@ -1,4 +1,7 @@
 import 'package:my_app_hospital/app/network/data/api_docs.dart';
+import 'package:my_app_hospital/app/network/data/model/office_model.dart';
+import 'package:my_app_hospital/app/network/data/model/patient_information_model.dart';
+import 'package:my_app_hospital/app/network/data/model/staff_infor_model.dart';
 import 'package:my_app_hospital/app/network/data/provider/my_callback.dart';
 import 'package:my_app_hospital/app/network/data/provider/my_reponse.dart';
 
@@ -22,10 +25,39 @@ class AppRepository {
     //final queryParameters = {"agent": ApiDocs.agent};
 
     return await callBack.post(
-      endPoint: apiApp + ApiDocs.login,
+      endPoint: ApiDocs.login,
       //object: Login(),
       params: params,
       //queryParameters: queryParameters,
+    );
+  }
+
+  Future<MyResponse?> profile({String? username, String? password}) async {
+    return await callBack.get(
+      endPoint: ApiDocs.profile,
+      object: StaffInforModel(),
+    );
+  }
+
+  Future<MyResponse?> department({String? username, String? password}) async {
+    return await callBack.get(
+      endPoint: ApiDocs.department,
+      object: OfficeModer(),
+    );
+  }
+
+  Future<MyResponse?> listPatient({String? maphongban, String? PCCS, int? isGhiChuBS, int? isSHBatThuong}) async {
+    final params = {
+      "maphongban": maphongban,
+      "PCCS": PCCS,
+      "isGhiChuBS": isGhiChuBS,
+      "isSHBatThuong": isSHBatThuong,
+    };
+
+    return await callBack.get(
+      endPoint: ApiDocs.listPatient,
+      object: PatientInformationModel(),
+      params: params,
     );
   }
 

@@ -15,7 +15,7 @@ dependencies:
   flutter_screenutil: ^5.7.0
   fluttertoast: ^8.2.1
   overlay_dialog: ^0.2.1
-  sql_conn: ^0.0.3
+  # sql_conn: ^0.0.3
   flutter_emoji: ^2.4.0
   get_storage: ^2.1.1
   sticky_headers: ^0.3.0+2

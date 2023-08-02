@@ -61,7 +61,8 @@ class _CommandViewState extends State<CommandView> {
                                   onChanged: (bool? value) {
                                     controller.isSHBatThuong.value = value == true ? 1 : 0;
                                     controller.searchController.clear();
-                                    controller.getList(context, controller.dropDownValue.replaceAll('Cấp ', ''), controller.isGhiChuBS.value, controller.isSHBatThuong.value);
+                                    controller.getList(context, controller.dropDownValue.replaceAll('Cấp ', ''), controller.isGhiChuBS.value,
+                                        controller.isSHBatThuong.value);
                                   },
                                 ),
                               )),
@@ -82,7 +83,8 @@ class _CommandViewState extends State<CommandView> {
                                   onChanged: (bool? value) {
                                     controller.isGhiChuBS.value = value == true ? 1 : 0;
                                     controller.searchController.clear();
-                                    controller.getList(context, controller.dropDownValue.replaceAll('Cấp ', ''), controller.isGhiChuBS.value, controller.isSHBatThuong.value);
+                                    controller.getList(context, controller.dropDownValue.replaceAll('Cấp ', ''), controller.isGhiChuBS.value,
+                                        controller.isSHBatThuong.value);
                                   },
                                 ),
                               )),
@@ -150,7 +152,7 @@ class _CommandViewState extends State<CommandView> {
                                   () async {
                                     ProgressDialog.show(context);
                                     controller.resetData();
-                                    await controller.getTimeDate(context, e.bENHANID.toString());
+                                    //await controller.getTimeDate(context, e.bENHANID.toString());
                                     ProgressDialog.hide(context);
                                     if (controller.isError == false) {
                                       Get.to(CommandDetails(e));
@@ -188,7 +190,7 @@ class _CommandViewState extends State<CommandView> {
                                   () async {
                                     ProgressDialog.show(context);
                                     controller.resetData();
-                                    await controller.getTimeDate(context, e.bENHANID.toString());
+                                    //await controller.getTimeDate(context, e.bENHANID.toString());
                                     ProgressDialog.hide(context);
                                     if (controller.isError == false) {
                                       Get.to(CommandDetails(e));
@@ -254,7 +256,8 @@ class _CommandViewState extends State<CommandView> {
             child: Obx(
               () => DropdownButton(
                 hint: Text(controller.dropDownValue.value,
-                    maxLines: 1, style: TextStyle(fontSize: text_14, fontWeight: FontWeight.bold, color: AppColors.white, fontFamily: AppFonts.baiJamjuree)),
+                    maxLines: 1,
+                    style: TextStyle(fontSize: text_14, fontWeight: FontWeight.bold, color: AppColors.white, fontFamily: AppFonts.baiJamjuree)),
                 isExpanded: true,
                 icon: const Icon(Icons.arrow_drop_down),
                 underline: Container(),
@@ -271,7 +274,8 @@ class _CommandViewState extends State<CommandView> {
                   controller.searchController.clear();
                   controller.updateData(dropDownValue: val, lvValue: val);
                   if (val != null) {
-                    controller.getList(context, controller.dropDownValue.replaceAll('Cấp ', ''), controller.isGhiChuBS.value, controller.isSHBatThuong.value);
+                    controller.getList(
+                        context, controller.dropDownValue.replaceAll('Cấp ', ''), controller.isGhiChuBS.value, controller.isSHBatThuong.value);
                   }
                 },
               ),
