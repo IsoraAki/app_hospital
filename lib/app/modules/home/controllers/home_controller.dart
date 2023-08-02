@@ -16,8 +16,12 @@ class HomeController extends GetxController {
   var listPatientInfor = [].obs;
 
   @override
-  void onInit() {
-    getOffice();
+  Future<void> onInit() async {
+    await getOffice();
+    await profile();
+    dropDownValue.value.rESOURCENAME == null
+        ? dropDownValue.value = OfficeModer(rESOURCENAME: inforUser.value.maphongban, tENPHONGBAN: inforUser.value.loginDep)
+        : dropDownValue.value;
     super.onInit();
   }
 
@@ -71,6 +75,24 @@ class HomeController extends GetxController {
       // ignore: use_build_context_synchronously
     } catch (e) {
       // ignore: use_build_context_synchronously
+      Get.log(e.toString());
+    }
+  }
+
+  Future<void> profile() async {
+    try {
+      final MyResponse? myResponse = await appRepository.profile().timeout(const Duration(seconds: 60));
+
+      if (myResponse != null) {
+        if (myResponse.code == "SUCCESS") {
+          inforUser.value = myResponse.data?.first;
+        }
+      }
+    } on TimeoutException {
+      // ignore: use_build_context_synchronously
+    } catch (e) {
+      // ignore: use_build_context_synchronously
+
       Get.log(e.toString());
     }
   }

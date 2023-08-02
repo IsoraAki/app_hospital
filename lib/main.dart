@@ -26,6 +26,7 @@ Future<void> main() async {
     designSize: const Size(375, 812),
     minTextAdapt: true,
     splitScreenMode: true,
+    useInheritedMediaQuery: true,
     builder: (ctx, child) => GetMaterialApp(
       title: "Application",
       theme: themeHospital,

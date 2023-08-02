@@ -51,42 +51,44 @@ class _HomeViewState extends State<HomeView> {
                 const SizedBox(
                   width: 16,
                 ),
-                Column(
-                  children: [
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(50),
-                      child: Image.network(
-                        'http://192.168.1.178:1015/Data/48015/Template/AnhNhanVien/${controller.inforUser.value.manhanvien}.jpg',
-                        fit: BoxFit.cover,
-                        width: 100.sp,
-                        errorBuilder: (context, error, stackTrace) {
-                          return controller.inforUser.value.gioitinh == 1
-                              ? Image.asset(
-                                  'assets/images/icon_doctor_man.png',
-                                  width: 100.sp,
-                                  fit: BoxFit.contain,
-                                )
-                              : Image.asset(
-                                  'assets/images/icon_doctor_woman.png',
-                                  width: 100.sp,
-                                  fit: BoxFit.contain,
-                                );
-                        },
+                Obx(
+                  () => Column(
+                    children: [
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(50),
+                        child: Image.network(
+                          'http://192.168.1.178:1015/Data/48015/Template/AnhNhanVien/${controller.inforUser.value.manhanvien}.jpg',
+                          fit: BoxFit.cover,
+                          width: 100.sp,
+                          errorBuilder: (context, error, stackTrace) {
+                            return controller.inforUser.value.gioitinh == 1
+                                ? Image.asset(
+                                    'assets/images/icon_doctor_man.png',
+                                    width: 100.sp,
+                                    fit: BoxFit.contain,
+                                  )
+                                : Image.asset(
+                                    'assets/images/icon_doctor_woman.png',
+                                    width: 100.sp,
+                                    fit: BoxFit.contain,
+                                  );
+                          },
+                        ),
                       ),
-                    ),
-                    SizedBox(
-                      height: size_8_h,
-                    ),
-                    Text(
-                      controller.inforUser.value.tennhanvien ?? '...',
-                      textAlign: TextAlign.center,
-                      style: const TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
+                      SizedBox(
+                        height: size_8_h,
                       ),
-                    ),
-                  ],
+                      Text(
+                        controller.inforUser.value.tennhanvien ?? '...',
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ],
             ),
