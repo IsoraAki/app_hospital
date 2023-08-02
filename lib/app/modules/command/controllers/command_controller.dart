@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:my_app_hospital/app/data/diagnostic_model.dart';
-import 'package:my_app_hospital/app/data/infor_time_data_model.dart';
+import 'package:my_app_hospital/app/network/data/model/diagnostic_model.dart';
+import 'package:my_app_hospital/app/network/data/model/infor_time_data_model.dart';
 import 'package:my_app_hospital/app/data/thoi_gian_cham_soc_model.dart';
 import 'package:my_app_hospital/app/modules/widget/dialog/process_dialog.dart';
 import 'package:my_app_hospital/app/network/data/provider/my_reponse.dart';
@@ -96,7 +96,7 @@ class CommandController extends GetxController {
 
   void updateTimeDate(BuildContext context, ThoiGianChamSocModel timeDate) {
     this.timeDate.value = timeDate;
-    //getInforTimeDate(context, this.timeDate.value.chamsocId.toString());
+    getInforTimeDate(context, this.timeDate.value.chamsocId.toString());
   }
 
   void selecTimeDate(BuildContext context, {DateTime? value}) {
@@ -111,7 +111,7 @@ class CommandController extends GetxController {
 
     if (timeDate.chamsocId != null) {
       this.timeDate.value = timeDate;
-      //getInforTimeDate(context, timeDate.chamsocId.toString());
+      getInforTimeDate(context, timeDate.chamsocId.toString());
     } else {
       ProgressDialog.showDialogwWarning(context, content: 'Không có dữ liệu chăm sóc trong thời gian đã chọn');
     }
@@ -141,9 +141,8 @@ class CommandController extends GetxController {
     try {
       isLoad.value = true;
       listPatientInfor.value = [];
-      final MyResponse? myResponse = await appRepository
-          .listPatient(maphongban: maphongban.value, PCCS: PCCS, isGhiChuBS: isGhiChuBS, isSHBatThuong: isSHBatThuong)
-          .timeout(const Duration(seconds: 60));
+      final MyResponse? myResponse =
+          await appRepository.listPatient(maphongban: maphongban.value, PCCS: PCCS, isGhiChuBS: isGhiChuBS, isSHBatThuong: isSHBatThuong).timeout(const Duration(seconds: 60));
 
       if (myResponse != null) {
         if (myResponse.code == "SUCCESS") {
@@ -165,26 +164,26 @@ class CommandController extends GetxController {
     }
   }
 
-  // Future<void> getCDDD() async {
-  //   try {
-  //     isLoad.value = true;
-  //     var res = await SqlConn.readData("exec APPMBL_selectedCHANDOANDIEUDUONG");
-  //     Get.log(res.toString().trim());
-  //     if (res != null) {
-  //       listDiagnostic.value = [];
-  //       final valueMap = json.decode(res.toString().trim().replaceAll('\n', '\\n'));
-  //       if (valueMap != null) {
-  //         for (var element in valueMap) {
-  //           listDiagnostic.add(DiagnosticModel.fromJson(element));
-  //         }
-  //       }
-  //     }
-  //     isLoad.value = false;
-  //   } catch (e) {
-  //     isLoad.value = false;
-  //     Get.log('getCDD error: $e');
-  //   }
-  // }
+  Future<void> getCDDD() async {
+    try {
+      isLoad.value = true;
+      final MyResponse? myResponse = await appRepository.cddd().timeout(const Duration(seconds: 60));
+
+      if (myResponse != null) {
+        if (myResponse.code == "SUCCESS") {
+          if (myResponse.data != null) {
+            listDiagnostic.value = [];
+            listDiagnostic.value = myResponse.data!;
+          }
+        }
+      }
+
+      isLoad.value = false;
+    } catch (e) {
+      isLoad.value = false;
+      Get.log('getCDD error: $e');
+    }
+  }
 
   // Future<void> getTimeDate(BuildContext context, String benhNhanId) async {
   //   try {
@@ -209,40 +208,73 @@ class CommandController extends GetxController {
   //   }
   // }
 
-  // Future<void> getInforTimeDate(BuildContext context, String chamsocId) async {
-  //   try {
-  //     isError = false;
-  //     var res = await SqlConn.readData("exec APPMBL_getInfoPatientCareFrom_ChamsocID $chamsocId");
-  //     Get.log(res.toString());
-  //     if (res != null) {
-  //       inforTimeDate.value = InforTimeDateModel();
-  //       final valueMap = json.decode(res.toString().trim().replaceAll('\n', '\\n'));
-  //       if (valueMap != null) {
-  //         inforTimeDate.value = InforTimeDateModel.fromJson(valueMap[0]);
-  //       }
-  //       machController.value.text = inforTimeDate.value.mach ?? '';
-  //       nhietdoController.value.text = inforTimeDate.value.nhietdo ?? '';
-  //       huyetapController.value.text = inforTimeDate.value.huyetap ?? '';
-  //       chieucaoController.value.text = inforTimeDate.value.chieucao ?? '';
-  //       cannangController.value.text = inforTimeDate.value.cannang ?? '';
-  //       nhipthoController.value.text = inforTimeDate.value.nhiptho ?? '';
+  Future<void> getInforTimeDate(BuildContext context, String chamsocId) async {
+    try {
+      isError = false;
 
-  //       dienbienController.value.text = inforTimeDate.value.dienbien ?? '';
-  //       ylenhchamsocController.value.text = inforTimeDate.value.ylenhchamsoc ?? '';
-  //       chandoandieuduongController.value.text = inforTimeDate.value.chandoandieuduong ?? '';
+      final MyResponse? myResponse = await appRepository.infoPatient(chamsoc_id: chamsocId).timeout(const Duration(seconds: 60));
 
-  //       luonggiaController.value.text = inforTimeDate.value.luonggia ?? '';
-  //       ghichuController.value.text = inforTimeDate.value.ghichu ?? '';
-  //       chedodinhduongController.value.text = inforTimeDate.value.chandoandieuduong ?? '';
-  //       muctieudieuduongController.value.text = inforTimeDate.value.muctieudieuduong ?? '';
-  //       pccsController.value.text = inforTimeDate.value.phancapchamsoc == null ? '' : inforTimeDate.value.phancapchamsoc.toString();
-  //     }
-  //   } catch (e) {
-  //     isError = true;
-  //     ProgressDialog.showDialogNotification(context, content: 'Phát sinh lỗi: $e');
-  //     Get.log('getInforTimeDate error: $e');
-  //   }
-  // }
+      if (myResponse != null) {
+        if (myResponse.code == "SUCCESS") {
+          if (myResponse.data != null) {
+            inforTimeDate.value = InforTimeDateModel();
+            inforTimeDate.value = myResponse.data!.first;
+
+            // final valueMap = json.decode(res.toString().trim().replaceAll('\n', '\\n'));
+            // if (valueMap != null) {
+            //   inforTimeDate.value = InforTimeDateModel.fromJson(valueMap[0]);
+            // }
+            machController.value.text = inforTimeDate.value.mach ?? '';
+            nhietdoController.value.text = inforTimeDate.value.nhietdo ?? '';
+            huyetapController.value.text = inforTimeDate.value.huyetap ?? '';
+            chieucaoController.value.text = inforTimeDate.value.chieucao ?? '';
+            cannangController.value.text = inforTimeDate.value.cannang ?? '';
+            nhipthoController.value.text = inforTimeDate.value.nhiptho ?? '';
+
+            dienbienController.value.text = inforTimeDate.value.dienbien ?? '';
+            ylenhchamsocController.value.text = inforTimeDate.value.ylenhchamsoc ?? '';
+            chandoandieuduongController.value.text = inforTimeDate.value.chandoandieuduong ?? '';
+
+            luonggiaController.value.text = inforTimeDate.value.luonggia ?? '';
+            ghichuController.value.text = inforTimeDate.value.ghichu ?? '';
+            chedodinhduongController.value.text = inforTimeDate.value.chandoandieuduong ?? '';
+            muctieudieuduongController.value.text = inforTimeDate.value.muctieudieuduong ?? '';
+            pccsController.value.text = inforTimeDate.value.phancapchamsoc == null ? '' : inforTimeDate.value.phancapchamsoc.toString();
+          }
+        }
+      }
+
+      // var res = await SqlConn.readData("exec APPMBL_getInfoPatientCareFrom_ChamsocID $chamsocId");
+      // Get.log(res.toString());
+      // if (res != null) {
+      //   inforTimeDate.value = InforTimeDateModel();
+      //   final valueMap = json.decode(res.toString().trim().replaceAll('\n', '\\n'));
+      //   if (valueMap != null) {
+      //     inforTimeDate.value = InforTimeDateModel.fromJson(valueMap[0]);
+      //   }
+      //   machController.value.text = inforTimeDate.value.mach ?? '';
+      //   nhietdoController.value.text = inforTimeDate.value.nhietdo ?? '';
+      //   huyetapController.value.text = inforTimeDate.value.huyetap ?? '';
+      //   chieucaoController.value.text = inforTimeDate.value.chieucao ?? '';
+      //   cannangController.value.text = inforTimeDate.value.cannang ?? '';
+      //   nhipthoController.value.text = inforTimeDate.value.nhiptho ?? '';
+
+      //   dienbienController.value.text = inforTimeDate.value.dienbien ?? '';
+      //   ylenhchamsocController.value.text = inforTimeDate.value.ylenhchamsoc ?? '';
+      //   chandoandieuduongController.value.text = inforTimeDate.value.chandoandieuduong ?? '';
+
+      //   luonggiaController.value.text = inforTimeDate.value.luonggia ?? '';
+      //   ghichuController.value.text = inforTimeDate.value.ghichu ?? '';
+      //   chedodinhduongController.value.text = inforTimeDate.value.chandoandieuduong ?? '';
+      //   muctieudieuduongController.value.text = inforTimeDate.value.muctieudieuduong ?? '';
+      //   pccsController.value.text = inforTimeDate.value.phancapchamsoc == null ? '' : inforTimeDate.value.phancapchamsoc.toString();
+      // }
+    } catch (e) {
+      isError = true;
+      ProgressDialog.showDialogNotification(context, content: 'Phát sinh lỗi: $e');
+      Get.log('getInforTimeDate error: $e');
+    }
+  }
 
   void addYL() {
     isInsert.value = true;

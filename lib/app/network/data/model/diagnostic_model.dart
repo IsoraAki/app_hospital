@@ -1,4 +1,6 @@
-class DiagnosticModel {
+import 'package:my_app_hospital/app/network/data/provider/my_reponse.dart';
+
+class DiagnosticModel extends BaseObject<DiagnosticModel> {
   String? mA;
   String? tEN;
   String? nHOM;
@@ -23,5 +25,10 @@ class DiagnosticModel {
     data['MUCTIEU'] = this.mUCTIEU;
     data['CANTHIEP'] = this.cANTHIEP;
     return data;
+  }
+
+  @override
+  DiagnosticModel fromJson(json) {
+    return DiagnosticModel.fromJson(json);
   }
 }

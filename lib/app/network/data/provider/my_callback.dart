@@ -10,7 +10,7 @@ import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 import 'package:my_app_hospital/app/network/data/provider/my_reponse.dart';
 
 class MyCallBack {
-  final String _apiBaseUrl = "192.168.0.112:2828";
+  final String _apiBaseUrl = "7d64-2402-800-63ef-c1e8-ec24-4353-64d-7c12.ngrok-free.app";
 
   final Logger _logger = Logger("MyCallBack");
   final Dio _dio = Dio();
@@ -66,8 +66,7 @@ class MyCallBack {
   }) async {
     try {
       print("flutter params" + params.toString());
-      Response response =
-          await _dio.post(uri(endPoint, url: url ?? '').toString(), options: await options(), data: params, queryParameters: queryParameters);
+      Response response = await _dio.post(uri(endPoint, url: url ?? '').toString(), options: await options(), data: params, queryParameters: queryParameters);
       return base(response, object);
     } on DioError catch (e) {
       if (DioErrorType.receiveTimeout == e.type || DioErrorType.connectionTimeout == e.type) {

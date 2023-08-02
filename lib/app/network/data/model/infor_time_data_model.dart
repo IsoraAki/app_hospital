@@ -1,4 +1,6 @@
-class InforTimeDateModel {
+import 'package:my_app_hospital/app/network/data/provider/my_reponse.dart';
+
+class InforTimeDateModel extends BaseObject<InforTimeDateModel> {
   int? chamsocId;
   int? benhanId;
   int? luutruId;
@@ -100,5 +102,10 @@ class InforTimeDateModel {
     data['ghichubs'] = this.ghichubs;
     data['nguoithuchien_code'] = this.nguoithuchienCode;
     return data;
+  }
+
+  @override
+  InforTimeDateModel fromJson(json) {
+    return InforTimeDateModel.fromJson(json);
   }
 }
