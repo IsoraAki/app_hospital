@@ -3,8 +3,8 @@ import 'package:my_app_hospital/app/network/data/provider/my_reponse.dart';
 class PatientInformationModel extends BaseObject<PatientInformationModel> {
   String? kHOALAMSANG;
   int? bENHANID;
-  int? mAYTE;
-  double? sOBENHAN;
+  String? mAYTE;
+  String? sOBENHAN;
   String? tENBENHNHAN;
   int? nAMSINH;
   String? dOITUONG;
