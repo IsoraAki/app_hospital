@@ -19,7 +19,7 @@ class InforTimeDateModel extends BaseObject<InforTimeDateModel> {
   String? chandoandieuduong;
   String? luonggia;
   String? ghichu;
-  int? phancapchamsoc;
+  String? phancapchamsoc;
   String? chedodinhduong;
   String? muctieudieuduong;
   String? ghichubs;
@@ -69,7 +69,7 @@ class InforTimeDateModel extends BaseObject<InforTimeDateModel> {
     chandoandieuduong = json['chandoandieuduong'];
     luonggia = json['luonggia'] == null ? '' : json['luonggia'].toString();
     ghichu = json['ghichu'];
-    phancapchamsoc = json['phancapchamsoc'];
+    phancapchamsoc = json['phancapchamsoc'].toString();
     chedodinhduong = json['chedodinhduong'];
     muctieudieuduong = json['muctieudieuduong'];
     ghichubs = json['ghichubs'];

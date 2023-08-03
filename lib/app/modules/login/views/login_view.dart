@@ -149,6 +149,7 @@ class LoginView extends GetView<LoginController> {
                               if (controller.inforBS.value.manhanvien != null) {
                                 homeController.inforUser.value = controller.inforBS.value;
                                 AppState.instance.settingBox.write(SettingType.usercode.toString(), homeController.inforUser.value.manhanvien);
+                                AppState.instance.settingBox.write(SettingType.nameUser.toString(), homeController.inforUser.value.tennhanvien);
                                 homeController.dropDownValue.value = OfficeModer(
                                     rESOURCENAME: homeController.inforUser.value.maphongban, tENPHONGBAN: homeController.inforUser.value.loginDep);
                                 // ignore: use_build_context_synchronously

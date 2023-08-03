@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 import 'package:my_app_hospital/app/modules/command/views/command_details_view.dart';
+import 'package:my_app_hospital/app/modules/command/views/stick_details.dart';
 import 'package:my_app_hospital/app/modules/widget/custom_bottom_sheet.dart';
 import 'package:my_app_hospital/app/modules/widget/custom_text.dart';
 import 'package:my_app_hospital/app/modules/widget/dialog/process_dialog.dart';
@@ -15,7 +16,8 @@ import 'package:sticky_headers/sticky_headers.dart';
 import '../controllers/command_controller.dart';
 
 class CommandView extends StatefulWidget {
-  const CommandView({super.key});
+  final bool? isYLCS;
+  const CommandView({super.key, this.isYLCS = true});
 
   @override
   State<CommandView> createState() => _CommandViewState();
@@ -28,7 +30,7 @@ class _CommandViewState extends State<CommandView> {
     TextTheme textTheme = Theme.of(context).textTheme;
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Y lệnh chăm sóc'),
+        title: Text(widget.isYLCS == true ? 'Y lệnh chăm sóc' : 'Lịch dùng thuốc'),
         centerTitle: true,
         actions: [
           IconButton(
@@ -152,10 +154,14 @@ class _CommandViewState extends State<CommandView> {
                                   () async {
                                     ProgressDialog.show(context);
                                     controller.resetData();
-                                    //await controller.getTimeDate(context, e.bENHANID.toString());
+                                    await controller.getTimeDate(context, e.bENHANID.toString());
                                     ProgressDialog.hide(context);
                                     if (controller.isError == false) {
-                                      Get.to(CommandDetails(e));
+                                      if (widget.isYLCS == true) {
+                                        Get.to(CommandDetails(e));
+                                      } else {
+                                        Get.to(StickDetails(e));
+                                      }
                                     }
                                   },
                                   'http://192.168.1.178:1015/Data/48015/Media/${e.mAYTE}/${e.fILENAME}',
@@ -190,10 +196,14 @@ class _CommandViewState extends State<CommandView> {
                                   () async {
                                     ProgressDialog.show(context);
                                     controller.resetData();
-                                    //await controller.getTimeDate(context, e.bENHANID.toString());
+                                    await controller.getTimeDate(context, e.bENHANID.toString());
                                     ProgressDialog.hide(context);
                                     if (controller.isError == false) {
-                                      Get.to(CommandDetails(e));
+                                      if (widget.isYLCS == true) {
+                                        Get.to(CommandDetails(e));
+                                      } else {
+                                        Get.to(StickDetails(e));
+                                      }
                                     }
                                   },
                                   'http://192.168.1.178:1015/Data/48015/Media/${e.mAYTE}/${e.fILENAME}',

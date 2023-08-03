@@ -1,4 +1,6 @@
-class ThoiGianChamSocModel {
+import 'package:my_app_hospital/app/network/data/provider/my_reponse.dart';
+
+class ThoiGianChamSocModel extends BaseObject<ThoiGianChamSocModel> {
   int? chamsocId;
   String? thoigianchamsoc;
 
@@ -14,5 +16,10 @@ class ThoiGianChamSocModel {
     data['chamsoc_id'] = this.chamsocId;
     data['thoigianchamsoc'] = this.thoigianchamsoc;
     return data;
+  }
+
+  @override
+  ThoiGianChamSocModel fromJson(json) {
+    return ThoiGianChamSocModel.fromJson(json);
   }
 }

@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:my_app_hospital/app/modules/command/views/command_view.dart';
 import 'package:my_app_hospital/app/network/data/model/diagnostic_model.dart';
 import 'package:my_app_hospital/app/network/data/model/infor_time_data_model.dart';
-import 'package:my_app_hospital/app/data/thoi_gian_cham_soc_model.dart';
+import 'package:my_app_hospital/app/network/data/model/thoi_gian_cham_soc_model.dart';
 import 'package:my_app_hospital/app/modules/widget/dialog/process_dialog.dart';
 import 'package:my_app_hospital/app/network/data/provider/my_reponse.dart';
 import 'package:my_app_hospital/app/network/repositories/app_repository.dart';
-import 'package:my_app_hospital/app/routes/app_pages.dart';
+import 'package:my_app_hospital/app_state.dart';
 
 import 'package:my_app_hospital/configs/app_color.dart';
 import 'package:my_app_hospital/configs/date_formatter.dart';
@@ -62,6 +63,8 @@ class CommandController extends GetxController {
   var checkboxValue2 = false.obs;
   var checkboxValue3 = false.obs;
   var checkboxValue4 = false.obs;
+
+  String benhNhanId = '';
 
   @override
   void onInit() {
@@ -137,12 +140,13 @@ class CommandController extends GetxController {
     sarchlistPatientInfor.value = newList.isNotEmpty ? newList : listPatientInfor;
   }
 
-  Future<void> getList(BuildContext context, String PCCS, int isGhiChuBS, int isSHBatThuong, {bool? isGetTo}) async {
+  Future<void> getList(BuildContext context, String PCCS, int isGhiChuBS, int isSHBatThuong, {bool? isGetTo, bool? isYLCS = true}) async {
     try {
       isLoad.value = true;
       listPatientInfor.value = [];
-      final MyResponse? myResponse =
-          await appRepository.listPatient(maphongban: maphongban.value, PCCS: PCCS, isGhiChuBS: isGhiChuBS, isSHBatThuong: isSHBatThuong).timeout(const Duration(seconds: 60));
+      final MyResponse? myResponse = await appRepository
+          .listPatient(maphongban: maphongban.value, PCCS: PCCS, isGhiChuBS: isGhiChuBS, isSHBatThuong: isSHBatThuong)
+          .timeout(const Duration(seconds: 60));
 
       if (myResponse != null) {
         if (myResponse.code == "SUCCESS") {
@@ -153,11 +157,13 @@ class CommandController extends GetxController {
         }
       }
       if (isGetTo == true) {
-        Get.toNamed(Routes.COMMAND);
+        Get.to(CommandView(isYLCS: isYLCS));
+        //Get.toNamed(Routes.COMMAND);
       }
       isLoad.value = false;
     } catch (e) {
-      Get.toNamed(Routes.COMMAND);
+      Get.to(CommandView(isYLCS: isYLCS));
+      //Get.toNamed(Routes.COMMAND);
       //ProgressDialog.showDialogNotification(context, content: 'Phát sinh lỗi: $e');
       isLoad.value = false;
       Get.log('getList error: $e');
@@ -185,28 +191,35 @@ class CommandController extends GetxController {
     }
   }
 
-  // Future<void> getTimeDate(BuildContext context, String benhNhanId) async {
-  //   try {
-  //     isError = false;
-  //     var res = await SqlConn.readData("exec APPMBL_getTimePatientCare $benhNhanId");
-  //     print(res.toString());
-  //     if (res != null) {
-  //       listThoiGianChamSoc.value = [];
-  //       final valueMap = json.decode(res.toString().trim());
-  //       if (valueMap != null) {
-  //         for (var element in valueMap) {
-  //           listThoiGianChamSoc.add(ThoiGianChamSocModel.fromJson(element));
-  //         }
-  //       }
-  //       timeDate.value = listThoiGianChamSoc.first;
-  //       await getInforTimeDate(context, timeDate.value.chamsocId.toString());
-  //     }
-  //   } catch (e) {
-  //     isError = true;
-  //     ProgressDialog.showDialogNotification(context, content: 'Phát sinh lỗi: $e');
-  //     Get.log('getTimeDate error: $e');
-  //   }
-  // }
+  Future<void> getTimeDate(BuildContext context, String benhNhanId) async {
+    try {
+      isError = false;
+      //var res = await SqlConn.readData("exec APPMBL_getTimePatientCare $benhNhanId");
+      final MyResponse? res = await appRepository.getTimeDate(benhnhan_id: benhNhanId).timeout(const Duration(seconds: 60));
+
+      print(res.toString());
+      if (res != null && res.code == "SUCCESS") {
+        if (res.data != null) {
+          this.benhNhanId = benhNhanId;
+          listThoiGianChamSoc.value = [];
+          listThoiGianChamSoc.value = res.data!;
+          // final valueMap = json.decode(res.toString().trim());
+          // if (valueMap != null) {
+          //   for (var element in valueMap) {
+          //     listThoiGianChamSoc.add(ThoiGianChamSocModel.fromJson(element));
+          //   }
+          // }
+          timeDate.value = listThoiGianChamSoc.first;
+          // ignore: use_build_context_synchronously
+          await getInforTimeDate(context, timeDate.value.chamsocId.toString());
+        }
+      }
+    } catch (e) {
+      isError = true;
+      ProgressDialog.showDialogNotification(context, content: 'Phát sinh lỗi: $e');
+      Get.log('getTimeDate error: $e');
+    }
+  }
 
   Future<void> getInforTimeDate(BuildContext context, String chamsocId) async {
     try {
@@ -297,57 +310,142 @@ class CommandController extends GetxController {
     pccsController.value.text = '';
   }
 
-  // Future<void> saveYL(BuildContext context) async {
-  //   try {
-  //     if (inforTimeDate.value.nguoithuchienCode == AppState.instance.settingBox.read(SettingType.usercode.toString())) {
-  //       ProgressDialog.showDialogNotification(context, content: 'Xác nhận lưu y lệnh', isCanel: true, onPressed: () async {
-  //         if (isInsert.value) {
-  //           Navigator.of(context).pop();
-  //           ProgressDialog.show(context);
-  //           await SqlConn.readData(
-  //               "Exec APPMBL_InsertNewPatientCare @${inforTimeDate.value.benhanId ?? ''}, @${timeDate.value.thoigianchamsoc}, @${AppState.instance.settingBox.read(SettingType.usercode.toString())}, @${machController.value.text}, @${nhietdoController.value.text}, @${huyetapController.value.text}, @${cannangController.value.text}, @${nhipthoController.value.text}, @${chieucaoController.value.text}, @${dienbienController.value.text}, @${canthiepController.value.text}, @${chandoandieuduongController.value.text}, @${luonggiaController.value.text}, @${ghichuController.value.text}, @${pccsController.value.text}, @${ylenhchamsocController.value.text}, @${inforTimeDate.value.chamsocId ?? ''}, @${inforTimeDate.value.dieuduong ?? ''}, @${muctieudieuduongController.value.text}");
-  //           isInsert.value = false;
-  //           ProgressDialog.hide(context);
-  //         } else {
-  //           Navigator.of(context).pop();
-  //           ProgressDialog.show(context);
-  //           await SqlConn.readData(
-  //               "Exec APPMBL_UpdatePatientCareBy_ChamsocID @${timeDate.value.chamsocId ?? ''}, @${timeDate.value.thoigianchamsoc}, @${AppState.instance.settingBox.read(SettingType.usercode.toString())}, @${machController.value.text}, @${nhietdoController.value.text}, @${huyetapController.value.text}, @${cannangController.value.text}, @${nhipthoController.value.text}, @${chieucaoController.value.text}, @${dienbienController.value.text}, @${canthiepController.value.text}, @${chandoandieuduongController.value.text}, @${luonggiaController.value.text}, @${ghichuController.value.text}, @${pccsController.value.text}, @${ylenhchamsocController.value.text}, @${inforTimeDate.value.chamsocId ?? ''}, @${inforTimeDate.value.dieuduong ?? ''}, @${muctieudieuduongController.value.text}");
-  //           ProgressDialog.hide(context);
-  //         }
-  //       });
-  //     } else {
-  //       ProgressDialog.hide(context);
-  //       ProgressDialog.showDialogNotification(context, content: 'Chỉ có "${inforTimeDate.value.dieuduong}" mới có thể\nLƯU y lệnh chăm sóc này');
-  //     }
-  //   } catch (e) {
-  //     ProgressDialog.hide(context);
-  //     ProgressDialog.showDialogNotification(context, content: 'Phát sinh lỗi: $e');
-  //     Get.log('saveYL error: $e');
-  //   }
-  // }
+  Future<void> saveYL(BuildContext context) async {
+    try {
+      ProgressDialog.showDialogNotification(context, content: 'Xác nhận lưu y lệnh', isCanel: true, onPressed: () async {
+        if (isInsert.value) {
+          Navigator.of(context).pop();
 
-  // Future<void> deletaYL(BuildContext context) async {
-  //   try {
-  //     if (inforTimeDate.value.nguoithuchienCode == AppState.instance.settingBox.read(SettingType.usercode.toString())) {
-  //       ProgressDialog.showDialogNotification(context, content: 'Xác nhận xóa Y lệnh', isCanel: true, onPressed: () async {
-  //         Navigator.of(context).pop();
-  //         ProgressDialog.show(context);
-  //         if (timeDate.value.chamsocId != null) {
-  //           await SqlConn.readData("Exec APPMBL_deleteInfoPatientCareBy_ChamsocID @${timeDate.value.chamsocId ?? ''}");
-  //         } else {
-  //           ProgressDialog.showDialogNotification(context, content: 'Xóa y lệnh thất bại');
-  //         }
+          // await SqlConn.readData(
+          //     "Exec APPMBL_InsertNewPatientCare @${inforTimeDate.value.benhanId ?? ''}, @${timeDate.value.thoigianchamsoc}, @${AppState.instance.settingBox.read(SettingType.usercode.toString())}, @${machController.value.text}, @${nhietdoController.value.text}, @${huyetapController.value.text}, @${cannangController.value.text}, @${nhipthoController.value.text}, @${chieucaoController.value.text}, @${dienbienController.value.text}, @${canthiepController.value.text}, @${chandoandieuduongController.value.text}, @${luonggiaController.value.text}, @${ghichuController.value.text}, @${pccsController.value.text}, @${ylenhchamsocController.value.text}, @${inforTimeDate.value.chamsocId ?? ''}, @${inforTimeDate.value.dieuduong ?? ''}, @${muctieudieuduongController.value.text}");
 
-  //         ProgressDialog.hide(context);
-  //       });
-  //     } else {
-  //       ProgressDialog.showDialogNotification(context, content: 'Chỉ có "${inforTimeDate.value.dieuduong}" mới có thể\nXÓA y lệnh chăm sóc này');
-  //     }
-  //   } catch (e) {
-  //     ProgressDialog.hide(context);
-  //     ProgressDialog.showDialogNotification(context, content: 'Xóa y lệnh thất bại\nLỗi: $e');
-  //     Get.log('deletaYL error: $e');
-  //   }
-  // }
+          ProgressDialog.show(context);
+          final MyResponse? myResponse = await appRepository
+              .addYL(
+                BENHAN_ID: inforTimeDate.value.benhanId,
+                THOIGIANTHUCHIEN: timeDate.value.thoigianchamsoc,
+                MACH: machController.value.text,
+                USERCODE: AppState.instance.settingBox.read(SettingType.usercode.toString()),
+                NHIET: nhietdoController.value.text,
+                HUYETAP: huyetapController.value.text,
+                CANNANG: cannangController.value.text,
+                NHIPTHO: nhipthoController.value.text,
+                CHIEUCAO: chieucaoController.value.text,
+                TINHTRANGBN: dienbienController.value.text,
+                CANTHIEPDD: canthiepController.value.text.toString().trim().replaceAll('\n', '\\n'),
+                CHANDOANDD: chandoandieuduongController.value.text,
+                LUONGGIA: luonggiaController.value.text,
+                LOIDAN: ghichuController.value.text,
+                PCCS: pccsController.value.text,
+                YLENHDD: ylenhchamsocController.value.text,
+                MACHAMSOC: '',
+                TENCHAMSOC: AppState.instance.settingBox.read(SettingType.nameUser.toString()),
+                MUCTIEUDD: muctieudieuduongController.value.text,
+              )
+              .timeout(const Duration(seconds: 60));
+          // ignore: use_build_context_synchronously
+          ProgressDialog.hide(context);
+          if (myResponse?.code == "SUCCESS") {
+            // ignore: use_build_context_synchronously
+            isInsert.value = false;
+            // ignore: use_build_context_synchronously
+            ProgressDialog.showDialogNotification(context, content: 'Thêm y lệnh thành công', onPressed: () {
+              ProgressDialog.show(context);
+              getTimeDate(context, benhNhanId);
+              ProgressDialog.hide(context);
+              Get.back();
+            });
+          } else {
+            // ignore: use_build_context_synchronously
+            ProgressDialog.showDialogNotification(context, content: 'Thêm y lệnh thất bại');
+          }
+        } else if (inforTimeDate.value.nguoithuchienCode == AppState.instance.settingBox.read(SettingType.usercode.toString())) {
+          Navigator.of(context).pop();
+          // ProgressDialog.show(context);
+          // await SqlConn.readData(
+          //     "Exec APPMBL_UpdatePatientCareBy_ChamsocID @${timeDate.value.chamsocId ?? ''}, @${timeDate.value.thoigianchamsoc}, @${AppState.instance.settingBox.read(SettingType.usercode.toString())}, @${machController.value.text}, @${nhietdoController.value.text}, @${huyetapController.value.text}, @${cannangController.value.text}, @${nhipthoController.value.text}, @${chieucaoController.value.text}, @${dienbienController.value.text}, @${canthiepController.value.text}, @${chandoandieuduongController.value.text}, @${luonggiaController.value.text}, @${ghichuController.value.text}, @${pccsController.value.text}, @${ylenhchamsocController.value.text}, @${inforTimeDate.value.chamsocId ?? ''}, @${inforTimeDate.value.dieuduong ?? ''}, @${muctieudieuduongController.value.text}");
+          // ProgressDialog.hide(context);
+          ProgressDialog.show(context);
+          final MyResponse? myResponse = await appRepository
+              .editYL(
+                chamsoc_id: timeDate.value.chamsocId,
+                THOIGIANTHUCHIEN: timeDate.value.thoigianchamsoc,
+                MACH: machController.value.text,
+                USERCODE: AppState.instance.settingBox.read(SettingType.usercode.toString()),
+                NHIET: nhietdoController.value.text,
+                HUYETAP: huyetapController.value.text,
+                CANNANG: cannangController.value.text,
+                NHIPTHO: nhipthoController.value.text,
+                CHIEUCAO: chieucaoController.value.text,
+                TINHTRANGBN: dienbienController.value.text,
+                CANTHIEPDD: canthiepController.value.text.toString().trim().replaceAll('\n', '\\n'),
+                CHANDOANDD: chandoandieuduongController.value.text,
+                LUONGGIA: luonggiaController.value.text,
+                LOIDAN: ghichuController.value.text,
+                PCCS: pccsController.value.text,
+                YLENHDD: ylenhchamsocController.value.text,
+                MACHAMSOC: inforTimeDate.value.chamsocId.toString(),
+                TENCHAMSOC: inforTimeDate.value.dieuduong ?? '',
+                MUCTIEUDD: muctieudieuduongController.value.text,
+              )
+              .timeout(const Duration(seconds: 60));
+          ProgressDialog.hide(context);
+          if (myResponse?.code == "SUCCESS") {
+            // ignore: use_build_context_synchronously
+            ProgressDialog.showDialogNotification(context, content: 'Sửa lệnh thành công', onPressed: () {
+              ProgressDialog.show(context);
+              getTimeDate(context, benhNhanId);
+              ProgressDialog.hide(context);
+              Get.back();
+            });
+          } else {
+            // ignore: use_build_context_synchronously
+            ProgressDialog.showDialogNotification(context, content: 'Sửa y lệnh thất bại');
+          }
+        } else {
+          Navigator.of(context).pop();
+          ProgressDialog.showDialogNotification(context, content: 'Chỉ có "${inforTimeDate.value.dieuduong}" mới có thể\nLƯU y lệnh chăm sóc này');
+        }
+      });
+    } catch (e) {
+      ProgressDialog.showDialogNotification(context, content: 'Phát sinh lỗi: $e');
+      Get.log('saveYL error: $e');
+    }
+  }
+
+  Future<void> deletaYL(BuildContext context) async {
+    try {
+      if (inforTimeDate.value.nguoithuchienCode == AppState.instance.settingBox.read(SettingType.usercode.toString())) {
+        ProgressDialog.showDialogNotification(context, content: 'Xác nhận xóa Y lệnh', isCanel: true, onPressed: () async {
+          Navigator.of(context).pop();
+
+          if (timeDate.value.chamsocId != null) {
+            //await SqlConn.readData("Exec APPMBL_deleteInfoPatientCareBy_ChamsocID @${timeDate.value.chamsocId ?? ''}");
+            ProgressDialog.show(context);
+            final MyResponse? myResponse =
+                await appRepository.deletaYL(chamsoc_id: timeDate.value.chamsocId.toString()).timeout(const Duration(seconds: 60));
+            ProgressDialog.hide(context);
+            if (myResponse?.code == "SUCCESS") {
+              // ignore: use_build_context_synchronously
+              ProgressDialog.showDialogNotification(context, content: 'Xóa y lệnh thành công', onPressed: () {
+                ProgressDialog.show(context);
+                getTimeDate(context, benhNhanId);
+                ProgressDialog.hide(context);
+                Get.back();
+              });
+            } else {
+              // ignore: use_build_context_synchronously
+              ProgressDialog.showDialogNotification(context, content: 'Xóa y lệnh thất bại');
+            }
+          }
+        });
+      } else {
+        ProgressDialog.showDialogNotification(context, content: 'Chỉ có "${inforTimeDate.value.dieuduong}" mới có thể\nXÓA y lệnh chăm sóc này');
+      }
+    } catch (e) {
+      ProgressDialog.hide(context);
+      ProgressDialog.showDialogNotification(context, content: 'Xóa y lệnh thất bại\nLỗi: $e');
+      Get.log('deletaYL error: $e');
+    }
+  }
 }

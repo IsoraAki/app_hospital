@@ -4,6 +4,7 @@ import 'package:my_app_hospital/app/network/data/model/infor_time_data_model.dar
 import 'package:my_app_hospital/app/network/data/model/office_model.dart';
 import 'package:my_app_hospital/app/network/data/model/patient_information_model.dart';
 import 'package:my_app_hospital/app/network/data/model/staff_infor_model.dart';
+import 'package:my_app_hospital/app/network/data/model/thoi_gian_cham_soc_model.dart';
 import 'package:my_app_hospital/app/network/data/provider/my_callback.dart';
 import 'package:my_app_hospital/app/network/data/provider/my_reponse.dart';
 
@@ -66,6 +67,19 @@ class AppRepository {
     );
   }
 
+  //danh sách thời gian chăm sóc
+  Future<MyResponse?> getTimeDate({String? benhnhan_id}) async {
+    final params = {
+      "BENHAN_ID": benhnhan_id,
+    };
+
+    return await callBack.get(
+      endPoint: ApiDocs.timePatient,
+      object: ThoiGianChamSocModel(),
+      params: params,
+    );
+  }
+
   //thông tin bệnh nhân chăm sóc
   Future<MyResponse?> infoPatient({String? chamsoc_id}) async {
     final params = {
@@ -105,6 +119,104 @@ class AppRepository {
     };
     return await callBack.delete(
       endPoint: ApiDocs.deletaYL,
+      params: params,
+    );
+  }
+
+  //tạo y lệnh
+  Future<MyResponse?> addYL({
+    int? BENHAN_ID,
+    String? THOIGIANTHUCHIEN,
+    String? MACH,
+    String? USERCODE,
+    String? NHIET,
+    String? HUYETAP,
+    String? CANNANG,
+    String? NHIPTHO,
+    String? CHIEUCAO,
+    String? TINHTRANGBN,
+    String? CANTHIEPDD,
+    String? CHANDOANDD,
+    String? LUONGGIA,
+    String? LOIDAN,
+    String? PCCS,
+    String? YLENHDD,
+    String? MACHAMSOC,
+    String? TENCHAMSOC,
+    String? MUCTIEUDD,
+  }) async {
+    final params = {
+      "BENHAN_ID": BENHAN_ID,
+      "THOIGIANTHUCHIEN": THOIGIANTHUCHIEN,
+      "MACH": MACH,
+      "USERCODE": USERCODE,
+      "NHIET": NHIET,
+      "HUYETAP": HUYETAP,
+      "CANNANG": CANNANG,
+      "NHIPTHO": NHIPTHO,
+      "CHIEUCAO": CHIEUCAO,
+      "TINHTRANGBN": TINHTRANGBN,
+      "CANTHIEPDD": CANTHIEPDD,
+      "CHANDOANDD": CHANDOANDD,
+      "LUONGGIA": LUONGGIA,
+      "LOIDAN": LOIDAN,
+      "PCCS": PCCS,
+      "YLENHDD": YLENHDD,
+      "MACHAMSOC": MACHAMSOC,
+      "TENCHAMSOC": TENCHAMSOC,
+      "MUCTIEUDD": MUCTIEUDD,
+    };
+    return await callBack.post(
+      endPoint: ApiDocs.addYL,
+      params: params,
+    );
+  }
+
+  //sửa y lệnh
+  Future<MyResponse?> editYL({
+    int? chamsoc_id,
+    String? THOIGIANTHUCHIEN,
+    String? MACH,
+    String? USERCODE,
+    String? NHIET,
+    String? HUYETAP,
+    String? CANNANG,
+    String? NHIPTHO,
+    String? CHIEUCAO,
+    String? TINHTRANGBN,
+    String? CANTHIEPDD,
+    String? CHANDOANDD,
+    String? LUONGGIA,
+    String? LOIDAN,
+    String? PCCS,
+    String? YLENHDD,
+    String? MACHAMSOC,
+    String? TENCHAMSOC,
+    String? MUCTIEUDD,
+  }) async {
+    final params = {
+      "chamsoc_id": chamsoc_id,
+      "THOIGIANTHUCHIEN": THOIGIANTHUCHIEN,
+      "MACH": MACH,
+      "USERCODE": USERCODE,
+      "NHIET": NHIET,
+      "HUYETAP": HUYETAP,
+      "CANNANG": CANNANG,
+      "NHIPTHO": NHIPTHO,
+      "CHIEUCAO": CHIEUCAO,
+      "TINHTRANGBN": TINHTRANGBN,
+      "CANTHIEPDD": CANTHIEPDD,
+      "CHANDOANDD": CHANDOANDD,
+      "LUONGGIA": LUONGGIA,
+      "LOIDAN": LOIDAN,
+      "PCCS": PCCS,
+      "YLENHDD": YLENHDD,
+      "MACHAMSOC": MACHAMSOC,
+      "TENCHAMSOC": TENCHAMSOC,
+      "MUCTIEUDD": MUCTIEUDD,
+    };
+    return await callBack.post(
+      endPoint: ApiDocs.editYL,
       params: params,
     );
   }

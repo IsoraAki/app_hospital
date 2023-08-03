@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:my_app_hospital/app/network/data/model/patient_information_model.dart';
-import 'package:my_app_hospital/app/data/thoi_gian_cham_soc_model.dart';
+import 'package:my_app_hospital/app/network/data/model/thoi_gian_cham_soc_model.dart';
 import 'package:my_app_hospital/app/modules/command/controllers/command_controller.dart';
 import 'package:my_app_hospital/app/modules/command/views/cddd_view.dart';
 import 'package:my_app_hospital/app/modules/widget/custom_bottom_sheet.dart';
@@ -31,15 +31,17 @@ class CommandDetails extends GetView<CommandController> {
           padding: const EdgeInsets.all(8.0),
           child: SingleChildScrollView(
             child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              sickPeople(
-                context,
-                'http://192.168.1.178:1015/Data/48015/Media/${patientInformationModel.mAYTE}/${patientInformationModel.fILENAME}',
-                patientInformationModel.sOBENHAN.toString(),
-                patientInformationModel.tENBENHNHAN ?? '...',
-                patientInformationModel.nAMSINH.toString(),
-                patientInformationModel.dOITUONG ?? '...',
-                patientInformationModel.pCCS ?? '...',
-                patientInformationModel.sEX ?? 1,
+              Obx(
+                () => sickPeople(
+                  context,
+                  'http://192.168.1.178:1015/Data/48015/Media/${patientInformationModel.mAYTE}/${patientInformationModel.fILENAME}',
+                  patientInformationModel.sOBENHAN.toString(),
+                  patientInformationModel.tENBENHNHAN ?? '...',
+                  patientInformationModel.nAMSINH.toString(),
+                  patientInformationModel.dOITUONG ?? '...',
+                  patientInformationModel.pCCS ?? '...',
+                  patientInformationModel.sEX ?? 1,
+                ),
               ),
               SizedBox(
                 height: size_8_h,
@@ -544,7 +546,7 @@ class CommandDetails extends GetView<CommandController> {
             )),
         ElevatedButton(
             onPressed: () {
-              //controller.saveYL(context);
+              controller.saveYL(context);
             },
             style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.orange)),
             child: Padding(
@@ -562,7 +564,7 @@ class CommandDetails extends GetView<CommandController> {
         Obx(() => ElevatedButton(
             onPressed: () {
               if (controller.isInsert.value == false) {
-                //controller.deletaYL(context);
+                controller.deletaYL(context);
               }
             },
             style: controller.isInsert.value == true

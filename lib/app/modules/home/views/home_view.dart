@@ -130,7 +130,9 @@ class _HomeViewState extends State<HomeView> {
                   //commandController.listPatientInfor == controller.listPatientInfor;
                   ProgressDialog.show(context);
                   await commandController.getCDDD();
-                  await commandController.getList(context, 'Tất cả', 0, 0, isGetTo: true);
+                  // ignore: use_build_context_synchronously
+                  await commandController.getList(context, 'Tất cả', 0, 0, isGetTo: true, isYLCS: false);
+                  // ignore: use_build_context_synchronously
                   ProgressDialog.hide(context);
                   // medicationScheduleController.maphongban.value = controller.dropDownValue.value.rESOURCENAME ?? '';
                   // medicationScheduleController.tenphongban.value = controller.dropDownValue.value.tENPHONGBAN ?? '';
@@ -254,7 +256,8 @@ class _HomeViewState extends State<HomeView> {
             child: DropdownButton(
               hint: Obx(
                 () => Text(controller.dropDownValue.value.tENPHONGBAN ?? '...',
-                    maxLines: 1, style: TextStyle(fontSize: text_14, fontWeight: FontWeight.bold, color: AppColors.white, fontFamily: AppFonts.baiJamjuree)),
+                    maxLines: 1,
+                    style: TextStyle(fontSize: text_14, fontWeight: FontWeight.bold, color: AppColors.white, fontFamily: AppFonts.baiJamjuree)),
               ),
               isExpanded: true,
               icon: const Icon(Icons.arrow_drop_down, color: AppColors.white),
