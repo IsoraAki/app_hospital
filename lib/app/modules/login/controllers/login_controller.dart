@@ -62,11 +62,11 @@ class LoginController extends GetxController {
           await profile(context);
         } else {
           // ignore: use_build_context_synchronously
-          ProgressDialog.showDialogNotification(context, content: 'Sai tài khoản hoặc mật khẩu');
+          ProgressDialog.showDialogNotification(context, content: 'Đăng nhập không thành công');
         }
       } else {
         // ignore: use_build_context_synchronously
-        ProgressDialog.showDialogNotification(context, content: 'Sai tài khoản hoặc mật khẩu');
+        ProgressDialog.showDialogNotification(context, content: 'Đăng nhập không thành công');
       }
     } on TimeoutException {
       // ignore: use_build_context_synchronously
