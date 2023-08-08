@@ -102,4 +102,13 @@ class LoginController extends GetxController {
       Get.log(e.toString());
     }
   }
+
+  loginTest() {
+    AppState.instance.settingBox.remove(SettingType.inforUser.toString());
+    if (isSave.value) {
+      AppState.instance.settingBox.write(SettingType.user.toString(), emailController.text);
+      AppState.instance.settingBox.write(SettingType.password.toString(), pwdController.text);
+    }
+    AppState.instance.settingBox.remove(SettingType.listOffice.toString());
+  }
 }

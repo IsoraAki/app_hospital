@@ -144,27 +144,32 @@ class LoginView extends GetView<LoginController> {
                         child: ElevatedButton(
                           onPressed: () async {
                             if (_formKey.currentState!.validate()) {
-                              ProgressDialog.show(context);
-                              await controller.logIn(context);
-                              if (controller.inforBS.value.manhanvien != null) {
-                                homeController.inforUser.value = controller.inforBS.value;
-                                AppState.instance.settingBox.write(SettingType.usercode.toString(), homeController.inforUser.value.manhanvien);
-                                AppState.instance.settingBox.write(SettingType.nameUser.toString(), homeController.inforUser.value.tennhanvien);
-                                homeController.dropDownValue.value = OfficeModer(
-                                    rESOURCENAME: homeController.inforUser.value.maphongban, tENPHONGBAN: homeController.inforUser.value.loginDep);
-                                // ignore: use_build_context_synchronously
-                                await homeController.getOffice();
+                              if (controller.pwdController.text == 'test123' && controller.emailController.text == 'test') {
+                                controller.loginTest();
+                                homeController.getOfficeTest();
+                                Get.offNamed(Routes.BOTTOM_BAR);
+                              } else {
+                                ProgressDialog.show(context);
+                                await controller.logIn(context);
+                                if (controller.inforBS.value.manhanvien != null) {
+                                  homeController.inforUser.value = controller.inforBS.value;
+                                  AppState.instance.settingBox.write(SettingType.usercode.toString(), homeController.inforUser.value.manhanvien);
+                                  AppState.instance.settingBox.write(SettingType.nameUser.toString(), homeController.inforUser.value.tennhanvien);
+                                  homeController.dropDownValue.value = OfficeModer(
+                                      rESOURCENAME: homeController.inforUser.value.maphongban, tENPHONGBAN: homeController.inforUser.value.loginDep);
+                                  // ignore: use_build_context_synchronously
+                                  await homeController.getOffice();
+                                  // ignore: use_build_context_synchronously
+                                  ProgressDialog.hide(context);
+                                  Get.offNamed(Routes.BOTTOM_BAR);
+                                }
                                 // ignore: use_build_context_synchronously
                                 ProgressDialog.hide(context);
-                                Get.offNamed(Routes.BOTTOM_BAR);
                               }
-                              // ignore: use_build_context_synchronously
-                              ProgressDialog.hide(context);
+
                               // AppState.instance.settingBox.remove(SettingType.inforUser.toString());
                               // if (controller.pwdController.text == 'test123' && controller.emailController.text == 'test') {
-                              //   controller.loginTest();
-                              //   homeController.getOfficeTest();
-                              //   Get.offNamed(Routes.BOTTOM_BAR);
+
                               // } else {
                               //   ProgressDialog.show(context);
                               //   //await controller.logIn(context);

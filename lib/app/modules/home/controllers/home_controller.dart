@@ -6,6 +6,7 @@ import 'package:my_app_hospital/app/network/data/model/office_model.dart';
 import 'package:my_app_hospital/app/network/data/model/staff_infor_model.dart';
 import 'package:my_app_hospital/app/network/data/provider/my_reponse.dart';
 import 'package:my_app_hospital/app/network/repositories/app_repository.dart';
+import 'package:my_app_hospital/app_state.dart';
 
 class HomeController extends GetxController {
   AppRepository appRepository = AppRepository();
@@ -95,5 +96,12 @@ class HomeController extends GetxController {
 
       Get.log(e.toString());
     }
+  }
+
+  getOfficeTest() {
+    inforUser.value = StaffInforModel();
+    AppState.instance.settingBox.remove(SettingType.usercode.toString());
+    dropDownValue.value = OfficeModer();
+    listOffice.value = [];
   }
 }
