@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'package:get/get.dart';
 import 'package:my_app_hospital/app/modules/home/controllers/home_controller.dart';
@@ -10,6 +11,7 @@ import 'package:my_app_hospital/app/routes/app_pages.dart';
 import 'package:my_app_hospital/app_state.dart';
 import 'package:my_app_hospital/configs/app_color.dart';
 import 'package:my_app_hospital/configs/theme/dimens.dart';
+import 'package:my_app_hospital/configs/theme/theme.dart';
 
 import 'package:my_app_hospital/util/validator.dart';
 
@@ -30,6 +32,19 @@ class LoginView extends GetView<LoginController> {
     bool _pinned = false;
     bool _snap = false;
     bool _floating = false;
+
+    DateTime? currentBackPressTime;
+
+    Future<bool> onWillPop(BuildContext context) {
+      DateTime now = DateTime.now();
+      if (currentBackPressTime == null || now.difference(currentBackPressTime!) > Duration(seconds: 2)) {
+        currentBackPressTime = now;
+        showToast("Ấn thêm lần nữa để thoát");
+        return Future.value(false);
+      }
+      SystemNavigator.pop();
+      return Future.value(true);
+    }
 
     final widgetList = [
       Row(
@@ -242,56 +257,65 @@ class LoginView extends GetView<LoginController> {
         height: 15.0,
       ),
     ];
-    return Scaffold(
-      extendBodyBehindAppBar: true,
-      //backgroundColor: Colors.white,
-      appBar: AppBar(
-        // leading: Icon(Icons.arrow_back),
-        backgroundColor: Colors.transparent,
-        elevation: 0.0,
-      ),
-      body: CustomScrollView(
-        slivers: <Widget>[
-          SliverAppBar(
-            pinned: _pinned,
-            snap: _snap,
-            floating: _floating,
-            expandedHeight: coverHeight, //304,
-            backgroundColor: Colors.black,
-            flexibleSpace: FlexibleSpaceBar(
-              centerTitle: true,
-              background: Image.asset("assets/images/bg1.jpg", fit: BoxFit.cover),
-            ),
-          ),
-          SliverToBoxAdapter(
-            child: Container(
-              decoration:
-                  const BoxDecoration(borderRadius: BorderRadius.only(), gradient: LinearGradient(colors: <Color>[Colors.black, Colors.black])),
-              width: screenWidth,
-              height: 25,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: <Widget>[
-                  Container(
-                    width: screenWidth,
-                    height: 25,
-                    decoration: const BoxDecoration(
-                      color: AppColors.background,
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(30.0),
-                        topRight: Radius.circular(30.0),
-                      ),
-                    ),
-                  )
-                ],
+    return WillPopScope(
+      onWillPop: () => onWillPop(context),
+      child: GestureDetector(
+        onTap: () {
+          FocusManager.instance.primaryFocus!.unfocus();
+        },
+        child: Scaffold(
+          //extendBodyBehindAppBar: true,
+          //backgroundColor: Colors.white,
+          // appBar: AppBar(
+          //   // leading: Icon(Icons.arrow_back),
+          //   backgroundColor: Colors.transparent,
+          //   elevation: 0.0,
+          // ),
+          body: CustomScrollView(
+            slivers: <Widget>[
+              SliverAppBar(
+                pinned: _pinned,
+                snap: _snap,
+                floating: _floating,
+                expandedHeight: coverHeight, //304,
+                backgroundColor: Colors.black,
+                automaticallyImplyLeading: false,
+                flexibleSpace: FlexibleSpaceBar(
+                  centerTitle: true,
+                  background: Image.asset("assets/images/bg1.jpg", fit: BoxFit.cover),
+                ),
               ),
-            ),
+              SliverToBoxAdapter(
+                child: Container(
+                  decoration:
+                      const BoxDecoration(borderRadius: BorderRadius.only(), gradient: LinearGradient(colors: <Color>[Colors.black, Colors.black])),
+                  width: screenWidth,
+                  height: 25,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: <Widget>[
+                      Container(
+                        width: screenWidth,
+                        height: 25,
+                        decoration: const BoxDecoration(
+                          color: AppColors.background,
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(30.0),
+                            topRight: Radius.circular(30.0),
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              ),
+              SliverList(
+                  delegate: SliverChildBuilderDelegate((BuildContext context, int index) {
+                return widgetList[index];
+              }, childCount: widgetList.length))
+            ],
           ),
-          SliverList(
-              delegate: SliverChildBuilderDelegate((BuildContext context, int index) {
-            return widgetList[index];
-          }, childCount: widgetList.length))
-        ],
+        ),
       ),
     );
   }
