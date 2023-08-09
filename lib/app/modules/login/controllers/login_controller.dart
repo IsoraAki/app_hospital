@@ -70,7 +70,7 @@ class LoginController extends GetxController {
       }
     } on TimeoutException {
       // ignore: use_build_context_synchronously
-      ProgressDialog.showDialogNotification(context, content: 'Kết nối đươc với máy chủ');
+      ProgressDialog.showDialogNotification(context, content: 'Không kết nối đươc với máy chủ');
     } catch (e) {
       // ignore: use_build_context_synchronously
       ProgressDialog.showDialogNotification(context, content: 'Đăng nhập không thành công');
@@ -95,7 +95,7 @@ class LoginController extends GetxController {
       }
     } on TimeoutException {
       // ignore: use_build_context_synchronously
-      ProgressDialog.showDialogNotification(context, content: 'Kết nối đươc với máy chủ');
+      ProgressDialog.showDialogNotification(context, content: 'Không kết nối đươc với máy chủ');
     } catch (e) {
       // ignore: use_build_context_synchronously
       ProgressDialog.showDialogNotification(context, content: 'Không lấy được thông tin tài khoản');
