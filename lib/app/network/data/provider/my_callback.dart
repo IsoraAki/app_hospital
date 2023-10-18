@@ -12,7 +12,7 @@ import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 import 'package:my_app_hospital/app/network/data/provider/my_reponse.dart';
 
 class MyCallBack {
-  final String _apiBaseUrl = "192.168.1.202:3000";
+  final String _apiBaseUrl = "192.168.1.178:9909";
 
   final Logger _logger = Logger("MyCallBack");
   final Dio _dio = Dio();
